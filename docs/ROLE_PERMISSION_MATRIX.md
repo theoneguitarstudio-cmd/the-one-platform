@@ -33,3 +33,16 @@ All route access also requires `account_status = active`. Anonymous,
 
 Fine-grained permissions and administrative role-assignment procedures remain
 to be completed from the approved formal PRD.
+
+## Epic 2 teacher permissions
+
+| Actor | Public teacher projection | Private teacher profile | Admin controls |
+| --- | --- | --- | --- |
+| Anonymous | Read active, public rows only | No access | No access |
+| Student | Same as Anonymous | No access | No access |
+| Teacher | Same as Anonymous, plus own private row | May update approved presentation fields and own specialties | Cannot set slug, publishing, teaching status, or stage certification |
+| Admin / Super Admin | Through server-only privileged path | Through server-only privileged path | May create/enable teacher profiles, set slug/public status, specialties, and stage capabilities |
+
+The UI does not grant authority. Teacher and Admin server actions independently
+verify protected-route access, while database grants and RLS enforce the
+same ownership limits for normal user-scoped data access.

@@ -48,3 +48,39 @@ truth for this model, grants, triggers, and RLS.
 
 Additional profile fields, public-profile publication rules, audit history, and
 later domain relationships await the approved formal PRD.
+
+## Epic 2 implemented model
+
+### Teacher public/private boundary
+
+`teacher_profiles` is the private teacher platform record. It holds the
+teacher account reference, admin-controlled publication controls, public slug,
+prices, and editable teaching content; it is never granted to anonymous users.
+
+`teacher_public_profiles` is the explicit minimal projection for public
+discovery. It contains only the fields rendered on `/teachers` and
+`/teachers/[slug]`. A security-definer database trigger synchronizes allowed
+display name data from `profiles` and allowed teacher presentation data from
+`teacher_profiles`. Public routes query this projection, never
+`profiles` or `teacher_profiles`.
+
+### Teacher capability model
+
+- `specialties`: platform-defined catalog, seeded conflict-safely.
+- `teacher_specialties`: normalized many-to-many assignment.
+- `learning_map_stages`: canonical seeded Stage 1–5 catalog.
+- `teacher_stage_capabilities`: admin-controlled teacher-to-stage assignment
+  with `allowed` or `certified` status.
+
+### Money and location
+
+All current prices are nullable non-negative `integer` TWD amounts:
+`trial_price_twd`, `fixed_lesson_price_twd`, and
+`flexible_lesson_price_twd`. No JavaScript float is used as a stored monetary
+value. MVP location is nullable public `location_text`; structured geography
+can be introduced later without changing existing public URL identity.
+
+## Epic 2 migration
+
+`supabase/migrations/20260831000200_teacher_profiles_public_discovery.sql`
+creates the tables, policies, triggers, and deterministic catalog seeds.

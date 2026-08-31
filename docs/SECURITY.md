@@ -36,3 +36,28 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
   password policy, and production cookie/HTTPS behavior before launch.
 - A formal threat model, incident response policy, audit-log design, and
   privileged admin workflow remain pending the approved PRD.
+
+## Epic 2 implemented baseline
+
+- Public discovery reads `teacher_public_profiles`, a minimal projection with
+  an explicit allowlist of public fields. It never reads from private
+  `profiles` or `teacher_profiles`.
+- Anonymous and authenticated users can read only rows where a teacher is both
+  public and `active`. They receive no private teacher table grants.
+- Teacher RLS and column grants allow only own editable presentation fields and
+  own specialty assignments. Publication, slug, teaching status, and stage
+  certification are not writable by teachers.
+- Privileged Admin mutations are server actions guarded by server-side Admin
+  authorization. The service-role client remains in a `server-only` module.
+- All money is validated as a non-negative integer TWD amount on both server
+  input and database constraints.
+- Database trigger functions use `security definer`, a pinned empty
+  `search_path`, schema-qualified object references, and revoked direct
+  execution permissions.
+
+## Epic 2 operational work still required
+
+- Apply and test the Epic 2 migration in local/staging before any production
+  rollout.
+- Establish an audited Admin assignment workflow and slug-change redirect
+  history before operational staff use the management screen at scale.

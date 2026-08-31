@@ -1,4 +1,5 @@
 import { SignOutForm } from "@/components/auth/sign-out-form";
+import Link from "next/link";
 
 export default function AdminPage() {
   return (
@@ -13,6 +14,12 @@ export default function AdminPage() {
         <p className="mt-3 text-sm text-[var(--text-secondary)]">
           正式 Admin Dashboard 尚未建立。
         </p>
+        <Link
+          className="mt-5 inline-flex rounded-xl bg-[var(--brand-yellow)] px-4 py-2 text-sm font-semibold"
+          href="/admin/teachers"
+        >
+          管理老師
+        </Link>
         <div className="mt-6">
           <SignOutForm />
         </div>
