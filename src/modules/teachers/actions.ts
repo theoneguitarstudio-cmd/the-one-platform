@@ -18,7 +18,7 @@ function readString(formData: FormData, name: string): string {
 }
 
 export async function saveOwnTeacherProfile(formData: FormData) {
-  const identity = await requireAreaAccess("teacher");
+  await requireAreaAccess("teacher");
   const parsed = editableTeacherProfileSchema.safeParse({
     avatarUrl: readString(formData, "avatarUrl"),
     bio: readString(formData, "bio"),
@@ -38,56 +38,20 @@ export async function saveOwnTeacherProfile(formData: FormData) {
   }
 
   const supabase = await createServerSupabaseClient();
-  const { data: teacher, error: teacherError } = await supabase
-    .from("teacher_profiles")
-    .select("id")
-    .eq("user_id", identity.userId)
-    .maybeSingle();
+  const { error } = await supabase.rpc("update_own_teacher_profile", {
+    p_avatar_url: parsed.data.avatarUrl,
+    p_bio: parsed.data.bio,
+    p_fixed_lesson_price_twd: parsed.data.fixedLessonPriceTwd,
+    p_flexible_lesson_price_twd: parsed.data.flexibleLessonPriceTwd,
+    p_location_text: parsed.data.locationText,
+    p_specialty_ids: specialtyIds.data,
+    p_teaching_modes: parsed.data.teachingModes,
+    p_trial_price_twd: parsed.data.trialPriceTwd,
+    p_years_experience: parsed.data.yearsExperience,
+  });
 
-  if (teacherError || !teacher) {
-    redirect("/auth/access-denied");
-  }
-
-  const { error: profileError } = await supabase
-    .from("teacher_profiles")
-    .update({
-      avatar_url: parsed.data.avatarUrl,
-      bio: parsed.data.bio,
-      fixed_lesson_price_twd: parsed.data.fixedLessonPriceTwd,
-      flexible_lesson_price_twd: parsed.data.flexibleLessonPriceTwd,
-      location_text: parsed.data.locationText,
-      teaching_modes: parsed.data.teachingModes,
-      trial_price_twd: parsed.data.trialPriceTwd,
-      years_experience: parsed.data.yearsExperience,
-    })
-    .eq("id", teacher.id);
-
-  if (profileError) {
+  if (error) {
     redirect("/teacher/profile?error=save_failed");
-  }
-
-  const { error: deleteError } = await supabase
-    .from("teacher_specialties")
-    .delete()
-    .eq("teacher_profile_id", teacher.id);
-
-  if (deleteError) {
-    redirect("/teacher/profile?error=save_failed");
-  }
-
-  if (specialtyIds.data.length > 0) {
-    const { error: insertError } = await supabase
-      .from("teacher_specialties")
-      .insert(
-        specialtyIds.data.map((specialtyId) => ({
-          specialty_id: specialtyId,
-          teacher_profile_id: teacher.id,
-        })),
-      );
-
-    if (insertError) {
-      redirect("/teacher/profile?error=save_failed");
-    }
   }
 
   revalidatePath("/teacher/profile");

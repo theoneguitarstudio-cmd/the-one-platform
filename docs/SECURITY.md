@@ -44,9 +44,15 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
   `profiles` or `teacher_profiles`.
 - Anonymous and authenticated users can read only rows where a teacher is both
   public and `active`. They receive no private teacher table grants.
-- Teacher RLS and column grants allow only own editable presentation fields and
-  own specialty assignments. Publication, slug, teaching status, and stage
-  certification are not writable by teachers.
+- Teacher self-service presentation and specialty updates run through one
+  authenticated database RPC. It validates the authenticated user, active
+  account status, Teacher role, permitted fields, non-negative integer prices,
+  and active catalog specialties before changing any row. Direct Teacher table
+  writes are not granted.
+- Public discovery has layered account-status protection: profile triggers
+  refresh the projection when account status changes, and public RLS verifies
+  current account and teacher publication state rather than trusting the
+  projection flag alone.
 - Privileged Admin mutations are server actions guarded by server-side Admin
   authorization. The service-role client remains in a `server-only` module.
 - All money is validated as a non-negative integer TWD amount on both server

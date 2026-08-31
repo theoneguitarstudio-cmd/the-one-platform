@@ -66,3 +66,16 @@ describe("public discovery boundary", () => {
     expect(source).not.toContain('.from("profiles")');
   });
 });
+
+describe("teacher self-update boundary", () => {
+  const actionSource = readFileSync(
+    new URL("../src/modules/teachers/actions.ts", import.meta.url),
+    "utf8",
+  );
+
+  it("uses the atomic database mutation instead of table-by-table writes", () => {
+    expect(actionSource).toContain('.rpc("update_own_teacher_profile"');
+    expect(actionSource).not.toContain('.from("teacher_specialties")');
+    expect(actionSource).not.toContain('.from("teacher_profiles")');
+  });
+});
