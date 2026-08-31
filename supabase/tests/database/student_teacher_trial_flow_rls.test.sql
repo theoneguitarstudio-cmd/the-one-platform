@@ -2,6 +2,12 @@ begin;
 
 select plan(33);
 
+create temporary table trial_test_ids (
+  name text primary key,
+  id uuid not null
+) on commit drop;
+grant select, insert on table trial_test_ids to anon, authenticated;
+
 insert into auth.users (id, email) values
   ('30000000-0000-0000-0000-00000000000a', 'epic3-student-a@example.invalid'),
   ('30000000-0000-0000-0000-00000000000b', 'epic3-student-b@example.invalid'),
@@ -64,10 +70,11 @@ reset role;
 set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000a', true);
 select lives_ok(
-  $$select public.request_trial_checkout(
-    'epic3-teacher-a', 'Learn rhythm', 'online', null,
-    '2099-01-10 10:00:00+00', 'Asia/Taipei', 'epic3-student-a-order-0001'
-  )$$,
+  $$insert into pg_temp.trial_test_ids (name, id)
+    select 'student-a-teacher-a', public.request_trial_checkout(
+      'epic3-teacher-a', 'Learn rhythm', 'online', null,
+      '2099-01-10 10:00:00+00', 'Asia/Taipei', 'epic3-student-a-order-0001'
+    )$$,
   'student can create a pending trial checkout'
 );
 select is(
@@ -80,7 +87,7 @@ reset role;
 set local role anon;
 select throws_ok(
   $$select public.confirm_trial_payment(
-    (select id from public.trial_orders where idempotency_key = 'epic3-student-a-order-0001'),
+    (select id from pg_temp.trial_test_ids where name = 'student-a-teacher-a'),
     null
   )$$,
   '42501', null, 'anonymous cannot confirm trial payment'
@@ -91,7 +98,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000e', true);
 select lives_ok(
   $$select public.confirm_trial_payment(
-    (select id from public.trial_orders where idempotency_key = 'epic3-student-a-order-0001'),
+    (select id from pg_temp.trial_test_ids where name = 'student-a-teacher-a'),
     null
   )$$,
   'Admin can confirm placeholder payment'
@@ -117,7 +124,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000e', true);
 select lives_ok(
   $$select public.confirm_trial_payment(
-    (select id from public.trial_orders where idempotency_key = 'epic3-student-a-order-0001'), null
+    (select id from pg_temp.trial_test_ids where name = 'student-a-teacher-a'), null
   )$$,
   'payment confirmation is idempotent'
 );
@@ -143,10 +150,11 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000b', true);
 select is((select count(*) from public.lessons where meeting_url is not null), 0::bigint, 'non-participant cannot read meeting reference');
 select lives_ok(
-  $$select public.request_trial_checkout(
-    'epic3-teacher-a', 'Student B goal', 'online', null,
-    '2099-01-10 10:00:00+00', 'Asia/Taipei', 'epic3-student-b-order-0001'
-  )$$,
+  $$insert into pg_temp.trial_test_ids (name, id)
+    select 'student-b-teacher-a', public.request_trial_checkout(
+      'epic3-teacher-a', 'Student B goal', 'online', null,
+      '2099-01-10 10:00:00+00', 'Asia/Taipei', 'epic3-student-b-order-0001'
+    )$$,
   'second student can request the same teacher time while payment is pending'
 );
 
@@ -155,7 +163,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000e', true);
 select throws_ok(
   $$select public.confirm_trial_payment(
-    (select id from public.trial_orders where idempotency_key = 'epic3-student-b-order-0001'), null
+    (select id from pg_temp.trial_test_ids where name = 'student-b-teacher-a'), null
   )$$,
   '23P01', null, 'database exclusion constraint rejects teacher collision'
 );
@@ -164,10 +172,11 @@ reset role;
 set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000a', true);
 select lives_ok(
-  $$select public.request_trial_checkout(
-    'epic3-teacher-b', 'Second teacher request', 'online', null,
-    '2099-01-10 10:00:00+00', 'Asia/Taipei', 'epic3-student-a-order-0002'
-  )$$,
+  $$insert into pg_temp.trial_test_ids (name, id)
+    select 'student-a-teacher-b', public.request_trial_checkout(
+      'epic3-teacher-b', 'Second teacher request', 'online', null,
+      '2099-01-10 10:00:00+00', 'Asia/Taipei', 'epic3-student-a-order-0002'
+    )$$,
   'student can request another teacher while payment is pending'
 );
 
@@ -176,7 +185,7 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000e', true);
 select throws_ok(
   $$select public.confirm_trial_payment(
-    (select id from public.trial_orders where idempotency_key = 'epic3-student-a-order-0002'), null
+    (select id from pg_temp.trial_test_ids where name = 'student-a-teacher-b'), null
   )$$,
   '23P01', null, 'database exclusion constraint rejects student collision'
 );
@@ -207,8 +216,9 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000d', true);
 select throws_ok(
   $$select public.complete_trial_lesson(
-    (select id from public.lessons limit 1), 1, 'Visible', 'Private',
-    'Performance', 'Next', 'Homework', 'one_to_one', 'Assessment'
+    (select id from public.lessons limit 1), 1::smallint, 'Visible', 'Private',
+    'Performance', 'Next', 'Homework',
+    'one_to_one'::public.recommendation_type, 'Assessment'
   )$$,
   '42501', null, 'only the assigned Teacher can complete a trial'
 );
@@ -218,8 +228,9 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000c', true);
 select lives_ok(
   $$select public.complete_trial_lesson(
-    (select id from public.lessons limit 1), 1, 'Visible', 'Private',
-    'Performance', 'Next', 'Homework', 'one_to_one', 'Assessment'
+    (select id from public.lessons limit 1), 1::smallint, 'Visible', 'Private',
+    'Performance', 'Next', 'Homework',
+    'one_to_one'::public.recommendation_type, 'Assessment'
   )$$,
   'assigned Teacher can atomically complete a trial'
 );
@@ -247,8 +258,9 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000c', true);
 select lives_ok(
   $$select public.complete_trial_lesson(
-    (select id from public.lessons limit 1), 1, 'Visible', 'Private',
-    'Performance', 'Next', 'Homework', 'one_to_one', 'Assessment'
+    (select id from public.lessons limit 1), 1::smallint, 'Visible', 'Private',
+    'Performance', 'Next', 'Homework',
+    'one_to_one'::public.recommendation_type, 'Assessment'
   )$$,
   'repeat trial completion is idempotent'
 );

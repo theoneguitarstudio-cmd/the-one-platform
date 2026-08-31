@@ -369,8 +369,9 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '40000000-0000-0000-0000-00000000000c', true);
 select throws_ok(
   $$select public.complete_trial_lesson(
-      '42000000-0000-0000-0000-000000000003', 1, 'Visible', 'Private',
-      'Performance', 'Next', 'Homework', 'one_to_one', 'Assessment'
+      '42000000-0000-0000-0000-000000000003'::uuid,
+      1::smallint, 'Visible', 'Private', 'Performance', 'Next', 'Homework',
+      'one_to_one'::public.recommendation_type, 'Assessment'
     )$$,
   '23514', null, 'assigned Teacher cannot complete a Trial before starts_at'
 );
@@ -442,8 +443,9 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '40000000-0000-0000-0000-00000000000c', true);
 select throws_ok(
   $$select public.complete_trial_lesson(
-      '42000000-0000-0000-0000-000000000003', 1, 'Visible', 'Private',
-      'Performance', 'Next', 'Homework', 'one_to_one', 'Assessment'
+      '42000000-0000-0000-0000-000000000003'::uuid,
+      1::smallint, 'Visible', 'Private', 'Performance', 'Next', 'Homework',
+      'one_to_one'::public.recommendation_type, 'Assessment'
     )$$,
   '23514', null, 'completion requires its Relationship to be trial'
 );
@@ -467,8 +469,9 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '40000000-0000-0000-0000-00000000000c', true);
 select lives_ok(
   $$select public.complete_trial_lesson(
-      '42000000-0000-0000-0000-000000000003', 1, 'Visible', 'Private',
-      'Performance', 'Next', 'Homework', 'one_to_one', 'Assessment'
+      '42000000-0000-0000-0000-000000000003'::uuid,
+      1::smallint, 'Visible', 'Private', 'Performance', 'Next', 'Homework',
+      'one_to_one'::public.recommendation_type, 'Assessment'
     )$$,
   'started Trial with a trial Relationship completes successfully'
 );
@@ -626,8 +629,9 @@ set local role authenticated;
 select set_config('request.jwt.claim.sub', '40000000-0000-0000-0000-00000000000c', true);
 select throws_ok(
   $$select public.complete_trial_lesson(
-      '42000000-0000-0000-0000-000000000003', 1, 'Visible', 'Private',
-      'Performance', 'Next', 'Homework', 'one_to_one', 'Assessment'
+      '42000000-0000-0000-0000-000000000003'::uuid,
+      1::smallint, 'Visible', 'Private', 'Performance', 'Next', 'Homework',
+      'one_to_one'::public.recommendation_type, 'Assessment'
     )$$,
   '42501', null, 'removed Teacher role cannot complete a Trial'
 );

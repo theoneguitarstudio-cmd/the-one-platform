@@ -74,11 +74,13 @@ select set_config(
   true
 );
 
-select lives_ok(
+select throws_ok(
   $$update public.teacher_profiles
     set bio = 'Updated public teacher bio'
     where public_slug = 'teacher-a'$$,
-  'Teacher A can update an allowed own field'
+  '42501',
+  null,
+  'Teacher A must use the atomic self-update RPC instead of direct UPDATE'
 );
 
 select is(
@@ -91,18 +93,13 @@ select is(
   'Teacher A cannot read Teacher B private profile'
 );
 
-select is(
-  (
-    with attempted as (
-      update public.teacher_profiles
-      set bio = 'attempted cross-account change'
-      where public_slug = 'teacher-b'
-      returning 1
-    )
-    select count(*) from attempted
-  ),
-  0::bigint,
-  'Teacher A cannot update Teacher B'
+select throws_ok(
+  $$update public.teacher_profiles
+    set bio = 'attempted cross-account change'
+    where public_slug = 'teacher-b'$$,
+  '42501',
+  null,
+  'Teacher A cannot update Teacher B directly'
 );
 
 select throws_ok(

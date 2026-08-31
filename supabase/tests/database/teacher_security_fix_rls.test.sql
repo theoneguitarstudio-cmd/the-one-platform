@@ -1,6 +1,6 @@
 begin;
 
-select plan(15);
+select plan(16);
 
 insert into auth.users (id, email)
 values
@@ -96,7 +96,7 @@ select lives_ok(
   $$select public.update_own_teacher_profile(
       'Teacher A updated bio',
       null,
-      12,
+      12::smallint,
       900,
       1800,
       null,
@@ -131,7 +131,7 @@ select throws_ok(
   $$select public.update_own_teacher_profile(
       'Should rollback',
       null,
-      12,
+      12::smallint,
       900,
       1800,
       null,
@@ -161,7 +161,7 @@ select throws_ok(
   $$select public.update_own_teacher_profile(
       'Should rollback negative price',
       null,
-      12,
+      12::smallint,
       -1,
       1800,
       null,
@@ -180,12 +180,19 @@ select is(
   'negative-price failure leaves original profile unchanged'
 );
 
+reset role;
 select is(
   (select bio from public.teacher_profiles where public_slug = 'security-teacher-b'),
   'Teacher B original bio',
   'Teacher A RPC cannot target Teacher B'
 );
 
+set local role authenticated;
+select set_config(
+  'request.jwt.claim.sub',
+  '20000000-0000-0000-0000-00000000000a',
+  true
+);
 select throws_ok(
   $$update public.teacher_profiles
     set is_public = false
@@ -219,7 +226,7 @@ select throws_ok(
   $$select public.update_own_teacher_profile(
       'Anonymous attempt',
       null,
-      1,
+      1::smallint,
       null,
       null,
       null,
