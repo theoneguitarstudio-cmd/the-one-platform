@@ -32,7 +32,6 @@ export default async function TeacherTrialsPage({ searchParams }: TeacherTrialsP
           <select className="rounded-xl border border-[var(--border)] px-3 py-2" name="provider">
             <option value="manual_google_meet">Google Meet（手動）</option>
             <option value="manual_zoom">Zoom（手動）</option>
-            <option value="manual_url">其他安全連結</option>
           </select>
           <input className="rounded-xl border border-[var(--border)] px-3 py-2" name="url" placeholder="https://…" required type="url" />
           <button className="rounded-xl bg-[var(--brand-yellow)] px-4 py-2 font-semibold" type="submit">儲存</button>

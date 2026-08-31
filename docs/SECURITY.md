@@ -79,12 +79,18 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
   preferred mode, timezone, and necessary Lesson details.
 - Meeting URLs are absent from every public projection. The join Route Handler
   verifies a fresh active identity and relies on participant RLS before issuing
-  an external redirect.
+  an external redirect. The database and Route Handler independently enforce
+  exact Google Meet or safe-boundary `zoom.us` hosts; arbitrary URLs, userinfo,
+  local/private IP hosts, and provider/domain mismatches are rejected.
 - Student and Teacher collision races are blocked by PostgreSQL GiST exclusion
   constraints, not by a browser-only availability check.
 - Trial confirmation and completion functions are security-definer functions
   with empty `search_path`, schema-qualified access, revoked anonymous/public
   execution, row locking, unique constraints, and idempotent return behavior.
+- The Epic 3 hardening migration binds Assessments and Lesson Record completers
+  to Lesson participants, narrows participant column grants, rejects repeat
+  Trial requests for existing open relationships, and prevents completion
+  before `starts_at`.
 - Admin Trial mutations use the authenticated session so database role checks
   remain effective; the service role is used only for server-only Admin reads.
 

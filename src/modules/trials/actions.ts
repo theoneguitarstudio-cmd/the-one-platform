@@ -16,10 +16,20 @@ import {
   trialRequestSchema,
 } from "@/modules/trials/domain";
 import { zonedLocalDateTimeToUtc } from "@/modules/trials/timezone";
+import { normalizeMeetingUrl } from "@/modules/trials/meeting-url";
 
 function readString(formData: FormData, key: string): string {
   const value = formData.get(key);
   return typeof value === "string" ? value : "";
+}
+
+function trialRequestErrorUrl(
+  teacherSlug: string,
+  idempotencyKey: string,
+  error: string,
+) {
+  const query = new URLSearchParams({ error, intent: idempotencyKey });
+  return `/teachers/${teacherSlug}/trial?${query.toString()}`;
 }
 
 export async function requestTrialCheckout(formData: FormData) {
@@ -33,7 +43,7 @@ export async function requestTrialCheckout(formData: FormData) {
     teacherSlug: readString(formData, "teacherSlug"),
     timezone: readString(formData, "timezone"),
   });
-  if (!parsed.success) redirect(`/teachers/${readString(formData, "teacherSlug")}/trial?error=invalid_input`);
+  if (!parsed.success) redirect("/student/trial?error=invalid_input");
 
   let startsAt: string;
   try {
@@ -42,7 +52,13 @@ export async function requestTrialCheckout(formData: FormData) {
       parsed.data.timezone,
     );
   } catch {
-    redirect(`/teachers/${parsed.data.teacherSlug}/trial?error=invalid_time`);
+    redirect(
+      trialRequestErrorUrl(
+        parsed.data.teacherSlug,
+        parsed.data.idempotencyKey,
+        "invalid_time",
+      ),
+    );
   }
 
   const supabase = await createServerSupabaseClient();
@@ -55,7 +71,15 @@ export async function requestTrialCheckout(formData: FormData) {
     p_teacher_slug: parsed.data.teacherSlug,
     p_timezone: parsed.data.timezone,
   });
-  if (error) redirect(`/teachers/${parsed.data.teacherSlug}/trial?error=request_failed`);
+  if (error) {
+    redirect(
+      trialRequestErrorUrl(
+        parsed.data.teacherSlug,
+        parsed.data.idempotencyKey,
+        "request_failed",
+      ),
+    );
+  }
   revalidatePath("/student/trial");
   redirect("/student/trial?status=requested");
 }
@@ -67,10 +91,15 @@ export async function saveTeacherMeetingDefaults(formData: FormData) {
     url: readString(formData, "url"),
   });
   if (!parsed.success) redirect("/teacher/trials?error=invalid_meeting");
+  const normalizedUrl = normalizeMeetingUrl(
+    parsed.data.provider,
+    parsed.data.url,
+  );
+  if (!normalizedUrl) redirect("/teacher/trials?error=invalid_meeting");
   const supabase = await createServerSupabaseClient();
   const { error } = await supabase.rpc("update_own_teacher_meeting_defaults", {
     p_provider: parsed.data.provider,
-    p_url: parsed.data.url,
+    p_url: normalizedUrl,
   });
   if (error) redirect("/teacher/trials?error=save_failed");
   revalidatePath("/teacher/trials");

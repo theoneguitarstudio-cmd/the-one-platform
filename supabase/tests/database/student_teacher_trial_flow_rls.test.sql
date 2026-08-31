@@ -28,12 +28,12 @@ insert into public.teacher_profiles (
   (
     '30000000-0000-0000-0000-00000000000c', 'epic3-teacher-a', 'A',
     'active', true, array['online']::public.teaching_mode[], 500,
-    'manual_google_meet', 'https://meet.example.invalid/teacher-a'
+    'manual_google_meet', 'https://meet.google.com/aaa-bbbb-ccc'
   ),
   (
     '30000000-0000-0000-0000-00000000000d', 'epic3-teacher-b', 'B',
     'active', true, array['online']::public.teaching_mode[], 500,
-    'manual_zoom', 'https://zoom.example.invalid/teacher-b'
+    'manual_zoom', 'https://us02web.zoom.us/j/123456789'
   );
 
 insert into public.student_profiles (user_id, learning_goal, onboarding_status)
@@ -192,10 +192,16 @@ select throws_ok(
     '30000000-0000-0000-0000-00000000000c',
     (select id from public.student_teacher_relationships limit 1),
     'trial', 'online', '2099-02-01 10:00+00', '2099-02-01 10:40+00',
-    50, 'Asia/Taipei', 'scheduled', 'manual_url', 'https://meet.example.invalid/invalid'
+    50, 'Asia/Taipei', 'scheduled', 'manual_google_meet',
+    'https://meet.google.com/invalid-interval'
   )$$,
   '23514', null, 'invalid lesson interval is rejected'
 );
+
+update public.lessons set
+  starts_at = now() - interval '60 minutes',
+  ends_at = now() - interval '10 minutes'
+where status = 'scheduled';
 
 set local role authenticated;
 select set_config('request.jwt.claim.sub', '30000000-0000-0000-0000-00000000000d', true);

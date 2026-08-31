@@ -6,23 +6,34 @@ import { requireAreaAccess } from "@/modules/auth/server-authorization";
 import { getAuthenticatedIdentity } from "@/modules/auth/session";
 import { requestTrialCheckout } from "@/modules/trials/actions";
 import {
+  checkoutIntentKeySchema,
+  teacherSlugSchema,
+} from "@/modules/trials/domain";
+import {
   getOwnProfileTimezone,
   getTrialTeacherContext,
 } from "@/modules/trials/data";
 
 type TrialPageProps = {
   params: Promise<{ slug: string }>;
-  searchParams: Promise<{ error?: string }>;
+  searchParams: Promise<{ error?: string; intent?: string }>;
 };
 
 export default async function TrialPage({ params, searchParams }: TrialPageProps) {
   const { slug } = await params;
+  if (!teacherSlugSchema.safeParse(slug).success) notFound();
   const session = await getAuthenticatedIdentity();
   if (!session) {
     redirect(`/auth/sign-in?next=${encodeURIComponent(`/teachers/${slug}/trial`)}`);
   }
   const identity = await requireAreaAccess("student");
   const query = await searchParams;
+  const intent = checkoutIntentKeySchema.safeParse(query.intent);
+  if (!intent.success) {
+    const nextQuery = new URLSearchParams({ intent: randomUUID() });
+    if (query.error) nextQuery.set("error", query.error);
+    redirect(`/teachers/${slug}/trial?${nextQuery.toString()}`);
+  }
   const [teacher, studentTimezone] = await Promise.all([
     getTrialTeacherContext(slug),
     getOwnProfileTimezone(identity.userId),
@@ -45,7 +56,7 @@ export default async function TrialPage({ params, searchParams }: TrialPageProps
         <form action={requestTrialCheckout} className="space-y-6 px-6 py-8 sm:px-9">
           <input name="teacherSlug" type="hidden" value={teacher.publicSlug} />
           <input name="timezone" type="hidden" value={studentTimezone} />
-          <input name="idempotencyKey" type="hidden" value={randomUUID()} />
+          <input name="idempotencyKey" type="hidden" value={intent.data} />
           {query.error ? (
             <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-800">
               無法送出體驗課申請，請檢查資料或改選其他時間。

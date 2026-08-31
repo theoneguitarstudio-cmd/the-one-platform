@@ -25,8 +25,9 @@ To be completed from the approved formal PRD.
   availability. Weekly availability and recurring booking remain out of scope.
 - Scheduled Teacher and Student intervals may not overlap. PostgreSQL exclusion
   constraints provide race-safe enforcement using half-open UTC ranges.
-- Online Lessons snapshot the Teacher's manually configured HTTPS meeting
-  reference. Onsite Lessons snapshot the lesson-safe Teacher location text.
+- Online Lessons snapshot an allowlisted Google Meet or `zoom.us` HTTPS meeting
+  reference. Arbitrary manual URLs are not redirect targets in Epic 3. Onsite
+  Lessons snapshot the lesson-safe Teacher location text.
 - Only the assigned Teacher can complete a Trial. Completion atomically creates
   one record and assessment and advances `trial` to `awaiting_conversion`.
 - Trial confirmation/completion never creates packages, consumes credits,

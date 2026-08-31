@@ -5,9 +5,17 @@ const migration = readFileSync(
   "supabase/migrations/20260831000400_student_teacher_trial_flow.sql",
   "utf8",
 ).toLowerCase();
+const hardeningMigration = readFileSync(
+  "supabase/migrations/20260831000500_harden_trial_security_and_integrity.sql",
+  "utf8",
+).toLowerCase();
 const actions = readFileSync("src/modules/trials/actions.ts", "utf8");
 const data = readFileSync("src/modules/trials/data.ts", "utf8");
 const joinRoute = readFileSync("src/app/lesson/[id]/join/route.ts", "utf8");
+const trialRequestPage = readFileSync(
+  "src/app/teachers/[slug]/trial/page.tsx",
+  "utf8",
+);
 
 describe("Epic 3 trial flow contracts", () => {
   it("creates the required normalized domain tables", () => {
@@ -81,5 +89,54 @@ describe("Epic 3 trial flow contracts", () => {
     expect(migration).not.toContain("credit_ledger");
     expect(migration).not.toContain("teacher_earnings");
     expect(migration).not.toContain("course_packages");
+  });
+
+  it("hardens meeting URLs at the database and join boundaries", () => {
+    expect(hardeningMigration).toContain("private.is_safe_trial_meeting_url");
+    expect(hardeningMigration).toContain("requested_provider = 'manual_url' then false");
+    expect(hardeningMigration).toContain("meet[.]google[.]com([/?#]|$)");
+    expect(hardeningMigration).toContain("zoom[.]us([/?#]|$)");
+    expect(joinRoute).toContain("normalizeMeetingUrl");
+    expect(joinRoute).toContain("meeting_provider, meeting_url");
+  });
+
+  it("enforces relationship and participant integrity in PostgreSQL", () => {
+    expect(hardeningMigration).toContain("relationship does not permit a trial");
+    expect(hardeningMigration).toContain("trial relationship transition failed");
+    expect(hardeningMigration).toContain("assessments_lesson_participants_fkey");
+    expect(hardeningMigration).toContain(
+      "lesson_records_completed_by_assigned_teacher_fkey",
+    );
+  });
+
+  it("uses retry-safe scoped idempotency with deterministic locking", () => {
+    expect(hardeningMigration).toContain(
+      "unique (student_user_id, idempotency_key)",
+    );
+    expect(hardeningMigration).toContain(
+      "on conflict (student_user_id, idempotency_key) do nothing",
+    );
+    expect(hardeningMigration).toContain("pg_advisory_xact_lock");
+    expect(hardeningMigration).toContain("a trial request is already pending");
+    expect(trialRequestPage).toContain("query.intent");
+    expect(trialRequestPage).toContain('value={intent.data}');
+    expect(trialRequestPage).not.toContain('value={randomUUID()}');
+  });
+
+  it("prevents early completion and validates IANA timezones at the DB layer", () => {
+    expect(hardeningMigration).toContain("trial_lesson.starts_at > now()");
+    expect(hardeningMigration).toContain("private.is_valid_iana_timezone");
+    expect(hardeningMigration).toContain("lessons_timezone_anchor_is_iana");
+    expect(hardeningMigration).toContain("trial_orders_timezone_is_iana");
+  });
+
+  it("minimizes participant columns and pins trusted function ownership", () => {
+    expect(hardeningMigration).toContain(
+      "revoke select on table public.lessons from authenticated",
+    );
+    expect(hardeningMigration).toContain(
+      "revoke select on table public.assessments from authenticated",
+    );
+    expect(hardeningMigration).toContain("owner to postgres");
   });
 });

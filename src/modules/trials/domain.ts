@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { SUPPORTED_MEETING_PROVIDERS } from "@/modules/trials/meeting-url";
+
 export const DELIVERY_MODES = ["online", "onsite"] as const;
 export type DeliveryMode = (typeof DELIVERY_MODES)[number];
 
@@ -21,18 +23,25 @@ const localDateTimeSchema = z.string().regex(
   "請選擇有效日期與時間。",
 );
 
+export const teacherSlugSchema = z
+  .string()
+  .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/)
+  .max(80);
+
 export const trialRequestSchema = z.object({
   idempotencyKey: z.string().min(16).max(160),
   learningGoal: z.string().trim().min(1).max(1000),
   localStartsAt: localDateTimeSchema,
   preferredLocation: z.string().trim().max(160),
   preferredMode: z.enum(DELIVERY_MODES),
-  teacherSlug: z.string().regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/).max(80),
+  teacherSlug: teacherSlugSchema,
   timezone: z.string().min(3).max(80),
 });
 
+export const checkoutIntentKeySchema = z.uuid();
+
 export const teacherMeetingDefaultsSchema = z.object({
-  provider: z.enum(["manual_google_meet", "manual_zoom", "manual_url"]),
+  provider: z.enum(SUPPORTED_MEETING_PROVIDERS),
   url: z.url().startsWith("https://").max(2048),
 });
 
