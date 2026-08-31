@@ -44,6 +44,8 @@ yarn-error.log*
 *.csv
 *.dump
 *.backup
+!supabase/migrations/*.sql
+!supabase/tests/**/*.sql
 /backups/
 /migration-data/
 /private-data/

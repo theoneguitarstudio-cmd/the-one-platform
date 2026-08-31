@@ -7,3 +7,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+# The One 樂玩吉他 2.0 project rules
+
+- Keep the application a modular monolith. Domain and authorization logic belongs in `src/modules`, not UI components.
+- Preserve role boundaries for Student, Teacher, Admin, and Super Admin. Every privileged operation must be re-authorized on the server and protected by database policy.
+- Never expose secrets, service-role credentials, production personal data, database dumps, or private backups to the browser or Git.
+- Core brand colors are yellow `#FFD70A`, white `#FFFFFF`, and black `#171717`. Use yellow as an accent rather than a full-page background.
