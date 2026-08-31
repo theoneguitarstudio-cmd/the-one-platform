@@ -1,6 +1,8 @@
 [CmdletBinding()]
 param(
-  [string]$ContainerName
+  [string]$ContainerName,
+  [ValidateRange(1, 100)]
+  [int]$StressRounds = 20
 )
 
 $ErrorActionPreference = 'Stop'
@@ -49,7 +51,7 @@ $ids = [ordered]@{
 }
 
 $relationshipIds = 1..18 | ForEach-Object { '64000000-0000-0000-0000-{0:d12}' -f $_ }
-$orderIds = 1..10 | ForEach-Object { '65000000-0000-0000-0000-{0:d12}' -f $_ }
+$orderIds = 1..14 | ForEach-Object { '65000000-0000-0000-0000-{0:d12}' -f $_ }
 $lessonIds = 1..14 | ForEach-Object { '66000000-0000-0000-0000-{0:d12}' -f $_ }
 $allUserIdsSql = ($ids.Values | ForEach-Object { "'$_'::uuid" }) -join ', '
 
@@ -354,63 +356,77 @@ values
   }
 
   Run-Case 5 'Teacher schedule collision race' {
-    $fixtureSql = @"
+    $stats = [ordered]@{ Success = 0; Collision = 0; Deadlock = 0; Unique = 0; Partial = 0 }
+    foreach ($round in 1..$StressRounds) {
+      $fixtureSql = @"
+delete from public.lessons where trial_order_id in ('$($orderIds[6])', '$($orderIds[7])');
+delete from public.student_teacher_relationships where
+  (student_user_id in ('$($ids.student5)', '$($ids.student6)') and teacher_user_id = '$($ids.teacher5)');
+delete from public.trial_orders where id in ('$($orderIds[6])', '$($orderIds[7])');
 insert into public.trial_orders (id, idempotency_key, student_user_id, teacher_user_id, delivery_mode, proposed_starts_at, timezone, price_twd)
 values
   ('$($orderIds[6])', 'epic3-concurrency-teacher-race-a', '$($ids.student5)', '$($ids.teacher5)', 'online', '2099-09-05 10:00:00+00', 'Asia/Taipei', 500),
   ('$($orderIds[7])', 'epic3-concurrency-teacher-race-b', '$($ids.student6)', '$($ids.teacher5)', 'online', '2099-09-05 10:20:00+00', 'Asia/Taipei', 500);
 "@
-    Require-Success (Invoke-LocalPsql $fixtureSql) 'teacher collision orders'
-    $race = Invoke-Concurrent @(
-      (Authenticated-Sql $ids.admin1 "select pg_sleep(0.5); select public.confirm_trial_payment('$($orderIds[6])'::uuid, null);"),
-      (Authenticated-Sql $ids.admin2 "select pg_sleep(0.5); select public.confirm_trial_payment('$($orderIds[7])'::uuid, null);")
-    )
-    $successes = @($race | Where-Object ExitCode -eq 0)
-    $rejections = @($race | Where-Object ExitCode -ne 0)
-    $isExclusion = $rejections.Count -eq 1 -and (Has-SqlState $rejections[0] '23P01')
-    $isDeadlock = $rejections.Count -eq 1 -and (Has-SqlState $rejections[0] '40P01')
-    if ($successes.Count -ne 1 -or (-not $isExclusion -and -not $isDeadlock)) {
-      throw "Teacher collision did not produce exactly one committed lesson and one safe rejection: $($race | ConvertTo-Json -Compress -Depth 3)"
+      Require-Success (Invoke-LocalPsql $fixtureSql) "teacher collision fixture round $round"
+      $race = Invoke-Concurrent @(
+        (Authenticated-Sql $ids.admin1 "select pg_sleep(0.1); select public.confirm_trial_payment('$($orderIds[6])'::uuid, null);"),
+        (Authenticated-Sql $ids.admin2 "select pg_sleep(0.1); select public.confirm_trial_payment('$($orderIds[7])'::uuid, null);")
+      )
+      $successes = @($race | Where-Object ExitCode -eq 0)
+      $rejections = @($race | Where-Object ExitCode -ne 0)
+      $stats.Success += $successes.Count
+      $stats.Collision += @($rejections | Where-Object { Has-SqlState $_ '23P01' }).Count
+      $stats.Deadlock += @($rejections | Where-Object { Has-SqlState $_ '40P01' }).Count
+      $stats.Unique += @($rejections | Where-Object { Has-SqlState $_ '23505' }).Count
+      if ($successes.Count -ne 1 -or $rejections.Count -ne 1) {
+        throw "Teacher collision round $round had an unexpected outcome: $($race | ConvertTo-Json -Compress -Depth 3)"
+      }
+      $state = Invoke-LocalPsql "select (select count(*) from public.lessons where teacher_user_id='$($ids.teacher5)' and status='scheduled') || '|' || (select count(*) from public.student_teacher_relationships where teacher_user_id='$($ids.teacher5)') || '|' || (select count(*) from public.trial_orders where id in ('$($orderIds[6])','$($orderIds[7])') and payment_status='paid') || '|' || (select count(*) from public.trial_orders o where o.id in ('$($orderIds[6])','$($orderIds[7])') and o.payment_status='paid' and not exists (select 1 from public.lessons l where l.trial_order_id=o.id));"
+      Require-Success $state "teacher collision state round $round"
+      if (($state.Output -split "`r?`n")[-1] -ne '1|1|1|0') { $stats.Partial++ }
     }
-    Require-Count "select count(*) from public.lessons where teacher_user_id = '$($ids.teacher5)' and status = 'scheduled';" 1 'teacher collision lesson count'
-    Require-Count "select count(*) from public.student_teacher_relationships where teacher_user_id = '$($ids.teacher5)';" 1 'teacher collision relationship count'
-    Require-Count "select count(*) from public.trial_orders where id in ('$($orderIds[6])', '$($orderIds[7])') and payment_status = 'paid';" 1 'teacher collision paid count'
-    Require-Count "select count(*) from public.trial_orders o where o.id in ('$($orderIds[6])', '$($orderIds[7])') and o.payment_status = 'paid' and not exists (select 1 from public.lessons l where l.trial_order_id=o.id);" 0 'teacher collision partial payment count'
-    if ($isDeadlock) {
-      @{ Status = 'ARCHITECTURE RISK'; Details = 'Production confirm RPC preserved invariants, but the loser exposed transient SQLSTATE 40P01 while GiST checked the Teacher exclusion constraint.' }
-    } else {
-      @{ Status = 'EXPECTED REJECTION'; Details = 'Production confirm RPC preserved invariants; GiST rejected the overlapping Teacher schedule with 23P01.' }
+    if ($stats.Deadlock -ne 0 -or $stats.Unique -ne 0 -or $stats.Partial -ne 0 -or $stats.Collision -ne $StressRounds) {
+      throw "Teacher stress failed: rounds=$StressRounds success=$($stats.Success) 23P01=$($stats.Collision) 40P01=$($stats.Deadlock) 23505=$($stats.Unique) partial=$($stats.Partial)"
     }
+    @{ Status = 'EXPECTED REJECTION'; Details = "rounds=$StressRounds success=$($stats.Success) 23P01=$($stats.Collision) 40P01=$($stats.Deadlock) 23505=$($stats.Unique) partial=$($stats.Partial)" }
   }
 
   Run-Case 6 'Student schedule collision race' {
-    $fixtureSql = @"
+    $stats = [ordered]@{ Success = 0; Collision = 0; Deadlock = 0; Unique = 0; Partial = 0 }
+    foreach ($round in 1..$StressRounds) {
+      $fixtureSql = @"
+delete from public.lessons where trial_order_id in ('$($orderIds[8])', '$($orderIds[9])');
+delete from public.student_teacher_relationships where
+  student_user_id = '$($ids.student7)' and teacher_user_id in ('$($ids.teacher6)', '$($ids.teacher7)');
+delete from public.trial_orders where id in ('$($orderIds[8])', '$($orderIds[9])');
 insert into public.trial_orders (id, idempotency_key, student_user_id, teacher_user_id, delivery_mode, proposed_starts_at, timezone, price_twd)
 values
   ('$($orderIds[8])', 'epic3-concurrency-student-race-a', '$($ids.student7)', '$($ids.teacher6)', 'online', '2099-09-06 10:00:00+00', 'Asia/Taipei', 500),
   ('$($orderIds[9])', 'epic3-concurrency-student-race-b', '$($ids.student7)', '$($ids.teacher7)', 'online', '2099-09-06 10:20:00+00', 'Asia/Taipei', 500);
 "@
-    Require-Success (Invoke-LocalPsql $fixtureSql) 'student collision orders'
-    $race = Invoke-Concurrent @(
-      (Authenticated-Sql $ids.admin1 "select pg_sleep(0.5); select public.confirm_trial_payment('$($orderIds[8])'::uuid, null);"),
-      (Authenticated-Sql $ids.admin2 "select pg_sleep(0.5); select public.confirm_trial_payment('$($orderIds[9])'::uuid, null);")
-    )
-    $successes = @($race | Where-Object ExitCode -eq 0)
-    $rejections = @($race | Where-Object ExitCode -ne 0)
-    $isExclusion = $rejections.Count -eq 1 -and (Has-SqlState $rejections[0] '23P01')
-    $isDeadlock = $rejections.Count -eq 1 -and (Has-SqlState $rejections[0] '40P01')
-    if ($successes.Count -ne 1 -or (-not $isExclusion -and -not $isDeadlock)) {
-      throw "Student collision did not produce exactly one committed lesson and one safe rejection: $($race | ConvertTo-Json -Compress -Depth 3)"
+      Require-Success (Invoke-LocalPsql $fixtureSql) "student collision fixture round $round"
+      $race = Invoke-Concurrent @(
+        (Authenticated-Sql $ids.admin1 "select pg_sleep(0.1); select public.confirm_trial_payment('$($orderIds[8])'::uuid, null);"),
+        (Authenticated-Sql $ids.admin2 "select pg_sleep(0.1); select public.confirm_trial_payment('$($orderIds[9])'::uuid, null);")
+      )
+      $successes = @($race | Where-Object ExitCode -eq 0)
+      $rejections = @($race | Where-Object ExitCode -ne 0)
+      $stats.Success += $successes.Count
+      $stats.Collision += @($rejections | Where-Object { Has-SqlState $_ '23P01' }).Count
+      $stats.Deadlock += @($rejections | Where-Object { Has-SqlState $_ '40P01' }).Count
+      $stats.Unique += @($rejections | Where-Object { Has-SqlState $_ '23505' }).Count
+      if ($successes.Count -ne 1 -or $rejections.Count -ne 1) {
+        throw "Student collision round $round had an unexpected outcome: $($race | ConvertTo-Json -Compress -Depth 3)"
+      }
+      $state = Invoke-LocalPsql "select (select count(*) from public.lessons where student_user_id='$($ids.student7)' and status='scheduled') || '|' || (select count(*) from public.student_teacher_relationships where student_user_id='$($ids.student7)') || '|' || (select count(*) from public.trial_orders where id in ('$($orderIds[8])','$($orderIds[9])') and payment_status='paid') || '|' || (select count(*) from public.trial_orders o where o.id in ('$($orderIds[8])','$($orderIds[9])') and o.payment_status='paid' and not exists (select 1 from public.lessons l where l.trial_order_id=o.id));"
+      Require-Success $state "student collision state round $round"
+      if (($state.Output -split "`r?`n")[-1] -ne '1|1|1|0') { $stats.Partial++ }
     }
-    Require-Count "select count(*) from public.lessons where student_user_id = '$($ids.student7)' and status = 'scheduled';" 1 'student collision lesson count'
-    Require-Count "select count(*) from public.student_teacher_relationships where student_user_id = '$($ids.student7)';" 1 'student collision relationship count'
-    Require-Count "select count(*) from public.trial_orders where id in ('$($orderIds[8])', '$($orderIds[9])') and payment_status = 'paid';" 1 'student collision paid count'
-    Require-Count "select count(*) from public.trial_orders o where o.id in ('$($orderIds[8])', '$($orderIds[9])') and o.payment_status = 'paid' and not exists (select 1 from public.lessons l where l.trial_order_id=o.id);" 0 'student collision partial payment count'
-    if ($isDeadlock) {
-      @{ Status = 'ARCHITECTURE RISK'; Details = 'Production confirm RPC preserved invariants, but the loser exposed transient SQLSTATE 40P01 while GiST checked the Student exclusion constraint.' }
-    } else {
-      @{ Status = 'EXPECTED REJECTION'; Details = 'Production confirm RPC preserved invariants; GiST rejected the overlapping Student schedule with 23P01.' }
+    if ($stats.Deadlock -ne 0 -or $stats.Unique -ne 0 -or $stats.Partial -ne 0 -or $stats.Collision -ne $StressRounds) {
+      throw "Student stress failed: rounds=$StressRounds success=$($stats.Success) 23P01=$($stats.Collision) 40P01=$($stats.Deadlock) 23505=$($stats.Unique) partial=$($stats.Partial)"
     }
+    @{ Status = 'EXPECTED REJECTION'; Details = "rounds=$StressRounds success=$($stats.Success) 23P01=$($stats.Collision) 40P01=$($stats.Deadlock) 23505=$($stats.Unique) partial=$($stats.Partial)" }
   }
 
   Run-Case 7 'Adjacent lesson ranges' {
@@ -426,26 +442,42 @@ values
   }
 
   Run-Case 8 'Cancel then concurrent rebook' {
-    $fixtureSql = (New-RelationshipSql $relationshipIds[6] $ids.student9 $ids.teacher10) + (New-RelationshipSql $relationshipIds[7] $ids.student10 $ids.teacher10) + (New-RelationshipSql $relationshipIds[8] $ids.student11 $ids.teacher10) + (New-OnsiteLessonSql $lessonIds[6] $ids.student9 $ids.teacher10 $relationshipIds[6] '2099-09-08 10:00:00+00' '2099-09-08 10:50:00+00' 'admin_cancelled')
-    Require-Success (Invoke-LocalPsql $fixtureSql) 'cancel/rebook fixture'
-    $race = Invoke-Concurrent @(
-      "begin; select pg_sleep(0.5); $(New-OnsiteLessonSql $lessonIds[7] $ids.student10 $ids.teacher10 $relationshipIds[7] '2099-09-08 10:00:00+00' '2099-09-08 10:50:00+00') commit;",
-      "begin; select pg_sleep(0.5); $(New-OnsiteLessonSql $lessonIds[8] $ids.student11 $ids.teacher10 $relationshipIds[8] '2099-09-08 10:00:00+00' '2099-09-08 10:50:00+00') commit;"
-    )
-    $successes = @($race | Where-Object ExitCode -eq 0)
-    $rejections = @($race | Where-Object ExitCode -ne 0)
-    $isExclusion = $rejections.Count -eq 1 -and (Has-SqlState $rejections[0] '23P01')
-    $isDeadlock = $rejections.Count -eq 1 -and (Has-SqlState $rejections[0] '40P01')
-    if ($successes.Count -ne 1 -or (-not $isExclusion -and -not $isDeadlock)) {
-      throw "Rebook race did not produce one success and one safe rejection: $($race | ConvertTo-Json -Compress -Depth 3)"
+    $baseFixture = (New-RelationshipSql $relationshipIds[6] $ids.student9 $ids.teacher10) + (New-OnsiteLessonSql $lessonIds[6] $ids.student9 $ids.teacher10 $relationshipIds[6] '2099-09-08 10:00:00+00' '2099-09-08 10:50:00+00' 'admin_cancelled')
+    Require-Success (Invoke-LocalPsql $baseFixture) 'cancel/rebook base fixture'
+    $stats = [ordered]@{ Success = 0; Collision = 0; Deadlock = 0; Unique = 0; Partial = 0 }
+    foreach ($round in 1..$StressRounds) {
+      $fixtureSql = @"
+delete from public.lessons where trial_order_id in ('$($orderIds[10])', '$($orderIds[11])');
+delete from public.student_teacher_relationships where
+  student_user_id in ('$($ids.student10)', '$($ids.student11)') and teacher_user_id='$($ids.teacher10)';
+delete from public.trial_orders where id in ('$($orderIds[10])', '$($orderIds[11])');
+insert into public.trial_orders (id, idempotency_key, student_user_id, teacher_user_id, delivery_mode, proposed_starts_at, timezone, price_twd)
+values
+  ('$($orderIds[10])', 'epic3-concurrency-rebook-race-a', '$($ids.student10)', '$($ids.teacher10)', 'online', '2099-09-08 10:00:00+00', 'Asia/Taipei', 500),
+  ('$($orderIds[11])', 'epic3-concurrency-rebook-race-b', '$($ids.student11)', '$($ids.teacher10)', 'online', '2099-09-08 10:00:00+00', 'Asia/Taipei', 500);
+"@
+      Require-Success (Invoke-LocalPsql $fixtureSql) "cancel/rebook fixture round $round"
+      $race = Invoke-Concurrent @(
+        (Authenticated-Sql $ids.admin1 "select pg_sleep(0.1); select public.confirm_trial_payment('$($orderIds[10])'::uuid, null);"),
+        (Authenticated-Sql $ids.admin2 "select pg_sleep(0.1); select public.confirm_trial_payment('$($orderIds[11])'::uuid, null);")
+      )
+      $successes = @($race | Where-Object ExitCode -eq 0)
+      $rejections = @($race | Where-Object ExitCode -ne 0)
+      $stats.Success += $successes.Count
+      $stats.Collision += @($rejections | Where-Object { Has-SqlState $_ '23P01' }).Count
+      $stats.Deadlock += @($rejections | Where-Object { Has-SqlState $_ '40P01' }).Count
+      $stats.Unique += @($rejections | Where-Object { Has-SqlState $_ '23505' }).Count
+      if ($successes.Count -ne 1 -or $rejections.Count -ne 1) {
+        throw "Rebook round $round had an unexpected outcome: $($race | ConvertTo-Json -Compress -Depth 3)"
+      }
+      $state = Invoke-LocalPsql "select (select count(*) from public.lessons where id='$($lessonIds[6])' and status='admin_cancelled') || '|' || (select count(*) from public.lessons where trial_order_id in ('$($orderIds[10])','$($orderIds[11])') and status='scheduled') || '|' || (select count(*) from public.trial_orders where id in ('$($orderIds[10])','$($orderIds[11])') and payment_status='paid') || '|' || (select count(*) from public.trial_orders o where o.id in ('$($orderIds[10])','$($orderIds[11])') and o.payment_status='paid' and not exists (select 1 from public.lessons l where l.trial_order_id=o.id));"
+      Require-Success $state "rebook state round $round"
+      if (($state.Output -split "`r?`n")[-1] -ne '1|1|1|0') { $stats.Partial++ }
     }
-    Require-Count "select count(*) from public.lessons where teacher_user_id = '$($ids.teacher10)' and status = 'admin_cancelled';" 1 'cancelled lesson count'
-    Require-Count "select count(*) from public.lessons where teacher_user_id = '$($ids.teacher10)' and status = 'scheduled';" 1 'rebook winner count'
-    if ($isDeadlock) {
-      @{ Status = 'ARCHITECTURE RISK'; Details = 'Cancelled lesson did not block and invariants held, but the competing replacement exposed transient SQLSTATE 40P01 during GiST exclusion checking.' }
-    } else {
-      @{ Status = 'EXPECTED REJECTION'; Details = 'Cancelled lesson did not block; exactly one replacement committed and the competing replacement received 23P01.' }
+    if ($stats.Deadlock -ne 0 -or $stats.Unique -ne 0 -or $stats.Partial -ne 0 -or $stats.Collision -ne $StressRounds) {
+      throw "Rebook stress failed: rounds=$StressRounds success=$($stats.Success) 23P01=$($stats.Collision) 40P01=$($stats.Deadlock) 23505=$($stats.Unique) partial=$($stats.Partial)"
     }
+    @{ Status = 'EXPECTED REJECTION'; Details = "rounds=$StressRounds success=$($stats.Success) 23P01=$($stats.Collision) 40P01=$($stats.Deadlock) 23505=$($stats.Unique) partial=$($stats.Partial)" }
   }
 
   Run-Case 9 'Concurrent trial completion' {
@@ -521,13 +553,76 @@ values ('$($orderIds[5])', 'epic3-concurrency-deadlock-order', '$($ids.student12
       throw "Reverse lock probe did not yield one detected 40P01 and one survivor: $($race.Output -join ' | ')"
     }
     $productionDeadlockObserved = @(
-      $results | Where-Object { $_.Test -le 11 -and $_.Details -match '40P01' }
+      $results | Where-Object {
+        $_.Test -le 11 -and (
+          $_.Details -match '40P01=([1-9][0-9]*)' -or
+          $_.Details -match 'exposed transient SQLSTATE 40P01'
+        )
+      }
     ).Count -gt 0
     if ($productionDeadlockObserved) {
       @{ Status = 'ARCHITECTURE RISK'; Details = 'Intentional privileged inverse row-lock order produced one prompt 40P01 and one survivor. A production confirm RPC collision also exposed 40P01 in this run; schedule-resource lock ordering or bounded server retry is required.' }
     } else {
       @{ Status = 'PASS'; Details = 'Intentional privileged inverse row-lock order produced one prompt 40P01 and one survivor. No production RPC deadlock occurred in this run; repeated runs are required because GiST deadlocks are timing-dependent.' }
     }
+  }
+
+  Run-Case 13 'Reschedule versus confirmation collision race' {
+    $fixtureSql = @"
+insert into public.trial_orders (
+  id, idempotency_key, student_user_id, teacher_user_id, delivery_mode,
+  proposed_starts_at, timezone, price_twd, payment_status, confirmed_at,
+  confirmed_by
+) values (
+  '$($orderIds[13])', 'epic3-concurrency-reschedule-source',
+  '$($ids.student12)', '$($ids.teacher7)', 'online',
+  '2099-09-13 08:00:00+00', 'Asia/Taipei', 500, 'paid', now(),
+  '$($ids.admin1)'
+);
+insert into public.student_teacher_relationships (
+  id, student_user_id, teacher_user_id, relationship_status, preferred_mode
+) values (
+  '$($relationshipIds[13])', '$($ids.student12)', '$($ids.teacher7)',
+  'trial', 'online'
+);
+insert into public.lessons (
+  id, student_user_id, teacher_user_id, relationship_id, trial_order_id,
+  lesson_type, delivery_mode, starts_at, ends_at, duration_minutes,
+  timezone_anchor, status, meeting_provider, meeting_url
+) values (
+  '$($lessonIds[13])', '$($ids.student12)', '$($ids.teacher7)',
+  '$($relationshipIds[13])', '$($orderIds[13])', 'trial', 'online',
+  '2099-09-13 08:00:00+00', '2099-09-13 08:50:00+00', 50,
+  'Asia/Taipei', 'scheduled', 'manual_google_meet',
+  'https://meet.google.com/epic-test-room'
+);
+insert into public.trial_orders (
+  id, idempotency_key, student_user_id, teacher_user_id, delivery_mode,
+  proposed_starts_at, timezone, price_twd
+) values (
+  '$($orderIds[12])', 'epic3-concurrency-reschedule-target',
+  '$($ids.student6)', '$($ids.teacher7)', 'online',
+  '2099-09-13 10:20:00+00', 'Asia/Taipei', 500
+);
+"@
+    Require-Success (Invoke-LocalPsql $fixtureSql) 'reschedule collision fixture'
+    $race = Invoke-Concurrent @(
+      (Authenticated-Sql $ids.admin1 "select pg_sleep(0.1); select public.admin_reschedule_trial_lesson('$($lessonIds[13])'::uuid, '2099-09-13 10:00:00+00'::timestamptz);"),
+      (Authenticated-Sql $ids.admin2 "select pg_sleep(0.1); select public.confirm_trial_payment('$($orderIds[12])'::uuid, null);")
+    )
+    $successes = @($race | Where-Object ExitCode -eq 0)
+    $rejections = @($race | Where-Object ExitCode -ne 0)
+    $deadlocks = @($rejections | Where-Object { Has-SqlState $_ '40P01' })
+    $uniqueViolations = @($rejections | Where-Object { Has-SqlState $_ '23505' })
+    $collisions = @($rejections | Where-Object { Has-SqlState $_ '23P01' })
+    if ($successes.Count -ne 1 -or $collisions.Count -ne 1 -or $deadlocks.Count -ne 0 -or $uniqueViolations.Count -ne 0) {
+      throw "Reschedule collision had an unexpected outcome: $($race | ConvertTo-Json -Compress -Depth 3)"
+    }
+    $state = Invoke-LocalPsql "select (select count(*) from public.lessons where teacher_user_id='$($ids.teacher7)' and status='scheduled' and tstzrange(starts_at,ends_at,'[)') && tstzrange('2099-09-13 10:00:00+00','2099-09-13 11:10:00+00','[)')) || '|' || (select count(*) from public.lessons where id='$($lessonIds[13])' and status='scheduled' and starts_at in ('2099-09-13 08:00:00+00','2099-09-13 10:00:00+00')) || '|' || (select count(*) from public.trial_orders o where o.id='$($orderIds[12])' and o.payment_status='paid' and not exists (select 1 from public.lessons l where l.trial_order_id=o.id));"
+    Require-Success $state 'reschedule collision state'
+    $finalState = ($state.Output -split "`r?`n")[-1]
+    if ($finalState -ne '1|1|0') { throw "Reschedule collision left invalid state: $finalState" }
+    @{ Status = 'EXPECTED REJECTION'; Details = 'One target-slot mutation committed, the loser received 23P01, the original lesson remained valid, and no paid-without-lesson state was created.' }
   }
 } finally {
   $cleanup = Invoke-LocalPsql -Sql $cleanupSql

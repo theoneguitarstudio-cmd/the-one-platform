@@ -25,10 +25,20 @@ To be completed from the approved formal PRD.
   availability. Weekly availability and recurring booking remain out of scope.
 - Scheduled Teacher and Student intervals may not overlap. PostgreSQL exclusion
   constraints provide race-safe enforcement using half-open UTC ranges.
+  Trusted schedule mutations first serialize on deterministic Student and
+  Teacher schedule-resource locks; the exclusion constraints remain the final
+  integrity guard.
 - Online Lessons snapshot an allowlisted Google Meet or `zoom.us` HTTPS meeting
   reference. Arbitrary manual URLs are not redirect targets in Epic 3. Onsite
   Lessons snapshot the lesson-safe Teacher location text.
 - Only the assigned Teacher can complete a Trial. Completion atomically creates
   one record and assessment and advances `trial` to `awaiting_conversion`.
+- Epic 3 MVP uses first-committer/lock-winner semantics when Trial completion
+  races Admin cancellation. Either transition may win, but the transaction must
+  leave a fully completed Trial or a fully cancelled Trial, never partial state.
+  Admin cancellation priority would require a future explicit state machine.
+- Authorization is evaluated while a mutation transaction executes. Role or
+  account revocation rejects every mutation that begins after revocation; an
+  already-authorized in-flight transaction may still complete.
 - Trial confirmation/completion never creates packages, consumes credits,
   creates earnings, or creates rewards.

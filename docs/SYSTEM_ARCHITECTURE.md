@@ -38,8 +38,12 @@ The Trial module is a vertical slice inside the modular monolith:
   re-authorize the role at the mutation boundary.
 - Authenticated security-definer RPCs own the payment-confirmation and
   Trial-completion transactions. Database grants/RLS remain the final boundary.
-- PostgreSQL uniqueness, row locks, advisory pair locks, and interval exclusion
-  constraints provide idempotency and race-safe scheduling.
+- PostgreSQL uniqueness, row locks, advisory pair locks, deterministic Student
+  and Teacher schedule-resource locks, and interval exclusion constraints
+  provide idempotency and race-safe scheduling. Every trusted mutation that
+  enters, changes, or leaves the `scheduled` exclusion predicate acquires the
+  same resource keys in ascending numeric order before locking or writing the
+  Lesson row. GiST remains the final integrity guard.
 - `/lesson/[id]/join` is the only meeting redirect. It performs fresh identity
   validation and a participant-RLS Lesson lookup; public pages never receive a
   meeting reference.
