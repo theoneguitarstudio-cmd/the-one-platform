@@ -27,3 +27,23 @@ view over private account records exposed to the Data API.
 The Admin management page is route-protected and its mutations require both
 server authorization and the server-only service-role client. This is a
 deliberate administrative boundary, not a client-side role check.
+
+## Epic 3 Trial Flow architecture
+
+The Trial module is a vertical slice inside the modular monolith:
+
+- Server Components call server-only DTO modules for Student, Teacher, and
+  Admin views.
+- Server Actions validate untrusted form input, convert IANA local time, and
+  re-authorize the role at the mutation boundary.
+- Authenticated security-definer RPCs own the payment-confirmation and
+  Trial-completion transactions. Database grants/RLS remain the final boundary.
+- PostgreSQL uniqueness, row locks, advisory pair locks, and interval exclusion
+  constraints provide idempotency and race-safe scheduling.
+- `/lesson/[id]/join` is the only meeting redirect. It performs fresh identity
+  validation and a participant-RLS Lesson lookup; public pages never receive a
+  meeting reference.
+
+Epic 3 intentionally uses an Admin/Teacher-controlled requested-time workflow.
+It does not introduce availability recurrence, payment providers, credits,
+earnings, packages, notifications, or calendar integrations.

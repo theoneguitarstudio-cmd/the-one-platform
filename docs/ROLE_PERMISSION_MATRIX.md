@@ -46,3 +46,16 @@ to be completed from the approved formal PRD.
 The UI does not grant authority. Teacher and Admin server actions independently
 verify protected-route access, while database grants and RLS enforce the
 same ownership limits for normal user-scoped data access.
+
+## Epic 3 Trial permissions
+
+| Actor | Student profile | Relationship / Lesson | Record / Assessment | Mutation |
+| --- | --- | --- | --- | --- |
+| Anonymous | None | None | None | None |
+| Student | Own row only | Own participation only | Own Student-safe columns and assessment | Request pending Trial checkout only through RPC |
+| Teacher | Minimal Trial Student DTO only | Own participation only | Own workflow DTO includes private Teacher notes | Meeting defaults and assigned Trial completion through RPC |
+| Admin / Super Admin | Server-only management | Server-only management | Server-only management | Authenticated Admin RPC for payment confirm, reschedule, and cancel |
+
+No authenticated client receives direct insert, update, or delete grants on
+Trial domain tables. High-risk actions re-check active account and role in both
+the Next.js server action and database function.

@@ -15,6 +15,12 @@ export default function TeacherPage() {
         >
           編輯公開老師資料
         </Link>
+        <Link
+          className="ml-3 mt-5 inline-flex rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-semibold"
+          href="/teacher/trials"
+        >
+          體驗課工作台
+        </Link>
         <div className="mt-6">
           <SignOutForm />
         </div>

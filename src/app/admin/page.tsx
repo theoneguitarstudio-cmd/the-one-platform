@@ -20,6 +20,12 @@ export default function AdminPage() {
         >
           管理老師
         </Link>
+        <Link
+          className="ml-3 mt-5 inline-flex rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-semibold"
+          href="/admin/trials"
+        >
+          管理體驗課
+        </Link>
         <div className="mt-6">
           <SignOutForm />
         </div>

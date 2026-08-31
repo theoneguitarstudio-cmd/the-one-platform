@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { TeacherAvatar } from "@/components/teachers/teacher-avatar";
@@ -142,14 +143,12 @@ function TeacherDetail({ teacher }: { teacher: PublicTeacher }) {
           </p>
         </section>
 
-        <button
-          aria-disabled="true"
-          className="mt-10 w-full rounded-xl bg-[var(--brand-yellow)] px-5 py-3 font-semibold text-[var(--text-primary)] disabled:cursor-not-allowed disabled:opacity-70"
-          disabled
-          type="button"
+        <Link
+          className="mt-10 flex w-full justify-center rounded-xl bg-[var(--brand-yellow)] px-5 py-3 font-semibold text-[var(--text-primary)]"
+          href={`/teachers/${teacher.publicSlug}/trial`}
         >
-          預約體驗課（即將開放）
-        </button>
+          預約 50 分鐘體驗課
+        </Link>
       </article>
     </main>
   );

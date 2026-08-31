@@ -84,3 +84,32 @@ can be introduced later without changing existing public URL identity.
 
 `supabase/migrations/20260831000200_teacher_profiles_public_discovery.sql`
 creates the tables, policies, triggers, and deterministic catalog seeds.
+
+## Epic 3 implemented model
+
+`student_profiles` owns learning goals, preferred delivery mode/location,
+onboarding state, and an optional current Learning Map Stage. Student learning
+data remains separate from the private account `profiles` table.
+
+`student_teacher_relationships` is the durable teaching relationship and does
+not derive its state from an order. A partial unique index permits only one
+open `trial`, `awaiting_conversion`, `active`, or `paused` relationship for a
+Student–Teacher pair.
+
+`trial_orders` is the deliberately small commerce boundary. It snapshots the
+trial price, requested UTC instant, delivery mode, IANA timezone, payment state,
+and an idempotency key. No payment-provider or financial instrument data is
+stored in Epic 3.
+
+`lessons` is the extensible lesson base for `trial`, `fixed`, `flexible`, and
+`makeup`, while Epic 3 creates only `trial`. It stores UTC `timestamptz`
+intervals, an IANA timezone anchor, duration, delivery details, and a snapshot
+of the participant-only meeting or lesson-safe location. Composite foreign
+keys guarantee the relationship and order participants match the lesson.
+
+`lesson_records` and `assessments` are one-to-one with a Trial Lesson. The
+record separates Student-visible notes from Teacher-private notes; assessment
+stores the primary stage, recommendation category, and formal summary.
+
+The source of truth is
+`supabase/migrations/20260831000400_student_teacher_trial_flow.sql`.

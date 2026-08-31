@@ -67,3 +67,30 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
   rollout.
 - Establish an audited Admin assignment workflow and slug-change redirect
   history before operational staff use the management screen at scale.
+
+## Epic 3 implemented baseline
+
+- Anonymous users have no grants on Student, relationship, order, lesson,
+  record, or assessment tables and cannot execute Trial business RPCs.
+- Participant RLS is backed by explicit column grants. In particular,
+  `private_teacher_notes` is absent from the authenticated Lesson Record grant;
+  Teachers receive it only from an ownership-checking DTO RPC.
+- Student-to-Teacher data sharing is minimized to display name, learning goal,
+  preferred mode, timezone, and necessary Lesson details.
+- Meeting URLs are absent from every public projection. The join Route Handler
+  verifies a fresh active identity and relies on participant RLS before issuing
+  an external redirect.
+- Student and Teacher collision races are blocked by PostgreSQL GiST exclusion
+  constraints, not by a browser-only availability check.
+- Trial confirmation and completion functions are security-definer functions
+  with empty `search_path`, schema-qualified access, revoked anonymous/public
+  execution, row locking, unique constraints, and idempotent return behavior.
+- Admin Trial mutations use the authenticated session so database role checks
+  remain effective; the service role is used only for server-only Admin reads.
+
+## Epic 3 operational work still required
+
+- Apply the migration to local/staging and run pgTAP before remote rollout.
+- Add durable privileged-operation audit events before production staff scale.
+- Replace manual payment and meeting references only in their dedicated future
+  integration epics; do not broaden Trial table client grants.

@@ -1,4 +1,5 @@
 import { SignOutForm } from "@/components/auth/sign-out-form";
+import Link from "next/link";
 
 export default function StudentPage() {
   return (
@@ -8,6 +9,9 @@ export default function StudentPage() {
           Protected route
         </p>
         <h1 className="mt-2 text-3xl font-semibold">Student</h1>
+        <Link className="mt-5 inline-flex rounded-xl bg-[var(--brand-yellow)] px-4 py-2 text-sm font-semibold" href="/student/trial">
+          查看我的體驗課
+        </Link>
         <div className="mt-6">
           <SignOutForm />
         </div>
