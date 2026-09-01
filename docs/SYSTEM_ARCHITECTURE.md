@@ -1,6 +1,6 @@
 # SYSTEM ARCHITECTURE
 
-## Architecture Follow-up — Scheduling & Booking Core (proposed)
+## Epic 6 — Scheduling & Booking Core (implemented locally)
 
 One-on-one teaching is a first-class domain beside LMS membership. Scheduling
 owns availability, booking behavior, recurring-series semantics, exceptions,
@@ -10,24 +10,30 @@ represents the actual occurrence:
 
 `lesson entitlement / credit ≠ booking or recurring slot ≠ lesson instance`.
 
-Both fixed and flexible modes consume the same future Lesson Credit entitlement
+Both fixed and flexible modes consume the same Lesson Credit entitlement
 ledger. Scheduling reserves/releases/consumes a credit through Entitlement; it
 does not create mode-specific credit balances.
 
-Fixed needs concepts equivalent to `recurring_lesson_series`, weekly rule/slot,
+Fixed uses `recurring_lesson_series`, bounded `recurring_lesson_occurrences`,
 series exceptions, priority reservation, and lazily generated lesson instances
 (never a batch of 100 future Lessons). It must handle pause/end/change, leave,
 Teacher unavailability, holiday/exception, temporary release, credit expiry,
 IANA timezone/DST, and Teacher/Admin override. Priority slots are excluded from
 Flexible availability unless an authorized exception releases them.
 
-Flexible Booking exposes eligible Teacher availability and creates one Lesson
+Flexible Booking exposes only generated slot DTOs and atomically creates one Lesson
 per chosen slot. It reuses Epic 3 `lessons`, Student–Teacher relationships, UTC
 `timestamptz` plus IANA anchor, collision/exclusion constraints, deterministic
 advisory locking, Lesson Records, and participant access controls. It needs
 availability/exception rules, credit reservation lifecycle, cancellation/
-reschedule policy, and audited Admin overrides. Lesson participation never
+reschedule primitives, and audited Admin overrides. Lesson participation never
 grants wholesale access to LMS submissions or private learning data.
+
+The first migration is `20260901000600_scheduling_booking_core.sql`. Weekly
+series store local wall time plus an IANA timezone; actual bookings and Lessons
+store UTC `timestamptz` instants. Ambiguous and nonexistent DST occurrences are
+recorded as failed occurrence claims instead of selecting an offset silently.
+All mutations use role-checked RPCs and the shared Epic 3 schedule lock order.
 
 ## Architecture Update — Learning Verification LMS (proposed)
 

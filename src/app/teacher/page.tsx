@@ -24,6 +24,9 @@ export default function TeacherPage() {
         <Link className="ml-3 mt-5 inline-flex rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-semibold" href="/teacher/packages">
           學生課程方案
         </Link>
+        <Link className="ml-3 mt-5 inline-flex rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-semibold" href="/teacher/schedule">
+          Availability 與課表
+        </Link>
         <div className="mt-6">
           <SignOutForm />
         </div>

@@ -1,11 +1,11 @@
 # SECURITY
 
-## Scheduling / one-on-one security architecture (proposed)
+## Epic 6 Scheduling / one-on-one security
 
 - Fixed-slot priority, Flexible availability, booking, series exception,
-  cancellation, and reschedule need transactional server/database authorization;
-  route/UI state is insufficient.
-- Credit reservation, consumption, release, reversal, and compensation require
+  cancellation, and reschedule use transactional server/database authorization;
+  route/UI state is never authority.
+- Credit reservation, consumption, and release use
   an auditable ledger transaction linked to the booking or Lesson. A Teacher
   cannot directly mutate a Student entitlement balance.
 - Teacher/Student collision protection retains Epic 3 UTC/IANA semantics,
@@ -14,6 +14,13 @@
 - Admin overrides record actor, reason, scope, credit outcome, and earning
   outcome; they do not grant broad access to unrelated submissions, feedback,
   or private profiles.
+- All Epic 6 tables have RLS, raw DML is revoked from `anon`, `authenticated`,
+  and `service_role`, and mutation functions are `SECURITY DEFINER`, owned by
+  `postgres`, schema-qualified, and pinned to an empty `search_path`.
+- All Booking, occurrence, series, and availability mutations converge on the
+  Epic 3 Student/Teacher advisory lock order. GiST exclusion constraints remain
+  the final UTC-instant integrity guard; constraint and deadlock errors are
+  translated to stable domain errors.
 
 ## Learning Verification & Membership security architecture (proposed)
 

@@ -1,11 +1,11 @@
 # ROLE PERMISSION MATRIX
 
-## Scheduling & lesson-credit architecture proposal
+## Epic 6 Scheduling & lesson-credit authorization
 
 | Capability | Student | Teacher | Admin / Super Admin |
 | --- | --- | --- | --- |
-| Create eligible Flexible Booking | Own credit and allowed availability | No booking for another user | Audited management path |
-| Manage Fixed series | Own series/safe details | Own assigned series only | Audited management path |
+| Create eligible Flexible Booking | Own credit and allowed availability | Own Teacher schedule for an active relationship | Audited management path |
+| Manage Fixed series | Read own safe summary only | Own assigned series only | Audited management path |
 | Set availability / exception | No | Own approved availability | Audited management path |
 | Release priority slot / override | No | Limited approved exception | Reasoned, audited override |
 | Consume/release Lesson Credit | No direct mutation | No direct mutation | Authorized transaction only |
@@ -13,6 +13,10 @@
 Scheduling and credit authorization are independent. A participant cannot alter
 the other party's booking, a Teacher cannot mutate Student credit, and an
 exceptional Admin change records its credit/earning outcome.
+
+Anonymous users have no Scheduling-domain table or RPC access. Authenticated
+clients have no raw mutation grants; participant reads are via RLS and allowlisted
+DTO RPCs. Fixed-series creation is Teacher/Admin only.
 
 ## Learning Verification & Membership architecture proposal
 

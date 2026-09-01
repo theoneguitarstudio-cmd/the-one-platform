@@ -1,6 +1,6 @@
 # BUSINESS RULES
 
-## Core 1-on-1 and configurable quota architecture proposal
+## Epic 6 core 1-on-1 scheduling rules
 
 - One-on-one Fixed/Recurring and Flexible Booking are both core services, not
   subordinate LMS features. Free, Plus, and Pro do not prevent independent
@@ -24,6 +24,18 @@
 - LMS review can recommend one-on-one escalation. A lesson Teacher sees only
   separately authorized minimum learning-map data, never all submissions or
   private feedback by default.
+- Flexible confirmation reserves exactly one credit and creates one Booking and
+  one Epic 3 Lesson in the same transaction. A retry uses the Student-scoped
+  idempotency key.
+- Fixed series create only bounded priority claims within the Teacher booking
+  horizon. Each occurrence is materialized separately and reserves one explicit
+  eligible entitlement. Missing credit marks `credit_required`; it never deletes
+  or silently weakens the series.
+- Cancelling requires an explicit `released`, `consumed`, `unchanged`, or
+  `manual_review_required` credit outcome. Rescheduling keeps the existing
+  reservation and changes the Lesson and Booking atomically.
+- Recurring local wall times use IANA timezone rules. Ambiguous or nonexistent
+  DST wall times are rejected/marked failed and must be resolved explicitly.
 
 ## Learning Verification & Membership architecture proposal
 

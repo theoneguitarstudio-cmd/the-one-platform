@@ -1,26 +1,27 @@
 # DATABASE DOMAIN MODEL
 
-## Scheduling & Lesson-credit architecture proposal (not implemented)
+## Epic 6 Scheduling & Lesson-credit domain
 
-No scheduling schema is created here. Existing Epic 3 `lessons`,
+Epic 6 adds the scheduling commitment layer while retaining Epic 3 `lessons`,
 `student_teacher_relationships`, `lesson_records`, UTC/IANA fields, and
-collision guarantees remain the occurrence foundation.
+collision guarantees as the occurrence foundation.
 
-| Proposed concept | Purpose |
+| Record | Purpose |
 | --- | --- |
-| Teacher availability rules/exceptions | Flexible source and absence/holiday handling |
-| Flexible booking/reservation | One selected time, pair, lifecycle, credit reservation |
-| Recurring lesson series and weekly slot/rule | Fixed local-time priority reservation |
-| Series exceptions | Leave, reschedule, pause, release, Teacher unavailable, holiday |
-| Instance generation state | Lazy safe Lesson creation rather than mass future rows |
-| Credit reservation/consumption/release linkage | One credit ledger for Fixed and Flexible |
-| Override/audit record | Actor, reason, scope, credit and earning outcome |
+| `teacher_scheduling_settings` | IANA timezone, notice, horizon, slot interval |
+| `teacher_availability_rules` / `teacher_availability_exceptions` | Flexible source and absence/holiday/opening handling |
+| `bookings` | One scheduled commitment, lifecycle, Lesson and credit-reservation linkage |
+| `recurring_lesson_series` | Fixed weekly local-time commitment, optional preferred entitlement |
+| `recurring_lesson_occurrences` | Bounded UTC priority claims and materialization state |
+| `recurring_lesson_series_exceptions` | Leave, reschedule, release, Teacher unavailable, holiday |
+| `audit_logs` | Actor, reason, before/after, credit and earning outcome |
 
-Future `lesson_credit`/`lesson_package` entitlements serve both a Fixed series
+`lesson_package` entitlements serve both a Fixed series
 occurrence and a Flexible booking. Products may later distinguish fixed,
 flexible, generic lesson package, membership, training, review pack, and
 assessment pack offerings without changing the existing Epic 4 Product enum in
-this documentation-only update.
+the scheduling schema. Series lifetime is never bound to one package; each
+occurrence supplies an explicit eligible entitlement.
 
 ## Learning Verification architecture proposal (not implemented)
 
