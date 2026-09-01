@@ -156,3 +156,33 @@ To be completed from the approved formal PRD.
 - Epic 3 Trial remains on `trial_orders` during Phase A. Phase B will migrate
   through an explicit `trial_legacy` source mapping and reconciliation plan;
   Epic 4 deliberately performs no dual-write and has one payment truth per flow.
+
+## Epic 5 Entitlement Core & Lesson Credits
+
+- A paid Order is not itself an Entitlement. Exactly-once item fulfillment is
+  keyed by the fulfillment event, Order Item, entitlement type, and ledger
+  operation.
+- Lesson Package quantity and validity are snapshotted at purchase. Product
+  edits affect only later purchases.
+- The MVP activation instant is successful fulfillment. Expiry is calculated
+  transactionally from the snapshotted number of days, weeks, or months.
+- Lesson Credit balance is derived from an append-only ledger. Direct balance
+  writes and client writes to ledger/reservation rows are forbidden.
+- Fixed and Flexible lessons share one credit ledger. Their booking and
+  scheduling behavior begins in Epic 6.
+- Reservation requires an active, started, unexpired entitlement with available
+  credit. Release and consumption are idempotent and serialize on the same
+  Entitlement row.
+- A Student may reserve only their own credit. An assigned active Teacher may
+  consume only a matching completed Lesson credit. Admin override paths require
+  an active Admin/Super Admin identity and durable reason/audit data.
+- Teacher expiry extension requires an active teaching relationship and scope
+  match; it changes neither credit quantity, beneficiary, entitlement type,
+  publication state, nor commercial price.
+- Suspension or disablement blocks protected DTOs and mutations. Historical
+  Entitlements and ledger events are retained rather than deleted.
+- Trial remains isolated on the Epic 3 flow. Fulfillment does not dual-write or
+  grant Trial credits.
+- Automatic package selection, reservation-at-expiry behavior, refund
+  reconciliation, expiry workers, first-booking activation, and scheduled
+  activation remain explicitly pending policy/implementation decisions.

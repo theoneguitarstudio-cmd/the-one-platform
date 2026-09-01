@@ -205,3 +205,43 @@ and Teacher archive, and is service-only.
 `order_fulfillment_events` is the transactional outbox. Its unique
 `(order_id, event_type)` row records `order.paid`, remains retryable, and does
 not mean fulfillment or lesson credits have occurred.
+
+## Epic 5 implemented model
+
+`lesson_package_product_configs` stores the fulfillment rules for a Commerce
+Lesson Package Product. `order_item_fulfillment_snapshots` freezes those rules
+when an Order Item is created, so later Product/config edits cannot rewrite an
+already purchased right.
+
+`entitlements` is the access grant. Epic 5 implements the
+`lesson_package` type and reserves the broader type catalog for later approved
+epics. Each paid Order Item can create at most one entitlement of a given type.
+The beneficiary is an Auth user in this phase; parent, gift, and school-owned
+benefits remain a future modeling decision.
+
+`lesson_credit_ledger` is the append-only balance source of truth. Allocation,
+reservation, release, consumption, adjustment, expiration, refund reversal,
+and revocation are distinct entry types; fixed and flexible lessons will use
+this same ledger. `lesson_credit_reservations` links a reserved credit to one
+future Booking or an existing Lesson without making credit, Booking, and
+Lesson the same entity.
+
+`entitlement_expiry_history` records authorized expiry extensions. Admin credit
+adjustments and revocation retain audit/history instead of deleting the
+entitlement.
+
+The implemented source of truth is
+`supabase/migrations/20260901000500_entitlement_lesson_credits.sql`.
+
+### Explicitly pending decisions
+
+- Epic 5 activates Lesson Packages at successful fulfillment. First-booking,
+  scheduled, and admin-specified activation are modeled but not executed.
+- Validity supports configured days, weeks, or months. Whether an already
+  reserved lesson may occur after expiry is deferred to Epic 6 policy.
+- Credit primitives require an explicit entitlement ID. Automatic selection
+  across multiple packages is deferred to Epic 6.
+- Refund-provider reconciliation and automatic expiry workers are not
+  implemented. Manual audited Admin revoke/adjust primitives are present.
+- Review quota, membership, subscription, LMS access, assessment,
+  certification, and achievement engines are not implemented by Epic 5.

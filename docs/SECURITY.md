@@ -181,3 +181,38 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
 Operationally, provider secrets and manual bank instructions remain server-only
 environment configuration. A dedicated pre-push review is required before the
 new migration reaches remote Supabase.
+
+## Epic 5 implemented baseline
+
+- Every Epic 5 table has RLS enabled. Students receive only an allowlisted view
+  of their own active Lesson Package entitlements; raw ledger, reservation,
+  fulfillment snapshot, config, expiry-history, and audit data have no direct
+  browser grants.
+- Fulfillment locks the event and relevant item state, validates paid Order
+  truth, uses item-level unique constraints and operation keys, and changes the
+  event to processed only after all grants allocate successfully. Any item
+  failure rolls the transaction back and leaves a retryable failed event.
+- Service-role fulfillment explicitly verifies `auth.role()`. Admin retry,
+  credit adjustment, revoke, and Product config functions separately verify
+  `auth.uid()`, active account status, and Admin/Super Admin role in the
+  database.
+- Student reserve and Teacher consume authorization derives from `auth.uid()`;
+  a client-supplied user ID is never the authority. Composite foreign keys bind
+  reservation and ledger subjects to the Entitlement beneficiary.
+- Credit mutations lock the Entitlement before reservation rows, use unique
+  idempotency keys, validate retry payloads, and return stable domain errors
+  rather than leaking uniqueness failures. Append-only triggers reject ledger
+  updates/deletes.
+- Teacher expiry extension rechecks active Teacher state, relationship, and
+  scope in the transaction. Admin adjustment/revoke requires a reason and
+  writes audit/history; revocation compensates remaining available/reserved
+  balance without deleting history.
+- Epic 5 security-definer functions are owned by `postgres`, set an empty
+  `search_path`, schema-qualify references, revoke execute from `PUBLIC`/`anon`,
+  and grant only the exact authenticated or service-role entry points.
+- DTO functions expose minimum role-specific fields. The UI, route protection,
+  and Server Actions are defense-in-depth and do not replace RLS/RPC checks.
+
+Before remote rollout, operators must confirm every purchasable existing
+`lesson_package` Product has an approved fulfillment config. Missing config
+fails checkout safely; no production value is guessed by the migration.

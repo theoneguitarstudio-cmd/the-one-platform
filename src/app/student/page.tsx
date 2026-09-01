@@ -12,6 +12,9 @@ export default function StudentPage() {
         <Link className="mt-5 inline-flex rounded-xl bg-[var(--brand-yellow)] px-4 py-2 text-sm font-semibold" href="/student/trial">
           查看我的體驗課
         </Link>
+        <Link className="ml-3 mt-5 inline-flex rounded-xl border border-[var(--border)] px-4 py-2 text-sm font-semibold" href="/student/packages">
+          我的課程方案
+        </Link>
         <div className="mt-6">
           <SignOutForm />
         </div>

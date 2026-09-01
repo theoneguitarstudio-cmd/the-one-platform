@@ -143,3 +143,30 @@ The Trial module is a vertical slice inside the modular monolith:
 Epic 3 intentionally uses an Admin/Teacher-controlled requested-time workflow.
 It does not introduce availability recurrence, payment providers, credits,
 earnings, packages, notifications, or calendar integrations.
+
+## Epic 5 Entitlement boundary
+
+The Entitlement module completes the current transactional path:
+
+`Commerce Order Item snapshot → order.paid outbox → idempotent fulfillment → Entitlement → append-only Lesson Credit ledger`
+
+Commerce still owns Product price and payment truth. Entitlement owns access
+and credit state. Epic 6 Scheduling will own time, Booking, recurring series,
+and the reserve/release/consume lifecycle. A credit is therefore neither a
+Booking nor a Lesson.
+
+The fulfillment consumer operates at Order Item granularity and fails closed
+for unsupported Product types. Its public service entry point requires the
+database `service_role`; the Admin retry entry point independently verifies an
+active Admin/Super Admin identity. Both call the same transactional private
+implementation, and a failed event remains retryable rather than being marked
+processed.
+
+Student, Teacher, and Admin pages read allowlisted DTO RPCs. Browser clients
+cannot read raw ledgers, fulfillment snapshots, reservations, or Product
+fulfillment configuration. Server Actions validate input and re-authorize the
+route role, while PostgreSQL remains the final authorization boundary.
+
+Epic 5 intentionally has no background queue/cron, Booking UI, subscription,
+review quota, LMS, or achievement workflow. Production scheduling of the
+outbox consumer and refund/expiry automation require later approved work.

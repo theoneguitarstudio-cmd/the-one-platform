@@ -18,6 +18,8 @@ values('lesson_package','active','platform-pack','Platform Package','TWD',3200,'
 ('recorded_course','draft','private-draft','Internal Draft','TWD',900,'platform',false,false,null);
 insert into public.products(product_type,status,public_slug,name,currency,base_price_amount,owner_type,owner_teacher_user_id,is_public,is_purchasable,published_at)
 values('lesson_package','active','teacher-pack','Teacher Package','TWD',2400,'teacher','40000000-0000-0000-0000-00000000000c',true,true,now());
+insert into public.lesson_package_product_configs(product_id,lesson_count,validity_value,validity_unit,booking_mode_eligibility)
+select id,4,5,'weeks','both' from public.products where public_slug in('platform-pack','teacher-pack');
 
 set local role anon; select set_config('request.jwt.claim.sub','',true);
 select is((select count(*) from public.product_public_catalog),2::bigint,'anonymous sees only active public products');

@@ -33,6 +33,9 @@ insert into public.products(
   'hardening-teacher-product','Teacher Product','TWD',2400,'teacher',
   '42000000-0000-0000-0000-000000000002',true,true,now()
 );
+insert into public.lesson_package_product_configs(product_id,lesson_count,validity_value,validity_unit,booking_mode_eligibility)
+select id,4,5,'weeks','both' from public.products
+where public_slug in('hardening-platform','hardening-teacher-product');
 
 set local role anon;
 select is(
