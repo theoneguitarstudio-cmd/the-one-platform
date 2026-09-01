@@ -1,5 +1,27 @@
 # DATABASE DOMAIN MODEL
 
+## Scheduling & Lesson-credit architecture proposal (not implemented)
+
+No scheduling schema is created here. Existing Epic 3 `lessons`,
+`student_teacher_relationships`, `lesson_records`, UTC/IANA fields, and
+collision guarantees remain the occurrence foundation.
+
+| Proposed concept | Purpose |
+| --- | --- |
+| Teacher availability rules/exceptions | Flexible source and absence/holiday handling |
+| Flexible booking/reservation | One selected time, pair, lifecycle, credit reservation |
+| Recurring lesson series and weekly slot/rule | Fixed local-time priority reservation |
+| Series exceptions | Leave, reschedule, pause, release, Teacher unavailable, holiday |
+| Instance generation state | Lazy safe Lesson creation rather than mass future rows |
+| Credit reservation/consumption/release linkage | One credit ledger for Fixed and Flexible |
+| Override/audit record | Actor, reason, scope, credit and earning outcome |
+
+Future `lesson_credit`/`lesson_package` entitlements serve both a Fixed series
+occurrence and a Flexible booking. Products may later distinguish fixed,
+flexible, generic lesson package, membership, training, review pack, and
+assessment pack offerings without changing the existing Epic 4 Product enum in
+this documentation-only update.
+
 ## Learning Verification architecture proposal (not implemented)
 
 No migration is created by this documentation update. The following names are

@@ -1,5 +1,20 @@
 # SECURITY
 
+## Scheduling / one-on-one security architecture (proposed)
+
+- Fixed-slot priority, Flexible availability, booking, series exception,
+  cancellation, and reschedule need transactional server/database authorization;
+  route/UI state is insufficient.
+- Credit reservation, consumption, release, reversal, and compensation require
+  an auditable ledger transaction linked to the booking or Lesson. A Teacher
+  cannot directly mutate a Student entitlement balance.
+- Teacher/Student collision protection retains Epic 3 UTC/IANA semantics,
+  advisory-lock discipline, and database final integrity guard. Recurring
+  generation needs the same protection, not browser-only calendar checks.
+- Admin overrides record actor, reason, scope, credit outcome, and earning
+  outcome; they do not grant broad access to unrelated submissions, feedback,
+  or private profiles.
+
 ## Learning Verification & Membership security architecture (proposed)
 
 **Status:** requirements for future implementation; no new storage policy, RLS,

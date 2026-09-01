@@ -1,5 +1,34 @@
 # SYSTEM ARCHITECTURE
 
+## Architecture Follow-up — Scheduling & Booking Core (proposed)
+
+One-on-one teaching is a first-class domain beside LMS membership. Scheduling
+owns availability, booking behavior, recurring-series semantics, exceptions,
+collision orchestration, and authorized overrides. Commerce owns price;
+Entitlement owns lesson eligibility; Scheduling owns time; and `lessons`
+represents the actual occurrence:
+
+`lesson entitlement / credit ≠ booking or recurring slot ≠ lesson instance`.
+
+Both fixed and flexible modes consume the same future Lesson Credit entitlement
+ledger. Scheduling reserves/releases/consumes a credit through Entitlement; it
+does not create mode-specific credit balances.
+
+Fixed needs concepts equivalent to `recurring_lesson_series`, weekly rule/slot,
+series exceptions, priority reservation, and lazily generated lesson instances
+(never a batch of 100 future Lessons). It must handle pause/end/change, leave,
+Teacher unavailability, holiday/exception, temporary release, credit expiry,
+IANA timezone/DST, and Teacher/Admin override. Priority slots are excluded from
+Flexible availability unless an authorized exception releases them.
+
+Flexible Booking exposes eligible Teacher availability and creates one Lesson
+per chosen slot. It reuses Epic 3 `lessons`, Student–Teacher relationships, UTC
+`timestamptz` plus IANA anchor, collision/exclusion constraints, deterministic
+advisory locking, Lesson Records, and participant access controls. It needs
+availability/exception rules, credit reservation lifecycle, cancellation/
+reschedule policy, and audited Admin overrides. Lesson participation never
+grants wholesale access to LMS submissions or private learning data.
+
 ## Architecture Update — Learning Verification LMS (proposed)
 
 **Implementation status:** documentation only. These are future

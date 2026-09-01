@@ -1,5 +1,19 @@
 # ROLE PERMISSION MATRIX
 
+## Scheduling & lesson-credit architecture proposal
+
+| Capability | Student | Teacher | Admin / Super Admin |
+| --- | --- | --- | --- |
+| Create eligible Flexible Booking | Own credit and allowed availability | No booking for another user | Audited management path |
+| Manage Fixed series | Own series/safe details | Own assigned series only | Audited management path |
+| Set availability / exception | No | Own approved availability | Audited management path |
+| Release priority slot / override | No | Limited approved exception | Reasoned, audited override |
+| Consume/release Lesson Credit | No direct mutation | No direct mutation | Authorized transaction only |
+
+Scheduling and credit authorization are independent. A participant cannot alter
+the other party's booking, a Teacher cannot mutate Student credit, and an
+exceptional Admin change records its credit/earning outcome.
+
 ## Learning Verification & Membership architecture proposal
 
 **Status:** planned authorization model only; no role, policy, grant, or table

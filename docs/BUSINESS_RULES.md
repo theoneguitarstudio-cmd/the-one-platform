@@ -1,5 +1,30 @@
 # BUSINESS RULES
 
+## Core 1-on-1 and configurable quota architecture proposal
+
+- One-on-one Fixed/Recurring and Flexible Booking are both core services, not
+  subordinate LMS features. Free, Plus, and Pro do not prevent independent
+  one-on-one purchase.
+- Review quota supports configurable allocation, reservation, consumption,
+  adjustment, reset/expiry, audit, history, extra purchase, reversal,
+  compensation, plan change, and resubmission policy. Exact numbers, periods,
+  resets, packs, prices, and resubmission consumption are explicitly TBD.
+- Fixed Lessons reserve an agreed recurring weekly local-time slot with priority
+  over Flexible availability. A series has lifecycle/exceptions; each actual
+  occurrence remains a separate Lesson and consumes a Lesson Credit.
+- Flexible Bookings select Teacher availability, make one Lesson, check
+  Teacher/Student collision and sufficient credit, and follow cancellation/
+  reschedule policy. Instants are UTC with IANA context.
+- Credit is eligibility, Booking is a scheduled commitment, Lesson is an actual
+  occurrence. Fixed and Flexible share one entitlement/credit ledger.
+- Flexible may currently be NT$100 above Fixed per lesson, but this is
+  Commerce/Product configuration—not Scheduling logic or a permanent rule.
+- Admin overrides for both modes require actor, reason, audit, credit outcome,
+  and earning outcome.
+- LMS review can recommend one-on-one escalation. A lesson Teacher sees only
+  separately authorized minimum learning-map data, never all submissions or
+  private feedback by default.
+
 ## Learning Verification & Membership architecture proposal
 
 **Status:** future policy direction only. No LMS or subscription behavior is

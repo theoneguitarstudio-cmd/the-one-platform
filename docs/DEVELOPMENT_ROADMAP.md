@@ -1,5 +1,19 @@
 # DEVELOPMENT ROADMAP
 
+## Architecture Follow-up — Scheduling placement
+
+After the documented Architecture Updates and **Epic 5 — Entitlement Core &
+Lesson Credits**, the next dedicated delivery is **Epic 6 — Scheduling &
+Booking Core**. It includes Teacher availability, Flexible Booking, recurring
+Fixed Lesson series, fixed-slot priority, booking/credit reservation and
+consumption integration, cancellation, reschedule, series exceptions, schedule
+collision, timezone/DST handling, and audited Admin overrides. It reuses Epic
+3's Lesson and collision foundation rather than replacing it.
+
+LMS implementation remains a parallel core product line after this foundation;
+the roadmap must not treat Fixed/Flexible one-on-one delivery as an LMS
+afterthought.
+
 ## Architecture Update — Learning Verification LMS & Membership
 
 **Status:** architecture direction documented; implementation pending approval.
