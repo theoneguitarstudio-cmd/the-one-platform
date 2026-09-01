@@ -46,13 +46,25 @@ To be completed from the approved formal PRD.
 ## Epic 4 Commerce Core
 
 - Commerce is not entitlement. Payment success does not grant Lesson Credits.
+- Public visibility and purchasability are separate. An active public Product
+  may remain visible as Coming Soon while `is_purchasable=false`, but checkout
+  always requires `is_purchasable=true`.
+- Teacher-owned checkout authoritatively rechecks the live private Teacher
+  record: active account, Teacher role, active teaching status, and public
+  publication must all remain true when the Order is created.
 - Checkout price, seller, and item identity are database snapshots; clients
   cannot submit totals. Discounts and taxes are explicit zero-valued fields in
   Epic 4, not assumptions that those domains will never exist.
 - Bank transfers require Buyer submission and Admin review. Cash confirmation
   is an Admin-only transaction. Both create durable audit records.
+- An Order may retain multiple Payment attempts, but at most one attempt may
+  become paid. A paid Order rejects every different Payment attempt; the losing
+  attempt remains unchanged for review. Same-Payment retries require the same
+  provider event identity.
 - Only pending or awaiting-payment Orders can be cancelled or expired. Paid
   Orders require the future refund workflow.
+- Buyer self-cancellation and Teacher self-archive write minimal durable audit
+  snapshots in the same transaction as the state change.
 - `order.paid` is an unconsumed, retryable Epic 5 bridge, not proof that any
   package, course, or credit was fulfilled.
 - Epic 3 Trial remains on `trial_orders` during Phase A. Phase B will migrate

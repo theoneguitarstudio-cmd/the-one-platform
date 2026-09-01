@@ -104,15 +104,25 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
 ## Epic 4 implemented baseline
 
 - Product discovery uses an allowlisted projection plus current source-state
-  RLS; private metadata and Teacher UUIDs are not public.
+  RLS; private metadata, Teacher UUIDs, and technical Product UUIDs are not
+  public. Public slugs are the external Product identifiers.
 - Checkout trusts only Product slug and quantity. A security-definer RPC
-  rechecks the active buyer/product/Teacher, locks the idempotency scope, reads
-  authoritative pricing, and creates immutable item snapshots atomically.
+  rechecks the active buyer/product and live Teacher eligibility, locks the
+  idempotency scope, reads authoritative pricing, and creates immutable item
+  snapshots atomically. Teacher eligibility requires an active account,
+  Teacher role, active teaching status, and public Teacher profile.
 - Buyers have RLS access only to their Orders and Items. Payments, submissions,
   audit logs, refunds, and fulfillment events have no direct client SELECT.
-- Payment confirmation locks both Order and Payment, validates amount/currency,
-  writes paid states and exactly one outbox event in one transaction. Paid
-  Orders cannot use cancellation or expiry paths.
+- Payment confirmation locks Order before Payment, validates amount/currency
+  and provider-event consistency, and writes paid states plus exactly one
+  outbox event in one transaction. A partial unique index permits at most one
+  paid Payment per Order; competing attempts receive a domain rejection rather
+  than leaking a uniqueness error. Paid Orders cannot use cancellation or
+  expiry paths.
+- Buyer cancellation and Teacher Product archive are audited transactionally.
+  Client roles cannot write or read the audit table. The private Teacher
+  eligibility helper is callable only from trusted database code/service role,
+  not directly by authenticated clients.
 - All privileged RPCs revalidate `auth.uid()`, active account, and database
   Admin role. Security-definer functions use empty `search_path`, qualified
   names, pinned ownership, and explicit execute grants.

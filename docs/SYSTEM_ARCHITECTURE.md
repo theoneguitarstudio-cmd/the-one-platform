@@ -21,6 +21,17 @@ Payment confirmation and the `order.paid` outbox insert share one transaction.
 An Epic 5 consumer may claim and retry pending outbox rows, but fulfillment is
 not part of the Payment RPC.
 
+The Order row is the serialization boundary for payment confirmation,
+cancellation, expiry, and rejection. Multiple Payment attempts may exist, but a
+partial unique index on paid attempts is the final invariant. Competing
+confirmations lock Order then Payment, so exactly one attempt can create the
+financial audit and unique `order.paid` outbox event.
+
+The public Product catalog uses `public_slug` and intentionally distinguishes
+visibility from purchasability for Coming Soon presentation. Checkout does not
+trust that projection: it reads the private Product and revalidates current
+Teacher account, role, teaching, and publication state inside PostgreSQL.
+
 ## Epic 2 public discovery architecture
 
 The web application remains a modular monolith. The Teacher module owns:

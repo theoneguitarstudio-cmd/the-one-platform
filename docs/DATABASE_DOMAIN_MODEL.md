@@ -119,17 +119,25 @@ The source of truth is
 `products` is the private product source with platform/Teacher ownership, ISO
 currency, integer minor-unit price, lifecycle timestamps, tax placeholders,
 and private metadata. `product_public_catalog` is a synchronized public-safe
-projection with no seller UUID or internal metadata.
+projection with no seller UUID, technical Product UUID grant, or internal
+metadata. `public_slug` is the public identifier. A non-purchasable row may be
+visible as Coming Soon; checkout separately enforces purchasability and live
+Teacher eligibility.
 
 `orders` separates order lifecycle from payment lifecycle and scopes checkout
 idempotency to `(buyer_user_id, idempotency_key)`. `order_items` snapshots the
 name, type, price, quantity, and seller at checkout. PostgreSQL computes all
 amounts from the locked Product and enforces subtotal/discount/tax/total checks.
 
-`payments` and `payment_submissions` are private. Buyers receive a minimal DTO;
-bank evidence and provider references are not granted directly. `refunds`
+`payments` and `payment_submissions` are private. An Order may have multiple
+Payment attempts, while the partial unique index
+`payments_one_paid_per_order_idx` guarantees at most one paid attempt. The paid
+transition serializes on the Order and then the target Payment; different
+attempts remaining pending cannot later be confirmed. Buyers receive a minimal
+DTO; bank evidence and provider references are not granted directly. `refunds`
 reserves multiple future attempts but has no refund engine. `audit_logs` records
-privileged state changes and is service-only.
+privileged payment/order/product state changes, including Buyer cancellation
+and Teacher archive, and is service-only.
 
 `order_fulfillment_events` is the transactional outbox. Its unique
 `(order_id, event_type)` row records `order.paid`, remains retryable, and does
