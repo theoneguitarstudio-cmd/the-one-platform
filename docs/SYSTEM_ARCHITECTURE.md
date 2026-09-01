@@ -10,6 +10,17 @@ Describe the modular-monolith architecture, system boundaries, and future integr
 
 To be completed from the approved formal PRD.
 
+## Epic 4 Commerce boundary
+
+The modular monolith now has separate Commerce and Payments modules. Server
+Components read through minimal DAL DTOs; UI mutations use Server Actions that
+re-authorize and call transactional PostgreSQL RPCs. Product/Order code depends
+only on a provider-neutral payment interface, never a gateway SDK.
+
+Payment confirmation and the `order.paid` outbox insert share one transaction.
+An Epic 5 consumer may claim and retry pending outbox rows, but fulfillment is
+not part of the Payment RPC.
+
 ## Epic 2 public discovery architecture
 
 The web application remains a modular monolith. The Teacher module owns:

@@ -59,3 +59,16 @@ same ownership limits for normal user-scoped data access.
 No authenticated client receives direct insert, update, or delete grants on
 Trial domain tables. High-risk actions re-check active account and role in both
 the Next.js server action and database function.
+
+## Epic 4 Commerce permissions
+
+| Capability | Anonymous | Buyer | Teacher | Admin / Super Admin |
+| --- | --- | --- | --- | --- |
+| Read active public Product projection | Yes | Yes | Yes | Server path |
+| Read private Product fields | No | No | Own products only | Server path |
+| Create/edit Teacher Product | No | No | Own draft via RPC | Server path |
+| Read Order and Item | No | Own only | No sales/payment detail | Server path |
+| Read payment-safe summary | No | Own Order only | No | Server path |
+| Submit bank-transfer evidence | No | Own open Order | No | Review only |
+| Confirm cash/payment or cancel/expire administratively | No | No | No | Authorized RPC |
+| Read or mutate audit/outbox/refunds | No | No | No | Service-only |

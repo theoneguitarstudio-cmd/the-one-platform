@@ -113,3 +113,24 @@ stores the primary stage, recommendation category, and formal summary.
 
 The source of truth is
 `supabase/migrations/20260831000400_student_teacher_trial_flow.sql`.
+
+## Epic 4 implemented model
+
+`products` is the private product source with platform/Teacher ownership, ISO
+currency, integer minor-unit price, lifecycle timestamps, tax placeholders,
+and private metadata. `product_public_catalog` is a synchronized public-safe
+projection with no seller UUID or internal metadata.
+
+`orders` separates order lifecycle from payment lifecycle and scopes checkout
+idempotency to `(buyer_user_id, idempotency_key)`. `order_items` snapshots the
+name, type, price, quantity, and seller at checkout. PostgreSQL computes all
+amounts from the locked Product and enforces subtotal/discount/tax/total checks.
+
+`payments` and `payment_submissions` are private. Buyers receive a minimal DTO;
+bank evidence and provider references are not granted directly. `refunds`
+reserves multiple future attempts but has no refund engine. `audit_logs` records
+privileged state changes and is service-only.
+
+`order_fulfillment_events` is the transactional outbox. Its unique
+`(order_id, event_type)` row records `order.paid`, remains retryable, and does
+not mean fulfillment or lesson credits have occurred.

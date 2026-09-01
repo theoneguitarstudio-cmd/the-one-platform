@@ -21,8 +21,8 @@ To be completed from the approved formal PRD.
 ## Not started
 
 Matching, reviews, ratings calculation, teacher applications, WordPress
-migration, complete booking, payment-provider integrations, packages, credits,
-earnings, recurring scheduling, and Epic 4 remain out of scope.
+migration, complete booking, external payment-provider integrations, packages,
+credits, earnings, and recurring scheduling remain out of scope.
 
 ## Implemented: Epic 3 — Student–Teacher Trial Flow
 
@@ -33,3 +33,14 @@ earnings, recurring scheduling, and Epic 4 remain out of scope.
 - Atomic, idempotent Trial completion, Lesson Record, and assessment
 - Student result, Teacher workflow, and minimum Admin management routes
 - RLS/grants, pgTAP coverage, server contract tests, and documentation
+
+## Implemented: Epic 4 — Commerce Core
+
+- Platform/Teacher Product model and minimal public catalog
+- Buyer-isolated Orders with immutable item snapshots and authoritative pricing
+- Manual bank-transfer and cash payment review with atomic paid transition
+- Transactional, idempotent `order.paid` outbox and durable audit log
+- Cancellation, expiry, refund/tax/discount reservations, provider interface,
+  secure webhook boundary, minimal Product/Student/Admin routes, and tests
+
+Epic 5 entitlement consumption is not started.

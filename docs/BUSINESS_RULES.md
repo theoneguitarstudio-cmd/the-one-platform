@@ -42,3 +42,19 @@ To be completed from the approved formal PRD.
   already-authorized in-flight transaction may still complete.
 - Trial confirmation/completion never creates packages, consumes credits,
   creates earnings, or creates rewards.
+
+## Epic 4 Commerce Core
+
+- Commerce is not entitlement. Payment success does not grant Lesson Credits.
+- Checkout price, seller, and item identity are database snapshots; clients
+  cannot submit totals. Discounts and taxes are explicit zero-valued fields in
+  Epic 4, not assumptions that those domains will never exist.
+- Bank transfers require Buyer submission and Admin review. Cash confirmation
+  is an Admin-only transaction. Both create durable audit records.
+- Only pending or awaiting-payment Orders can be cancelled or expired. Paid
+  Orders require the future refund workflow.
+- `order.paid` is an unconsumed, retryable Epic 5 bridge, not proof that any
+  package, course, or credit was fulfilled.
+- Epic 3 Trial remains on `trial_orders` during Phase A. Phase B will migrate
+  through an explicit `trial_legacy` source mapping and reconciliation plan;
+  Epic 4 deliberately performs no dual-write and has one payment truth per flow.

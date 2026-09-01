@@ -100,3 +100,25 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
 - Add durable privileged-operation audit events before production staff scale.
 - Replace manual payment and meeting references only in their dedicated future
   integration epics; do not broaden Trial table client grants.
+
+## Epic 4 implemented baseline
+
+- Product discovery uses an allowlisted projection plus current source-state
+  RLS; private metadata and Teacher UUIDs are not public.
+- Checkout trusts only Product slug and quantity. A security-definer RPC
+  rechecks the active buyer/product/Teacher, locks the idempotency scope, reads
+  authoritative pricing, and creates immutable item snapshots atomically.
+- Buyers have RLS access only to their Orders and Items. Payments, submissions,
+  audit logs, refunds, and fulfillment events have no direct client SELECT.
+- Payment confirmation locks both Order and Payment, validates amount/currency,
+  writes paid states and exactly one outbox event in one transaction. Paid
+  Orders cannot use cancellation or expiry paths.
+- All privileged RPCs revalidate `auth.uid()`, active account, and database
+  Admin role. Security-definer functions use empty `search_path`, qualified
+  names, pinned ownership, and explicit execute grants.
+- The webhook boundary reads the raw body first and rejects every provider
+  until a real signature-verifying adapter and idempotent callback RPC exist.
+
+Operationally, provider secrets and manual bank instructions remain server-only
+environment configuration. A dedicated pre-push review is required before the
+new migration reaches remote Supabase.
