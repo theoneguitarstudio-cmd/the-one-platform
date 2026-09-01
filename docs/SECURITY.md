@@ -212,6 +212,20 @@ new migration reaches remote Supabase.
   and grant only the exact authenticated or service-role entry points.
 - DTO functions expose minimum role-specific fields. The UI, route protection,
   and Server Actions are defense-in-depth and do not replace RLS/RPC checks.
+- Supabase `service_role` is a production application role, not a database
+  superuser for business logic. It has no raw INSERT/UPDATE/DELETE grant on
+  Epic 5 tables and can invoke only the automatic fulfillment RPC. PostgreSQL
+  owners/superusers used for migrations and isolated test fixtures remain an
+  operationally separate trust boundary.
+- Ledger, purchase snapshots, expiry history, and manual-retry attempts reject
+  UPDATE/DELETE through append-only triggers. Entitlements reject DELETE and
+  protect beneficiary, source, type, scope, and commercial snapshot fields;
+  legitimate status/expiry mutations remain inside authorized domain RPCs.
+- Automatic fulfillment retry is service-only and tracked by outbox status,
+  attempt count, and safe error state. Manual retry is a separate authenticated
+  Admin/Super Admin RPC requiring a reason and idempotency key. Every successful
+  or failed manual attempt writes one immutable actor/role/result record and one
+  central audit event; retries with the same key do not duplicate either.
 
 Before remote rollout, operators must confirm every purchasable existing
 `lesson_package` Product has an approved fulfillment config. Missing config

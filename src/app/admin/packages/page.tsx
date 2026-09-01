@@ -7,7 +7,9 @@ export default async function AdminPackagesPage() {
   return <main className="mx-auto max-w-6xl px-5 py-10">
     <Link href="/admin">← 返回管理區</Link><h1 className="mt-5 text-3xl font-semibold">Entitlement 管理</h1>
     <form action={adminRetryFulfillment} className="mt-6 flex flex-wrap gap-3 rounded-2xl bg-[var(--surface)] p-5">
+      <input name="idempotencyKey" type="hidden" value={crypto.randomUUID()} />
       <label className="grid flex-1 gap-1 text-sm">Fulfillment Event ID<input className="rounded-xl border bg-white px-3 py-2" name="eventId" required /></label>
+      <label className="grid flex-1 gap-1 text-sm">人工重試原因<input className="rounded-xl border bg-white px-3 py-2" name="reason" required /></label>
       <button className="self-end rounded-xl bg-[var(--brand-yellow)] px-4 py-2 font-semibold" type="submit">安全重試 Fulfillment</button>
     </form>
     <div className="mt-8 space-y-5">{packages.length === 0 ? <p>目前沒有 Lesson Package Entitlement。</p> : packages.map((item) =>

@@ -41,7 +41,11 @@ export const adjustmentSchema = z.object({
   quantityDelta: z.coerce.number().int().min(-1000).max(1000).refine((value) => value !== 0),
   reason: z.string().trim().min(3).max(1000),
 });
-export const fulfillmentRetrySchema = z.object({ eventId: z.uuid() });
+export const fulfillmentRetrySchema = z.object({
+  eventId: z.uuid(),
+  idempotencyKey: z.uuid(),
+  reason: z.string().trim().min(3).max(1000),
+});
 export const studentLookupSchema = z.uuid();
 
 const domainErrorMessages: Record<string, string> = {

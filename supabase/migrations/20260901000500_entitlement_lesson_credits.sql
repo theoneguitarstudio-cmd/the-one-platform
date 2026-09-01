@@ -157,14 +157,77 @@ create table public.entitlement_expiry_history (
   unique (entitlement_id, idempotency_key)
 );
 
+create table public.fulfillment_manual_retry_attempts (
+  id uuid primary key default gen_random_uuid(),
+  fulfillment_event_id uuid not null references public.order_fulfillment_events(id) on delete restrict,
+  order_id uuid not null references public.orders(id) on delete restrict,
+  actor_user_id uuid not null references auth.users(id) on delete restrict,
+  actor_role public.app_role not null check (actor_role in ('admin','super_admin')),
+  idempotency_key text not null check (char_length(idempotency_key) between 16 and 160),
+  reason text not null check (char_length(reason) between 3 and 1000),
+  result public.fulfillment_event_status not null,
+  safe_error_code text check (safe_error_code is null or char_length(safe_error_code) between 1 and 100),
+  created_at timestamptz not null default now(),
+  unique (idempotency_key)
+);
+
 create index entitlements_beneficiary_status_idx on public.entitlements(beneficiary_user_id, status, expires_at);
 create index entitlements_teacher_scope_idx on public.entitlements(teacher_scope_user_id, beneficiary_user_id);
 create index lesson_credit_ledger_entitlement_idx on public.lesson_credit_ledger(entitlement_id, created_at);
 create index lesson_credit_reservations_entitlement_idx on public.lesson_credit_reservations(entitlement_id, status);
+create index fulfillment_manual_retry_event_idx
+on public.fulfillment_manual_retry_attempts(fulfillment_event_id,created_at);
 
 comment on table public.entitlements is 'Commercial access rights. Commerce, entitlement, and learning achievement remain separate domains.';
 comment on table public.lesson_credit_ledger is 'Immutable source of truth for lesson-credit available/reserved/consumed movements.';
 comment on table public.order_item_fulfillment_snapshots is 'Purchase-time authoritative entitlement configuration; later Product edits do not alter purchased rights.';
+comment on table public.fulfillment_manual_retry_attempts is 'Immutable actor-aware audit for idempotent Admin fulfillment retry attempts.';
+
+create or replace function private.reject_epic5_append_only_mutation()
+returns trigger language plpgsql security definer set search_path = '' as $$
+begin
+  raise exception using errcode='55000',message='APPEND_ONLY_HISTORY';
+end; $$;
+
+create or replace function private.protect_entitlement_authority_fields()
+returns trigger language plpgsql security definer set search_path = '' as $$
+begin
+  if new.beneficiary_user_id is distinct from old.beneficiary_user_id
+    or new.entitlement_type is distinct from old.entitlement_type
+    or new.source_order_id is distinct from old.source_order_id
+    or new.source_order_item_id is distinct from old.source_order_item_id
+    or new.source_fulfillment_event_id is distinct from old.source_fulfillment_event_id
+    or new.product_id is distinct from old.product_id
+    or new.product_name_snapshot is distinct from old.product_name_snapshot
+    or new.teacher_scope_user_id is distinct from old.teacher_scope_user_id
+    or new.booking_mode_eligibility is distinct from old.booking_mode_eligibility
+    or new.lesson_duration_minutes is distinct from old.lesson_duration_minutes
+    or new.config_snapshot is distinct from old.config_snapshot
+    or new.created_at is distinct from old.created_at
+  then
+    raise exception using errcode='55000',message='ENTITLEMENT_AUTHORITY_FIELDS_IMMUTABLE';
+  end if;
+  return new;
+end; $$;
+
+create trigger order_item_fulfillment_snapshots_append_only
+before update or delete on public.order_item_fulfillment_snapshots
+for each row execute function private.reject_epic5_append_only_mutation();
+create trigger lesson_credit_ledger_append_only
+before update or delete on public.lesson_credit_ledger
+for each row execute function private.reject_epic5_append_only_mutation();
+create trigger entitlement_expiry_history_append_only
+before update or delete on public.entitlement_expiry_history
+for each row execute function private.reject_epic5_append_only_mutation();
+create trigger fulfillment_manual_retry_attempts_append_only
+before update or delete on public.fulfillment_manual_retry_attempts
+for each row execute function private.reject_epic5_append_only_mutation();
+create trigger entitlements_prevent_delete
+before delete on public.entitlements
+for each row execute function private.reject_epic5_append_only_mutation();
+create trigger entitlements_protect_authority_fields
+before update on public.entitlements
+for each row execute function private.protect_entitlement_authority_fields();
 
 create or replace function private.snapshot_order_item_fulfillment()
 returns trigger language plpgsql security definer set search_path = '' as $$
@@ -273,14 +336,52 @@ begin
   return result_status;
 end; $$;
 
-create or replace function public.admin_process_order_fulfillment_event(p_event_id uuid)
-returns public.fulfillment_event_status language plpgsql security definer set search_path = '' as $$
-declare caller uuid:=auth.uid(); result_event_id uuid; result_status public.fulfillment_event_status;
+create or replace function public.admin_retry_order_fulfillment_event(
+  p_event_id uuid,p_reason text,p_idempotency_key text
+) returns public.fulfillment_event_status
+language plpgsql security definer set search_path = '' as $$
+declare caller uuid:=auth.uid(); actor_role public.app_role;
+  existing_attempt public.fulfillment_manual_retry_attempts%rowtype;
+  evt public.order_fulfillment_events%rowtype; result_event_id uuid;
+  result_status public.fulfillment_event_status; result_error text;
 begin
   if caller is null or not private.current_user_has_role(array['admin'::public.app_role,'super_admin'::public.app_role])
     then raise exception using errcode='42501',message='Not authorized'; end if;
+  if char_length(trim(coalesce(p_reason,''))) not between 3 and 1000
+    or char_length(coalesce(p_idempotency_key,'')) not between 16 and 160
+    then raise exception using errcode='22023',message='INVALID_FULFILLMENT_RETRY'; end if;
+  select role into actor_role from public.user_roles where user_id=caller
+    and role in('super_admin','admin')
+    order by case role when 'super_admin' then 1 else 2 end limit 1;
+  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(
+    'the-one:v1:manual-fulfillment-retry:'||p_idempotency_key,5));
+  select * into existing_attempt from public.fulfillment_manual_retry_attempts
+  where idempotency_key=p_idempotency_key;
+  if found then
+    if existing_attempt.actor_user_id is distinct from caller
+      or existing_attempt.fulfillment_event_id is distinct from p_event_id
+      or existing_attempt.reason is distinct from trim(p_reason)
+      then raise exception using errcode='P0001',message='FULFILLMENT_RETRY_PAYLOAD_MISMATCH'; end if;
+    return existing_attempt.result;
+  end if;
+  select * into evt from public.order_fulfillment_events where id=p_event_id;
+  if not found or evt.event_type<>'order.paid'
+    then raise exception using errcode='P0001',message='FULFILLMENT_EVENT_NOT_FOUND'; end if;
   result_event_id:=private.fulfill_order_paid_event(p_event_id,caller);
-  select status into result_status from public.order_fulfillment_events where id=result_event_id;
+  select status,last_error into result_status,result_error
+  from public.order_fulfillment_events where id=result_event_id;
+  insert into public.fulfillment_manual_retry_attempts(
+    fulfillment_event_id,order_id,actor_user_id,actor_role,idempotency_key,
+    reason,result,safe_error_code
+  ) values(evt.id,evt.order_id,caller,actor_role,p_idempotency_key,trim(p_reason),
+    result_status,case when result_status='failed' then coalesce(result_error,'FULFILLMENT_FAILED') end);
+  insert into public.audit_logs(
+    actor_user_id,action,target_type,target_id,after_snapshot,reason
+  ) values(caller,'fulfillment.manual_retry','order_fulfillment_event',evt.id,
+    jsonb_build_object('actor_role',actor_role,'order_id',evt.order_id,
+      'result',result_status,'safe_error_code',case when result_status='failed'
+        then coalesce(result_error,'FULFILLMENT_FAILED') end,
+      'idempotency_key',p_idempotency_key),trim(p_reason));
   return result_status;
 end; $$;
 
@@ -629,6 +730,7 @@ alter table public.entitlements enable row level security;
 alter table public.lesson_credit_reservations enable row level security;
 alter table public.lesson_credit_ledger enable row level security;
 alter table public.entitlement_expiry_history enable row level security;
+alter table public.fulfillment_manual_retry_attempts enable row level security;
 
 create policy entitlements_select_own on public.entitlements for select to authenticated
 using (beneficiary_user_id=(select auth.uid()) and (select private.current_user_is_active()));
@@ -636,19 +738,19 @@ using (beneficiary_user_id=(select auth.uid()) and (select private.current_user_
 revoke all on table public.lesson_package_product_configs,
   public.order_item_fulfillment_snapshots,public.entitlements,
   public.lesson_credit_reservations,public.lesson_credit_ledger,
-  public.entitlement_expiry_history from public,anon,authenticated;
+  public.entitlement_expiry_history,public.fulfillment_manual_retry_attempts
+from public,anon,authenticated,service_role;
 grant select(id,entitlement_type,status,starts_at,expires_at,product_name_snapshot,
   booking_mode_eligibility,lesson_duration_minutes,created_at,updated_at)
 on public.entitlements to authenticated;
-grant all on public.lesson_package_product_configs,public.order_item_fulfillment_snapshots,
-  public.entitlements,public.lesson_credit_reservations,public.lesson_credit_ledger,
-  public.entitlement_expiry_history to service_role;
 
+alter function private.reject_epic5_append_only_mutation() owner to postgres;
+alter function private.protect_entitlement_authority_fields() owner to postgres;
 alter function private.snapshot_order_item_fulfillment() owner to postgres;
 alter function private.lesson_credit_balance(uuid) owner to postgres;
 alter function private.fulfill_order_paid_event(uuid,uuid) owner to postgres;
 alter function public.process_order_fulfillment_event(uuid) owner to postgres;
-alter function public.admin_process_order_fulfillment_event(uuid) owner to postgres;
+alter function public.admin_retry_order_fulfillment_event(uuid,text,text) owner to postgres;
 alter function public.reserve_lesson_credit(uuid,text,uuid,text) owner to postgres;
 alter function public.release_lesson_credit(uuid,text) owner to postgres;
 alter function public.consume_lesson_credit(uuid,uuid) owner to postgres;
@@ -660,10 +762,12 @@ alter function public.get_own_lesson_entitlement_summaries() owner to postgres;
 alter function public.get_teacher_student_lesson_entitlement_summaries(uuid) owner to postgres;
 alter function public.get_admin_lesson_entitlement_summaries() owner to postgres;
 
-revoke all on function private.snapshot_order_item_fulfillment(),private.lesson_credit_balance(uuid),
-  private.fulfill_order_paid_event(uuid,uuid) from public,anon,authenticated;
+revoke all on function private.reject_epic5_append_only_mutation(),
+  private.protect_entitlement_authority_fields(),private.snapshot_order_item_fulfillment(),
+  private.lesson_credit_balance(uuid),private.fulfill_order_paid_event(uuid,uuid)
+from public,anon,authenticated,service_role;
 revoke all on function public.process_order_fulfillment_event(uuid),
-  public.admin_process_order_fulfillment_event(uuid),
+  public.admin_retry_order_fulfillment_event(uuid,text,text),
   public.reserve_lesson_credit(uuid,text,uuid,text),public.release_lesson_credit(uuid,text),
   public.consume_lesson_credit(uuid,uuid),
   public.extend_lesson_package_entitlement(uuid,timestamptz,text,text),
@@ -672,13 +776,11 @@ revoke all on function public.process_order_fulfillment_event(uuid),
   public.admin_set_lesson_package_product_config(uuid,integer,integer,public.entitlement_validity_unit,integer,public.lesson_booking_mode_eligibility,text),
   public.get_own_lesson_entitlement_summaries(),public.get_teacher_student_lesson_entitlement_summaries(uuid),
   public.get_admin_lesson_entitlement_summaries()
-from public,anon,authenticated;
+from public,anon,authenticated,service_role;
 
-grant execute on function private.snapshot_order_item_fulfillment(),private.lesson_credit_balance(uuid),
-  private.fulfill_order_paid_event(uuid,uuid) to service_role;
 grant execute on function public.process_order_fulfillment_event(uuid) to service_role;
 grant execute on function public.reserve_lesson_credit(uuid,text,uuid,text),
-  public.admin_process_order_fulfillment_event(uuid),
+  public.admin_retry_order_fulfillment_event(uuid,text,text),
   public.release_lesson_credit(uuid,text),public.consume_lesson_credit(uuid,uuid),
   public.extend_lesson_package_entitlement(uuid,timestamptz,text,text),
   public.admin_adjust_lesson_credits(uuid,integer,text,text),

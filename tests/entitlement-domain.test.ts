@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 
 import {
   entitlementSummarySchema,
+  fulfillmentRetrySchema,
   isEntitlementUsable,
   lessonPackageSnapshotSchema,
   mapEntitlementDomainError,
@@ -59,5 +60,18 @@ describe("entitlement domain", () => {
     expect(mapEntitlementDomainError("CREDIT_ALREADY_RESERVED")).toContain("預約");
     expect(mapEntitlementDomainError("ENTITLEMENT_EXTENSION_PAYLOAD_MISMATCH")).toContain("不一致");
     expect(mapEntitlementDomainError("internal database detail")).toBe("操作未完成，請稍後再試。");
+  });
+
+  it("requires an auditable manual fulfillment retry payload", () => {
+    expect(fulfillmentRetrySchema.safeParse({
+      eventId: "11111111-1111-4111-8111-111111111111",
+      idempotencyKey: "22222222-2222-4222-8222-222222222222",
+      reason: "Reconcile a reviewed payment state",
+    }).success).toBe(true);
+    expect(fulfillmentRetrySchema.safeParse({
+      eventId: "11111111-1111-4111-8111-111111111111",
+      idempotencyKey: "22222222-2222-4222-8222-222222222222",
+      reason: "",
+    }).success).toBe(false);
   });
 });

@@ -55,11 +55,17 @@ export async function adminAdjustLessonCredits(formData: FormData) {
 
 export async function adminRetryFulfillment(formData: FormData) {
   await requireAreaAccess("admin");
-  const parsed = fulfillmentRetrySchema.safeParse({ eventId: read(formData, "eventId") });
+  const parsed = fulfillmentRetrySchema.safeParse({
+    eventId: read(formData, "eventId"),
+    idempotencyKey: read(formData, "idempotencyKey"),
+    reason: read(formData, "reason"),
+  });
   if (!parsed.success) redirect("/admin/packages?error=invalid_event");
   const supabase = await createServerSupabaseClient();
-  const { data, error } = await supabase.rpc("admin_process_order_fulfillment_event", {
+  const { data, error } = await supabase.rpc("admin_retry_order_fulfillment_event", {
     p_event_id: parsed.data.eventId,
+    p_idempotency_key: parsed.data.idempotencyKey,
+    p_reason: parsed.data.reason,
   });
   if (error || data !== "processed") redirect("/admin/packages?error=fulfillment_failed");
   revalidatePath("/admin/packages");

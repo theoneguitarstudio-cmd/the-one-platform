@@ -16,11 +16,21 @@ describe("Epic 5 migration security contract", () => {
     expect(migration).toContain("order_item_fulfillment_snapshots");
   });
 
-  it("keeps the ledger append-only for authenticated clients", () => {
-    expect(migration).toContain("from public,anon,authenticated");
+  it("keeps authoritative history append-only for application roles", () => {
+    expect(migration).toContain("lesson_credit_ledger_append_only");
+    expect(migration).toContain("entitlement_expiry_history_append_only");
+    expect(migration).toContain("fulfillment_manual_retry_attempts_append_only");
+    expect(migration).toContain("from public,anon,authenticated,service_role");
     expect(migration).not.toMatch(/grant (insert|update|delete)[^;]*lesson_credit_ledger[^;]*authenticated/i);
+    expect(migration).not.toMatch(/grant all[^;]*lesson_credit_ledger[^;]*service_role/i);
     expect(migration).toContain("lesson_credit_ledger_nonzero");
     expect(migration).toContain("unique (entitlement_id, operation_key)");
+  });
+
+  it("protects Entitlement source and commercial authority fields", () => {
+    expect(migration).toContain("ENTITLEMENT_AUTHORITY_FIELDS_IMMUTABLE");
+    expect(migration).toContain("entitlements_protect_authority_fields");
+    expect(migration).toContain("entitlements_prevent_delete");
   });
 
   it("locks Entitlement before Reservation in credit functions", () => {
@@ -45,6 +55,11 @@ describe("Epic 5 migration security contract", () => {
   it("keeps fulfillment service-only and DTOs authenticated", () => {
     expect(migration).toContain("grant execute on function public.process_order_fulfillment_event(uuid) to service_role");
     expect(migration).not.toMatch(/grant execute on function public\.process_order_fulfillment_event\(uuid\) to authenticated/i);
+    expect(migration).toContain("admin_retry_order_fulfillment_event(uuid,text,text)");
+    expect(migration).toContain("fulfillment_manual_retry_attempts");
+    expect(migration).toContain("unique (idempotency_key)");
+    expect(migration).toContain("the-one:v1:manual-fulfillment-retry:");
+    expect(migration).toContain("fulfillment.manual_retry");
     expect(migration).toContain("get_own_lesson_entitlement_summaries");
     expect(migration).toContain("get_teacher_student_lesson_entitlement_summaries");
   });
@@ -56,7 +71,7 @@ describe("Epic 5 migration security contract", () => {
   });
 
   it("revokes public execution and pins owners", () => {
-    expect(migration).toContain("from public,anon,authenticated");
+    expect(migration).toContain("from public,anon,authenticated,service_role");
     expect(migration).toContain("owner to postgres");
   });
 

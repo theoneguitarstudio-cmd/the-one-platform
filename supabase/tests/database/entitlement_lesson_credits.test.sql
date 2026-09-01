@@ -125,6 +125,43 @@ select throws_ok($$select public.reserve_lesson_credit('50000000-0000-0000-0000-
 reset role;
 select is((select count(*) from public.audit_logs where action='entitlement.revoked' and target_id='50000000-0000-0000-0000-000000000111'),1::bigint,'revocation audit is durable');
 
+insert into public.orders(id,order_number,buyer_user_id,status,currency,subtotal_amount,total_amount,payment_status,source,idempotency_key) values
+('50000000-0000-0000-0000-000000000120','ONE-20260901-EPIC5RETRY','50000000-0000-0000-0000-000000000001','pending','TWD',3200,3200,'unpaid','web','50000000-0000-4000-8000-000000000120'),
+('50000000-0000-0000-0000-000000000130','ONE-20260901-EPIC5FAIL1','50000000-0000-0000-0000-000000000001','pending','TWD',3200,3200,'unpaid','web','50000000-0000-4000-8000-000000000130');
+insert into public.order_items(id,order_id,product_id,product_type_snapshot,product_name_snapshot,unit_price_amount,quantity,line_subtotal_amount,line_total_amount,seller_type,seller_teacher_user_id) values
+('50000000-0000-0000-0000-000000000121','50000000-0000-0000-0000-000000000120','50000000-0000-0000-0000-000000000020','lesson_package','Lesson Package 4',3200,1,3200,3200,'teacher','50000000-0000-0000-0000-000000000003'),
+('50000000-0000-0000-0000-000000000131','50000000-0000-0000-0000-000000000130','50000000-0000-0000-0000-000000000020','lesson_package','Lesson Package 4',3200,1,3200,3200,'teacher','50000000-0000-0000-0000-000000000003');
+insert into public.order_fulfillment_events(id,order_id,event_type,payload) values
+('50000000-0000-0000-0000-000000000122','50000000-0000-0000-0000-000000000120','order.paid','{}'),
+('50000000-0000-0000-0000-000000000132','50000000-0000-0000-0000-000000000130','order.paid','{}');
+
+set local role service_role; select set_config('request.jwt.claim.role','service_role',true);
+select is(public.process_order_fulfillment_event('50000000-0000-0000-0000-000000000122'),'failed'::public.fulfillment_event_status,'automatic system retry records safe failed status');
+reset role;
+update public.orders set status='paid',payment_status='paid',paid_at=now() where id='50000000-0000-0000-0000-000000000120';
+set local role authenticated; select set_config('request.jwt.claim.sub','50000000-0000-0000-0000-000000000005',true);
+select is(public.admin_retry_order_fulfillment_event('50000000-0000-0000-0000-000000000122'::uuid,'Manual retry after payment reconciliation','50000000-0000-4000-8000-000000000123'),'processed'::public.fulfillment_event_status,'Admin manual retry succeeds');
+select is(public.admin_retry_order_fulfillment_event('50000000-0000-0000-0000-000000000122'::uuid,'Manual retry after payment reconciliation','50000000-0000-4000-8000-000000000123'),'processed'::public.fulfillment_event_status,'same manual retry key is idempotent');
+select throws_ok($$select public.admin_retry_order_fulfillment_event('50000000-0000-0000-0000-000000000122','Different retry payload','50000000-0000-4000-8000-000000000123')$$,'P0001','FULFILLMENT_RETRY_PAYLOAD_MISMATCH','manual retry key validates payload');
+select is(public.admin_retry_order_fulfillment_event('50000000-0000-0000-0000-000000000132'::uuid,'Investigate unfulfilled paid event','50000000-0000-4000-8000-000000000133'),'failed'::public.fulfillment_event_status,'failed Admin retry returns safe failed status');
+select is(public.admin_retry_order_fulfillment_event('50000000-0000-0000-0000-000000000132'::uuid,'Investigate unfulfilled paid event','50000000-0000-4000-8000-000000000133'),'failed'::public.fulfillment_event_status,'failed manual retry is idempotent');
+reset role;
+select is((select count(*) from public.entitlements where source_fulfillment_event_id='50000000-0000-0000-0000-000000000122'),1::bigint,'manual retry creates exactly one entitlement');
+select is((select count(*) from public.lesson_credit_ledger where source_fulfillment_event_id='50000000-0000-0000-0000-000000000122'),1::bigint,'manual retry creates exactly one allocation');
+select is((select count(*) from public.fulfillment_manual_retry_attempts where fulfillment_event_id='50000000-0000-0000-0000-000000000122'),1::bigint,'successful retry writes one immutable attempt audit');
+select is((select count(*) from public.audit_logs where action='fulfillment.manual_retry' and target_id='50000000-0000-0000-0000-000000000122'),1::bigint,'successful retry writes one central audit event');
+select is((select count(*) from public.entitlements where source_fulfillment_event_id='50000000-0000-0000-0000-000000000132'),0::bigint,'failed retry creates no entitlement');
+select is((select count(*) from public.lesson_credit_ledger where source_fulfillment_event_id='50000000-0000-0000-0000-000000000132'),0::bigint,'failed retry creates no allocation');
+select is((select count(*) from public.fulfillment_manual_retry_attempts where fulfillment_event_id='50000000-0000-0000-0000-000000000132' and result='failed' and safe_error_code='ORDER_NOT_PAID'),1::bigint,'failed retry audit persists a safe failure result');
+select is((select count(*) from public.audit_logs where action='fulfillment.manual_retry' and target_id='50000000-0000-0000-0000-000000000132'),1::bigint,'failed retry central audit persists');
+
+set local role authenticated; select set_config('request.jwt.claim.sub','50000000-0000-0000-0000-000000000001',true);
+select throws_ok($$select public.admin_retry_order_fulfillment_event('50000000-0000-0000-0000-000000000132','Student must be denied','50000000-0000-4000-8000-000000000134')$$,'42501','Not authorized','Student cannot execute manual retry');
+reset role; set local role authenticated; select set_config('request.jwt.claim.sub','50000000-0000-0000-0000-000000000003',true);
+select throws_ok($$select public.admin_retry_order_fulfillment_event('50000000-0000-0000-0000-000000000132','Teacher must be denied','50000000-0000-4000-8000-000000000135')$$,'42501','Not authorized','Teacher cannot execute manual retry');
+reset role;
+select is((select count(*) from public.fulfillment_manual_retry_attempts where actor_user_id<>'50000000-0000-0000-0000-000000000005'),0::bigint,'denied callers create no fake Admin audit');
+
 insert into public.entitlements(id,beneficiary_user_id,entitlement_type,status,starts_at,expires_at,product_name_snapshot,booking_mode_eligibility,lesson_duration_minutes) values
 ('50000000-0000-0000-0000-000000000090','50000000-0000-0000-0000-000000000001','lesson_package','active',now()-interval '2 months',now()-interval '1 month','Expired Package','both',50),
 ('50000000-0000-0000-0000-000000000091','50000000-0000-0000-0000-000000000001','membership_access','active',now(),now()+interval '1 month','Future Plus',null,null);
@@ -142,6 +179,31 @@ select is(has_table_privilege('authenticated','public.lesson_credit_ledger','INS
 select is(has_table_privilege('authenticated','public.lesson_credit_reservations','SELECT'),false,'authenticated has no raw reservation SELECT grant');
 select is(has_column_privilege('authenticated','public.entitlements','product_name_snapshot','SELECT'),true,'authenticated has only allowlisted entitlement columns');
 select is((select proconfig from pg_proc where oid='public.reserve_lesson_credit(uuid,text,uuid,text)'::regprocedure),array['search_path=""']::text[],'reserve pins empty search_path');
+select is(has_function_privilege('anon','public.admin_retry_order_fulfillment_event(uuid,text,text)','EXECUTE'),false,'anonymous has no manual retry grant');
+select is(has_function_privilege('service_role','private.fulfill_order_paid_event(uuid,uuid)','EXECUTE'),false,'service role cannot spoof actor through private fulfillment helper');
+select is((select count(*) from (values
+  ('lesson_package_product_configs'),('order_item_fulfillment_snapshots'),('entitlements'),
+  ('lesson_credit_reservations'),('lesson_credit_ledger'),('entitlement_expiry_history'),
+  ('fulfillment_manual_retry_attempts')) as t(name)
+  where has_table_privilege('service_role','public.'||name,'INSERT')
+    or has_table_privilege('service_role','public.'||name,'UPDATE')
+    or has_table_privilege('service_role','public.'||name,'DELETE')),0::bigint,'service role has no raw Epic 5 table mutation privileges');
+set local role service_role; select set_config('request.jwt.claim.role','service_role',true);
+select throws_ok($$insert into public.lesson_credit_ledger(entitlement_id,beneficiary_user_id,entry_type,available_delta,operation_key,reason_code) values('50000000-0000-0000-0000-000000000090','50000000-0000-0000-0000-000000000001','allocation',99,'service-forged-ledger','forged')$$,'42501',null,'service role cannot raw INSERT ledger');
+select throws_ok($$update public.lesson_credit_ledger set reason_code='forged'$$,'42501',null,'service role cannot raw UPDATE ledger');
+select throws_ok($$delete from public.lesson_credit_ledger$$,'42501',null,'service role cannot raw DELETE ledger');
+select throws_ok($$insert into public.entitlement_expiry_history(entitlement_id,new_expires_at,reason,actor_user_id,actor_role,idempotency_key) values('50000000-0000-0000-0000-000000000090',now()+interval '1 year','forged history','50000000-0000-0000-0000-000000000005','admin','service-forged-history')$$,'42501',null,'service role cannot raw INSERT expiry history');
+select throws_ok($$update public.entitlement_expiry_history set reason='forged'$$,'42501',null,'service role cannot raw UPDATE expiry history');
+select throws_ok($$delete from public.entitlement_expiry_history$$,'42501',null,'service role cannot raw DELETE expiry history');
+select throws_ok($$update public.entitlements set beneficiary_user_id='50000000-0000-0000-0000-000000000002'$$,'42501',null,'service role cannot raw change Entitlement authority fields');
+reset role;
+select throws_ok($$update public.lesson_credit_ledger set reason_code='owner-tamper'$$,'55000','APPEND_ONLY_HISTORY','append-only trigger rejects ledger owner UPDATE');
+select throws_ok($$delete from public.lesson_credit_ledger$$,'55000','APPEND_ONLY_HISTORY','append-only trigger rejects ledger owner DELETE');
+select throws_ok($$update public.entitlement_expiry_history set reason='owner-tamper'$$,'55000','APPEND_ONLY_HISTORY','append-only trigger rejects expiry history owner UPDATE');
+select throws_ok($$delete from public.entitlement_expiry_history$$,'55000','APPEND_ONLY_HISTORY','append-only trigger rejects expiry history owner DELETE');
+select throws_ok($$update public.fulfillment_manual_retry_attempts set reason='owner-tamper'$$,'55000','APPEND_ONLY_HISTORY','manual retry audit is immutable');
+select throws_ok($$update public.entitlements set product_name_snapshot=product_name_snapshot||' tamper' where id=(select id from pg_temp.epic5_ids where name='pack4')$$,'55000','ENTITLEMENT_AUTHORITY_FIELDS_IMMUTABLE','Entitlement commercial authority fields are immutable');
+select throws_ok($$delete from public.entitlements where id=(select id from pg_temp.epic5_ids where name='pack4')$$,'55000','APPEND_ONLY_HISTORY','Entitlement history cannot be deleted');
 
 select * from finish();
 rollback;
