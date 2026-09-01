@@ -5,9 +5,11 @@
 - Fixed-slot priority, Flexible availability, booking, series exception,
   cancellation, and reschedule use transactional server/database authorization;
   route/UI state is never authority.
-- Credit reservation, consumption, and release use
-  an auditable ledger transaction linked to the booking or Lesson. A Teacher
-  cannot directly mutate a Student entitlement balance.
+- Credit reservation, consumption, and release use Epic 5 shared private cores
+  in an auditable transaction linked to the Booking or Lesson. Epic 6 contains
+  no independent ledger writer. A Teacher cannot directly mutate a Student
+  entitlement balance, and a Booking-bound reservation cannot be released
+  outside Booking cancellation orchestration.
 - Teacher/Student collision protection retains Epic 3 UTC/IANA semantics,
   advisory-lock discipline, and database final integrity guard. Recurring
   generation needs the same protection, not browser-only calendar checks.
@@ -18,9 +20,16 @@
   and `service_role`, and mutation functions are `SECURITY DEFINER`, owned by
   `postgres`, schema-qualified, and pinned to an empty `search_path`.
 - All Booking, occurrence, series, and availability mutations converge on the
-  Epic 3 Student/Teacher advisory lock order. GiST exclusion constraints remain
-  the final UTC-instant integrity guard; constraint and deadlock errors are
-  translated to stable domain errors.
+  canonical order: deterministic Epic 3 Student/Teacher advisory locks,
+  Entitlement, credit Reservation, Booking, optional recurring Occurrence, then
+  Lesson. Epic 5-only paths use Entitlement then Reservation. GiST exclusion
+  constraints remain the final UTC-instant integrity guard; constraint and
+  deadlock errors are translated to stable domain errors.
+- Teacher mutation authorization requires an active account, Teacher role,
+  existing Teacher profile, and `teaching_status = 'active'`. Paused, draft,
+  inactive, suspended, and role-removed Teachers cannot mutate scheduling or
+  materialize new occurrences. Active Admin/Super Admin override remains
+  separately authorized and audited.
 
 ## Learning Verification & Membership security architecture (proposed)
 

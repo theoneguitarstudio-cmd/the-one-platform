@@ -11,8 +11,20 @@ represents the actual occurrence:
 `lesson entitlement / credit ≠ booking or recurring slot ≠ lesson instance`.
 
 Both fixed and flexible modes consume the same Lesson Credit entitlement
-ledger. Scheduling reserves/releases/consumes a credit through Entitlement; it
-does not create mode-specific credit balances.
+ledger. Epic 5 Entitlement/Credit is the sole owner of reservation, release,
+consumption, balance, ledger, idempotency, and exhausted-state invariants.
+Scheduling delegates those transitions to shared private Epic 5 cores; it does
+not insert credit-ledger entries or create mode-specific credit balances.
+
+### Canonical cross-domain lock order
+
+Every path that crosses Epic 3 scheduling, Epic 5 credit, and Epic 6 Booking
+uses one order: deterministic Student/Teacher schedule advisory locks,
+Entitlement row, credit Reservation row, Booking row, recurring Occurrence row
+when present, then Lesson row. A path that begins inside Epic 5 omits the
+schedule locks but still locks Entitlement before Reservation. Booking-bound
+reservations are released by Scheduling orchestration so Booking, Lesson,
+credit, and audit state commit or roll back together.
 
 Fixed uses `recurring_lesson_series`, bounded `recurring_lesson_occurrences`,
 series exceptions, priority reservation, and lazily generated lesson instances
@@ -33,7 +45,10 @@ The first migration is `20260901000600_scheduling_booking_core.sql`. Weekly
 series store local wall time plus an IANA timezone; actual bookings and Lessons
 store UTC `timestamptz` instants. Ambiguous and nonexistent DST occurrences are
 recorded as failed occurrence claims instead of selecting an offset silently.
-All mutations use role-checked RPCs and the shared Epic 3 schedule lock order.
+All mutations use role-checked RPCs and the canonical cross-domain lock order.
+Teacher mutations require an active account, Teacher role, an existing Teacher
+profile, and `teaching_status = 'active'`; Admin/Super Admin authorization is
+independent of Teacher teaching status.
 
 ## Architecture Update — Learning Verification LMS (proposed)
 

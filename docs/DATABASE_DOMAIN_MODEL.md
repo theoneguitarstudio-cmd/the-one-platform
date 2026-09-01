@@ -23,6 +23,14 @@ assessment pack offerings without changing the existing Epic 4 Product enum in
 the scheduling schema. Series lifetime is never bound to one package; each
 occurrence supplies an explicit eligible entitlement.
 
+Epic 5 remains the only credit-invariant authority. Its public RPCs and Epic 6
+Booking orchestration call the same private reserve/release/consume cores.
+Scheduling adds only an atomic reservation-to-Booking binding that verifies the
+same beneficiary, Entitlement, Reservation, Lesson, and Booking and refuses to
+steal an existing binding. Credit writes lock Entitlement then Reservation;
+cross-domain mutations first take deterministic Student/Teacher schedule locks,
+then Entitlement, Reservation, Booking, optional occurrence, and Lesson.
+
 ## Learning Verification architecture proposal (not implemented)
 
 No migration is created by this documentation update. The following names are

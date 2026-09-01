@@ -237,7 +237,12 @@ returns boolean language sql stable security definer set search_path=''
 as $$
   select private.current_user_is_active() and (
     (auth.uid()=p_teacher_user_id
-      and private.current_user_has_role(array['teacher'::public.app_role]))
+      and private.current_user_has_role(array['teacher'::public.app_role])
+      and exists(
+        select 1 from public.teacher_profiles teacher
+        where teacher.user_id=p_teacher_user_id
+          and teacher.teaching_status='active'
+      ))
     or private.current_user_has_role(array['admin'::public.app_role,'super_admin'::public.app_role])
   );
 $$;
@@ -549,88 +554,219 @@ exception when sqlstate 'P0001' then return false;
 end;
 $$;
 
-create or replace function private.reserve_scheduling_credit(
-  p_entitlement_id uuid,p_student_user_id uuid,p_reservation_key text,
-  p_booking_reference text,p_lesson_id uuid,p_actor_user_id uuid
+create or replace function private.reserve_lesson_credit_core(
+  p_entitlement_id uuid,p_beneficiary_user_id uuid,p_reservation_key text,
+  p_lesson_id uuid,p_booking_reference text,p_actor_user_id uuid
 ) returns uuid language plpgsql security definer set search_path=''
 as $$
 declare ent public.entitlements%rowtype; existing public.lesson_credit_reservations%rowtype;
   balance record; result_id uuid;
 begin
-  if char_length(coalesce(p_reservation_key,'')) not between 16 and 160 then
+  if char_length(coalesce(p_reservation_key,'')) not between 16 and 160
+    or (p_lesson_id is null and nullif(trim(coalesce(p_booking_reference,'')),'') is null) then
     raise exception using errcode='22023',message='INVALID_CREDIT_RESERVATION';
   end if;
   select * into ent from public.entitlements where id=p_entitlement_id for update;
-  if not found or ent.beneficiary_user_id<>p_student_user_id or ent.entitlement_type<>'lesson_package' then
+  if not found or ent.beneficiary_user_id<>p_beneficiary_user_id or ent.entitlement_type<>'lesson_package' then
     raise exception using errcode='P0001',message='ENTITLEMENT_NOT_ELIGIBLE';
   end if;
   select * into existing from public.lesson_credit_reservations
-  where beneficiary_user_id=p_student_user_id and reservation_key=p_reservation_key for update;
+  where beneficiary_user_id=p_beneficiary_user_id and reservation_key=p_reservation_key for update;
   if found then
     if existing.entitlement_id is distinct from p_entitlement_id
       or existing.lesson_id is distinct from p_lesson_id
-      or existing.booking_reference is distinct from p_booking_reference then
+      or existing.booking_reference is distinct from nullif(trim(coalesce(p_booking_reference,'')),'') then
       raise exception using errcode='P0001',message='CREDIT_RESERVATION_PAYLOAD_MISMATCH';
     end if;
     if existing.status='reserved' then return existing.id; end if;
-    raise exception using errcode='P0001',message='CREDIT_ALREADY_'||upper(existing.status::text);
+    raise exception using errcode='P0001',message=case when existing.status='consumed'
+      then 'CREDIT_ALREADY_CONSUMED' else 'CREDIT_ALREADY_RELEASED' end;
   end if;
-  if ent.status<>'active' or ent.starts_at>now() then
-    raise exception using errcode='P0001',message='ENTITLEMENT_NOT_ELIGIBLE';
-  end if;
+  if ent.status<>'active' then raise exception using errcode='P0001',message='ENTITLEMENT_NOT_ACTIVE'; end if;
+  if ent.starts_at>now() then raise exception using errcode='P0001',message='ENTITLEMENT_NOT_STARTED'; end if;
   if ent.expires_at is not null and ent.expires_at<=now() then
     raise exception using errcode='P0001',message='ENTITLEMENT_EXPIRED';
   end if;
+  if p_lesson_id is not null and not exists(
+    select 1 from public.lessons lesson
+    where lesson.id=p_lesson_id and lesson.student_user_id=p_beneficiary_user_id
+  ) then raise exception using errcode='42501',message='Not authorized'; end if;
   select * into balance from private.lesson_credit_balance(ent.id);
   if balance.available<1 then raise exception using errcode='P0001',message='INSUFFICIENT_LESSON_CREDITS'; end if;
   insert into public.lesson_credit_reservations(
     entitlement_id,beneficiary_user_id,reservation_key,lesson_id,booking_reference
-  ) values(ent.id,p_student_user_id,p_reservation_key,p_lesson_id,p_booking_reference)
+  ) values(ent.id,p_beneficiary_user_id,p_reservation_key,p_lesson_id,
+    nullif(trim(coalesce(p_booking_reference,'')),''))
+  on conflict do nothing
   returning id into result_id;
+  if result_id is null then
+    raise exception using errcode='P0001',message='CREDIT_ALREADY_RESERVED';
+  end if;
   insert into public.lesson_credit_ledger(
     entitlement_id,beneficiary_user_id,entry_type,available_delta,reserved_delta,
     reservation_id,lesson_id,operation_key,reason_code,actor_user_id,metadata
-  ) values(ent.id,p_student_user_id,'reservation',-1,1,result_id,p_lesson_id,
+  ) values(ent.id,p_beneficiary_user_id,'reservation',-1,1,result_id,p_lesson_id,
     'reserve:'||p_reservation_key,'booking_reservation',p_actor_user_id,
-    jsonb_build_object('booking_reference',p_booking_reference));
+    jsonb_build_object('booking_reference',nullif(trim(coalesce(p_booking_reference,'')),'')));
   return result_id;
 end;
 $$;
 
-create or replace function private.transition_scheduling_reservation(
-  p_reservation_id uuid,p_outcome public.booking_credit_outcome,p_actor_user_id uuid,p_reason text
-) returns void language plpgsql security definer set search_path=''
+create or replace function private.release_lesson_credit_core(
+  p_reservation_id uuid,p_reason_code text,p_actor_user_id uuid,p_metadata jsonb default '{}'::jsonb,
+  p_allow_booking_bound boolean default false
+) returns uuid language plpgsql security definer set search_path=''
+as $$
+declare res public.lesson_credit_reservations%rowtype; ent public.entitlements%rowtype;
+begin
+  select entitlement.* into ent from public.entitlements entitlement
+  join public.lesson_credit_reservations reservation on reservation.entitlement_id=entitlement.id
+  where reservation.id=p_reservation_id for update of entitlement;
+  if not found then raise exception using errcode='P0001',message='CREDIT_RESERVATION_NOT_FOUND'; end if;
+  select * into res from public.lesson_credit_reservations where id=p_reservation_id for update;
+  if res.booking_id is not null and not p_allow_booking_bound then
+    raise exception using errcode='P0001',message='CREDIT_RESERVATION_MANAGED_BY_BOOKING';
+  end if;
+  if res.status='released' then return res.id; end if;
+  if res.status='consumed' then raise exception using errcode='P0001',message='CREDIT_ALREADY_CONSUMED'; end if;
+  update public.lesson_credit_reservations set status='released',released_at=now(),updated_at=now() where id=res.id;
+  insert into public.lesson_credit_ledger(
+    entitlement_id,beneficiary_user_id,entry_type,available_delta,reserved_delta,
+    reservation_id,lesson_id,operation_key,reason_code,actor_user_id,metadata
+  ) values(ent.id,ent.beneficiary_user_id,'release',1,-1,res.id,res.lesson_id,
+    'release:'||res.id::text,left(coalesce(nullif(trim(p_reason_code),''),'booking_release'),100),
+    p_actor_user_id,coalesce(p_metadata,'{}'::jsonb));
+  if ent.status='exhausted' and (ent.expires_at is null or ent.expires_at>now()) then
+    update public.entitlements set status='active',updated_at=now() where id=ent.id;
+  end if;
+  return res.id;
+end;
+$$;
+
+create or replace function private.consume_lesson_credit_core(
+  p_reservation_id uuid,p_lesson_id uuid,p_reason_code text,p_actor_user_id uuid,
+  p_metadata jsonb default '{}'::jsonb
+) returns uuid language plpgsql security definer set search_path=''
 as $$
 declare res public.lesson_credit_reservations%rowtype; ent public.entitlements%rowtype; balance record;
 begin
-  select * into res from public.lesson_credit_reservations where id=p_reservation_id for update;
+  select entitlement.* into ent from public.entitlements entitlement
+  join public.lesson_credit_reservations reservation on reservation.entitlement_id=entitlement.id
+  where reservation.id=p_reservation_id for update of entitlement;
   if not found then raise exception using errcode='P0001',message='CREDIT_RESERVATION_NOT_FOUND'; end if;
-  select * into ent from public.entitlements where id=res.entitlement_id for update;
-  if res.status<>'reserved' then
-    if (p_outcome='released' and res.status='released') or (p_outcome='consumed' and res.status='consumed') then return; end if;
-    raise exception using errcode='P0001',message='CREDIT_RESERVATION_TERMINAL';
+  select * into res from public.lesson_credit_reservations where id=p_reservation_id for update;
+  if res.lesson_id is distinct from p_lesson_id then
+    raise exception using errcode='P0001',message='CREDIT_RESERVATION_PAYLOAD_MISMATCH';
   end if;
-  if p_outcome='released' then
-    update public.lesson_credit_reservations set status='released',released_at=now(),updated_at=now() where id=res.id;
-    insert into public.lesson_credit_ledger(
-      entitlement_id,beneficiary_user_id,entry_type,available_delta,reserved_delta,
-      reservation_id,lesson_id,operation_key,reason_code,actor_user_id,metadata
-    ) values(ent.id,res.beneficiary_user_id,'release',1,-1,res.id,res.lesson_id,
-      'release:'||res.id::text,'booking_cancellation',p_actor_user_id,jsonb_build_object('reason',p_reason));
-    select * into balance from private.lesson_credit_balance(ent.id);
-    if ent.status='exhausted' and (ent.expires_at is null or ent.expires_at>now()) and balance.available>0 then
-      update public.entitlements set status='active',updated_at=now() where id=ent.id;
-    end if;
-  elsif p_outcome='consumed' then
-    update public.lesson_credit_reservations set status='consumed',consumed_at=now(),updated_at=now() where id=res.id;
-    insert into public.lesson_credit_ledger(
-      entitlement_id,beneficiary_user_id,entry_type,reserved_delta,consumed_delta,
-      reservation_id,lesson_id,operation_key,reason_code,actor_user_id,metadata
-    ) values(ent.id,res.beneficiary_user_id,'consumption',-1,1,res.id,res.lesson_id,
-      'consume:'||res.id::text,'booking_cancellation',p_actor_user_id,jsonb_build_object('reason',p_reason));
+  if res.status='consumed' then return res.id; end if;
+  if res.status='released' then raise exception using errcode='P0001',message='CREDIT_ALREADY_RELEASED'; end if;
+  update public.lesson_credit_reservations
+  set status='consumed',consumed_at=now(),updated_at=now() where id=res.id;
+  insert into public.lesson_credit_ledger(
+    entitlement_id,beneficiary_user_id,entry_type,reserved_delta,consumed_delta,
+    reservation_id,lesson_id,operation_key,reason_code,actor_user_id,metadata
+  ) values(ent.id,ent.beneficiary_user_id,'consumption',-1,1,res.id,p_lesson_id,
+    'consume:'||res.id::text,left(coalesce(nullif(trim(p_reason_code),''),'lesson_completed'),100),
+    p_actor_user_id,coalesce(p_metadata,'{}'::jsonb));
+  select * into balance from private.lesson_credit_balance(ent.id);
+  if balance.available=0 and balance.reserved=0 then
+    update public.entitlements set status='exhausted',updated_at=now()
+    where id=ent.id and status='active';
   end if;
+  return res.id;
 end;
 $$;
+
+create or replace function private.bind_lesson_credit_reservation_booking_core(
+  p_reservation_id uuid,p_booking_id uuid,p_beneficiary_user_id uuid,
+  p_entitlement_id uuid,p_lesson_id uuid
+) returns uuid language plpgsql security definer set search_path=''
+as $$
+declare ent public.entitlements%rowtype; res public.lesson_credit_reservations%rowtype;
+  booking public.bookings%rowtype;
+begin
+  select * into ent from public.entitlements where id=p_entitlement_id for update;
+  if not found or ent.beneficiary_user_id<>p_beneficiary_user_id then
+    raise exception using errcode='P0001',message='CREDIT_RESERVATION_BINDING_MISMATCH';
+  end if;
+  select * into res from public.lesson_credit_reservations where id=p_reservation_id for update;
+  select * into booking from public.bookings where id=p_booking_id for update;
+  if not found or res.id is null or res.entitlement_id<>p_entitlement_id
+    or res.beneficiary_user_id<>p_beneficiary_user_id or res.lesson_id is distinct from p_lesson_id
+    or booking.student_user_id<>p_beneficiary_user_id
+    or booking.credit_reservation_id<>p_reservation_id or booking.lesson_id is distinct from p_lesson_id
+    or (res.booking_id is not null and res.booking_id<>p_booking_id) then
+    raise exception using errcode='P0001',message='CREDIT_RESERVATION_BINDING_MISMATCH';
+  end if;
+  update public.lesson_credit_reservations set booking_id=p_booking_id,updated_at=now()
+  where id=p_reservation_id and booking_id is null;
+  return p_reservation_id;
+end;
+$$;
+
+create or replace function public.reserve_lesson_credit(
+  p_entitlement_id uuid,p_reservation_key text,p_lesson_id uuid default null,
+  p_booking_reference text default null
+) returns uuid language plpgsql security definer set search_path='' as $$
+declare caller uuid:=auth.uid(); ent public.entitlements%rowtype;
+begin
+  if caller is null or not private.current_user_is_active() then
+    raise exception using errcode='42501',message='Not authorized';
+  end if;
+  if char_length(coalesce(p_reservation_key,'')) not between 16 and 160
+    or (p_lesson_id is null and nullif(trim(coalesce(p_booking_reference,'')),'') is null) then
+    raise exception using errcode='22023',message='INVALID_CREDIT_RESERVATION';
+  end if;
+  select * into ent from public.entitlements where id=p_entitlement_id;
+  if not found or ent.beneficiary_user_id<>caller or ent.entitlement_type<>'lesson_package' then
+    raise exception using errcode='42501',message='Not authorized';
+  end if;
+  return private.reserve_lesson_credit_core(p_entitlement_id,caller,p_reservation_key,
+    p_lesson_id,p_booking_reference,caller);
+end; $$;
+
+create or replace function public.release_lesson_credit(
+  p_reservation_id uuid,p_reason text default 'booking_release'
+) returns uuid language plpgsql security definer set search_path='' as $$
+declare caller uuid:=auth.uid(); beneficiary_id uuid;
+begin
+  if caller is null or not private.current_user_is_active() then
+    raise exception using errcode='42501',message='Not authorized';
+  end if;
+  select reservation.beneficiary_user_id into beneficiary_id
+  from public.lesson_credit_reservations reservation where reservation.id=p_reservation_id;
+  if not found or (beneficiary_id<>caller and not private.current_user_has_role(
+    array['admin'::public.app_role,'super_admin'::public.app_role])) then
+    raise exception using errcode='42501',message='Not authorized';
+  end if;
+  return private.release_lesson_credit_core(p_reservation_id,p_reason,caller);
+end; $$;
+
+create or replace function public.consume_lesson_credit(p_reservation_id uuid,p_lesson_id uuid)
+returns uuid language plpgsql security definer set search_path='' as $$
+declare caller uuid:=auth.uid(); beneficiary_id uuid; reservation_lesson_id uuid;
+begin
+  if caller is null or not private.current_user_is_active() then
+    raise exception using errcode='42501',message='Not authorized';
+  end if;
+  select reservation.beneficiary_user_id,reservation.lesson_id
+    into beneficiary_id,reservation_lesson_id
+  from public.lesson_credit_reservations reservation where reservation.id=p_reservation_id;
+  if not found then raise exception using errcode='P0001',message='CREDIT_RESERVATION_NOT_FOUND'; end if;
+  if reservation_lesson_id is distinct from p_lesson_id then
+    raise exception using errcode='P0001',message='CREDIT_RESERVATION_PAYLOAD_MISMATCH';
+  end if;
+  if not private.current_user_has_role(array['admin'::public.app_role,'super_admin'::public.app_role])
+    and not exists(
+      select 1 from public.lessons lesson
+      join public.teacher_profiles teacher on teacher.user_id=lesson.teacher_user_id
+      where lesson.id=p_lesson_id and lesson.teacher_user_id=caller
+        and lesson.student_user_id=beneficiary_id and lesson.status='completed'
+        and teacher.teaching_status='active'
+    ) then raise exception using errcode='42501',message='Not authorized'; end if;
+  return private.consume_lesson_credit_core(p_reservation_id,p_lesson_id,
+    'lesson_completed',caller);
+end; $$;
 
 create or replace function public.create_lesson_booking(
   p_student_user_id uuid,p_teacher_user_id uuid,p_relationship_id uuid,
@@ -653,7 +789,9 @@ begin
     if p_student_user_id is distinct from caller then raise exception using errcode='42501',message='UNAUTHORIZED_BOOKING_ACTION'; end if;
   elsif actor_role='teacher' then
     student_id:=p_student_user_id;
-    if caller<>p_teacher_user_id then raise exception using errcode='42501',message='UNAUTHORIZED_BOOKING_ACTION'; end if;
+    if caller<>p_teacher_user_id or not private.scheduling_teacher_authorized(p_teacher_user_id) then
+      raise exception using errcode='42501',message='UNAUTHORIZED_BOOKING_ACTION';
+    end if;
   elsif actor_role in('admin','super_admin') then student_id:=p_student_user_id;
   else raise exception using errcode='42501',message='UNAUTHORIZED_BOOKING_ACTION'; end if;
   if char_length(coalesce(p_idempotency_key,'')) not between 16 and 160
@@ -705,14 +843,15 @@ begin
     case when relation.preferred_mode='online' then teacher.default_meeting_url end,
     case when relation.preferred_mode='onsite' then teacher.location_text end
   );
-  reservation_id:=private.reserve_scheduling_credit(p_entitlement_id,student_id,
-    'booking:'||p_idempotency_key,new_booking_id::text,new_lesson_id,caller);
+  reservation_id:=private.reserve_lesson_credit_core(p_entitlement_id,student_id,
+    'booking:'||p_idempotency_key,new_lesson_id,new_booking_id::text,caller);
   insert into public.bookings(
     id,student_user_id,teacher_user_id,relationship_id,source,status,starts_at,ends_at,
     timezone_anchor,lesson_id,credit_reservation_id,created_by,idempotency_key
   ) values(new_booking_id,student_id,p_teacher_user_id,p_relationship_id,'flexible','confirmed',
     p_starts_at,lesson_end,p_timezone,new_lesson_id,reservation_id,caller,p_idempotency_key);
-  update public.lesson_credit_reservations r set booking_id=new_booking_id where r.id=reservation_id;
+  perform private.bind_lesson_credit_reservation_booking_core(
+    reservation_id,new_booking_id,student_id,p_entitlement_id,new_lesson_id);
   insert into public.audit_logs(actor_user_id,action,target_type,target_id,after_snapshot,reason)
   values(caller,'booking.created','booking',new_booking_id,jsonb_build_object(
     'actor_role',actor_role,'student_user_id',student_id,'teacher_user_id',p_teacher_user_id,
@@ -732,6 +871,8 @@ create or replace function public.cancel_lesson_booking(
 ) returns uuid language plpgsql security definer set search_path=''
 as $$
 declare caller uuid:=auth.uid(); actor_role public.app_role; b public.bookings%rowtype;
+  ent public.entitlements%rowtype; reservation public.lesson_credit_reservations%rowtype;
+  lesson public.lessons%rowtype; occurrence_id uuid;
 begin
   if caller is null or not private.current_user_is_active()
     or char_length(trim(coalesce(p_reason,''))) not between 3 and 1000
@@ -743,7 +884,7 @@ begin
   actor_role:=private.scheduling_actor_role(caller);
   if not (caller=b.student_user_id
     or (caller=b.teacher_user_id
-      and private.current_user_has_role(array['teacher'::public.app_role]))
+      and private.scheduling_teacher_authorized(b.teacher_user_id))
     or actor_role in('admin','super_admin')) then
     raise exception using errcode='42501',message='UNAUTHORIZED_BOOKING_ACTION';
   end if;
@@ -754,25 +895,41 @@ begin
     raise exception using errcode='42501',message='UNAUTHORIZED_BOOKING_ACTION';
   end if;
   perform private.lock_lesson_schedule_resources(b.student_user_id,b.teacher_user_id);
+  select entitlement.* into ent from public.entitlements entitlement
+  join public.lesson_credit_reservations credit on credit.entitlement_id=entitlement.id
+  where credit.id=b.credit_reservation_id for update of entitlement;
+  select * into reservation from public.lesson_credit_reservations
+    where id=b.credit_reservation_id for update;
   select * into b from public.bookings where id=p_booking_id for update;
+  select id into occurrence_id from public.recurring_lesson_occurrences
+    where booking_id=b.id for update;
+  select * into lesson from public.lessons where id=b.lesson_id for update;
   if b.status='cancelled' then return b.id; end if;
   if b.status not in('confirmed','rescheduled') then
     raise exception using errcode='P0001',message='BOOKING_NOT_CANCELLABLE';
   end if;
-  perform private.transition_scheduling_reservation(b.credit_reservation_id,p_credit_outcome,caller,trim(p_reason));
+  if p_credit_outcome='released' then
+    perform private.release_lesson_credit_core(
+      reservation.id,'booking_cancellation',caller,
+      jsonb_build_object('booking_id',b.id,'reason',trim(p_reason)),true);
+  elsif p_credit_outcome='consumed' then
+    perform private.consume_lesson_credit_core(
+      reservation.id,lesson.id,'admin_cancellation_consumed',caller,
+      jsonb_build_object('booking_id',b.id,'reason',trim(p_reason)));
+  end if;
   update public.lessons set status=case
       when actor_role in('admin','super_admin') then 'admin_cancelled'::public.lesson_status
       when caller=b.teacher_user_id then 'teacher_cancelled'::public.lesson_status
       else 'student_cancelled'::public.lesson_status
     end,updated_at=now()
-    where id=b.lesson_id and status='scheduled';
+    where id=lesson.id and status='scheduled';
   update public.bookings set status='cancelled',cancelled_at=now(),
     cancellation_reason=trim(p_reason),cancellation_credit_outcome=p_credit_outcome,
     earning_outcome=p_earning_outcome,updated_at=now() where id=b.id;
-  if b.recurring_series_id is not null then
+  if occurrence_id is not null then
     update public.recurring_lesson_occurrences set status=case when p_credit_outcome='released'
       then 'released'::public.recurring_occurrence_status else status end,updated_at=now()
-      where booking_id=b.id;
+      where id=occurrence_id;
   end if;
   insert into public.audit_logs(actor_user_id,action,target_type,target_id,before_snapshot,after_snapshot,reason)
   values(caller,'booking.cancelled','booking',b.id,
@@ -788,7 +945,8 @@ create or replace function public.reschedule_lesson_booking(
 ) returns uuid language plpgsql security definer set search_path=''
 as $$
 declare caller uuid:=auth.uid(); actor_role public.app_role; b public.bookings%rowtype;
-  ent public.entitlements%rowtype; new_end timestamptz; occurrence_id uuid;
+  ent public.entitlements%rowtype; reservation public.lesson_credit_reservations%rowtype;
+  lesson public.lessons%rowtype; new_end timestamptz; occurrence_id uuid;
 begin
   if caller is null or not private.current_user_is_active()
     or not private.is_valid_iana_timezone(p_timezone)
@@ -800,25 +958,28 @@ begin
   actor_role:=private.scheduling_actor_role(caller);
   if not (caller=b.student_user_id
     or (caller=b.teacher_user_id
-      and private.current_user_has_role(array['teacher'::public.app_role]))
+      and private.scheduling_teacher_authorized(b.teacher_user_id))
     or actor_role in('admin','super_admin')) then
     raise exception using errcode='42501',message='UNAUTHORIZED_BOOKING_ACTION';
   end if;
   perform private.lock_lesson_schedule_resources(b.student_user_id,b.teacher_user_id);
+  select e.* into ent from public.entitlements e join public.lesson_credit_reservations r
+    on r.entitlement_id=e.id where r.id=b.credit_reservation_id for update of e;
+  select * into reservation from public.lesson_credit_reservations
+    where id=b.credit_reservation_id for update;
   select * into b from public.bookings where id=p_booking_id for update;
   if b.status not in('confirmed','rescheduled') then
     raise exception using errcode='P0001',message='BOOKING_NOT_RESCHEDULABLE';
   end if;
-  select e.* into ent from public.entitlements e join public.lesson_credit_reservations r
-    on r.entitlement_id=e.id where r.id=b.credit_reservation_id for update of e;
   new_end:=p_new_starts_at+make_interval(mins=>extract(epoch from (b.ends_at-b.starts_at))::integer/60);
-  select id into occurrence_id from public.recurring_lesson_occurrences where booking_id=b.id;
+  select id into occurrence_id from public.recurring_lesson_occurrences where booking_id=b.id for update;
+  select * into lesson from public.lessons where id=b.lesson_id for update;
   if not private.flexible_slot_is_available(b.student_user_id,b.teacher_user_id,p_new_starts_at,
     extract(epoch from (new_end-p_new_starts_at))::integer/60,b.lesson_id,occurrence_id) then
     raise exception using errcode='P0001',message='SLOT_NOT_AVAILABLE';
   end if;
   update public.lessons set starts_at=p_new_starts_at,ends_at=new_end,
-    timezone_anchor=p_timezone,status='scheduled',updated_at=now() where id=b.lesson_id;
+    timezone_anchor=p_timezone,status='scheduled',updated_at=now() where id=lesson.id;
   update public.bookings set starts_at=p_new_starts_at,ends_at=new_end,
     timezone_anchor=p_timezone,status='rescheduled',rescheduled_at=now(),updated_at=now() where id=b.id;
   if occurrence_id is not null then
@@ -1040,9 +1201,8 @@ begin
     raise exception using errcode='22023',message='INVALID_BOOKING_REQUEST';
   end if;
   perform private.lock_lesson_schedule_resources(s.student_user_id,s.teacher_user_id);
-  select * into s from public.recurring_lesson_series where id=p_series_id for update;
   select * into o from public.recurring_lesson_occurrences
-    where series_id=s.id and occurrence_date=p_occurrence_date for update;
+    where series_id=s.id and occurrence_date=p_occurrence_date;
   if not found then raise exception using errcode='P0001',message='OCCURRENCE_NOT_FOUND'; end if;
   if o.status='materialized' then return o.booking_id; end if;
   if s.status<>'active' then raise exception using errcode='P0001',message='RECURRING_SERIES_INACTIVE'; end if;
@@ -1051,6 +1211,10 @@ begin
   end if;
   if p_entitlement_id is null or not private.scheduling_entitlement_eligible(
     p_entitlement_id,s.student_user_id,s.teacher_user_id,'fixed') then
+    select * into s from public.recurring_lesson_series where id=p_series_id for update;
+    select * into o from public.recurring_lesson_occurrences
+      where series_id=s.id and occurrence_date=p_occurrence_date for update;
+    if o.status='materialized' then return o.booking_id; end if;
     update public.recurring_lesson_occurrences set status='credit_required',
       error_code='CREDIT_REQUIRED',updated_at=now() where id=o.id;
     insert into public.audit_logs(actor_user_id,action,target_type,target_id,after_snapshot,reason)
@@ -1059,7 +1223,18 @@ begin
       'Eligible explicit entitlement is required');
     return null;
   end if;
-  perform 1 from public.entitlements where id=p_entitlement_id for update;
+  select * into ent from public.entitlements where id=p_entitlement_id for update;
+  select * into s from public.recurring_lesson_series where id=p_series_id for update;
+  select * into o from public.recurring_lesson_occurrences
+    where series_id=s.id and occurrence_date=p_occurrence_date for update;
+  if o.status='materialized' then return o.booking_id; end if;
+  if s.status<>'active' or o.status in('released','skipped','failed') then
+    raise exception using errcode='P0001',message='OCCURRENCE_NOT_MATERIALIZABLE';
+  end if;
+  if not private.scheduling_entitlement_eligible(
+    p_entitlement_id,s.student_user_id,s.teacher_user_id,'fixed') then
+    raise exception using errcode='P0001',message='ENTITLEMENT_NOT_ELIGIBLE';
+  end if;
   if not private.scheduling_slot_clear(s.student_user_id,s.teacher_user_id,o.starts_at,o.ends_at,null,o.id) then
     raise exception using errcode='P0001',message='SLOT_NOT_AVAILABLE';
   end if;
@@ -1077,15 +1252,16 @@ begin
     case when relation.preferred_mode='online' then teacher.default_meeting_provider end,
     case when relation.preferred_mode='online' then teacher.default_meeting_url end,
     case when relation.preferred_mode='onsite' then teacher.location_text end);
-  reservation_id:=private.reserve_scheduling_credit(p_entitlement_id,s.student_user_id,
-    'booking:'||p_idempotency_key,new_booking_id::text,new_lesson_id,caller);
+  reservation_id:=private.reserve_lesson_credit_core(p_entitlement_id,s.student_user_id,
+    'booking:'||p_idempotency_key,new_lesson_id,new_booking_id::text,caller);
   insert into public.bookings(
     id,student_user_id,teacher_user_id,relationship_id,source,status,starts_at,ends_at,
     timezone_anchor,lesson_id,credit_reservation_id,recurring_series_id,occurrence_date,
     created_by,idempotency_key
   ) values(new_booking_id,s.student_user_id,s.teacher_user_id,s.relationship_id,'fixed','confirmed',
     o.starts_at,o.ends_at,s.timezone,new_lesson_id,reservation_id,s.id,o.occurrence_date,caller,p_idempotency_key);
-  update public.lesson_credit_reservations r set booking_id=new_booking_id where r.id=reservation_id;
+  perform private.bind_lesson_credit_reservation_booking_core(
+    reservation_id,new_booking_id,s.student_user_id,p_entitlement_id,new_lesson_id);
   update public.recurring_lesson_occurrences o2 set status='materialized',booking_id=new_booking_id,
     lesson_id=new_lesson_id,error_code=null,updated_at=now() where id=o.id;
   insert into public.audit_logs(actor_user_id,action,target_type,target_id,after_snapshot,reason)
@@ -1110,13 +1286,14 @@ create or replace function public.complete_lesson_booking(
 ) returns uuid language plpgsql security definer set search_path=''
 as $$
 declare caller uuid:=auth.uid(); actor_role public.app_role; b public.bookings%rowtype;
-  lesson public.lessons%rowtype; reservation public.lesson_credit_reservations%rowtype;
+  ent public.entitlements%rowtype; lesson public.lessons%rowtype;
+  reservation public.lesson_credit_reservations%rowtype; occurrence_id uuid;
 begin
   select * into b from public.bookings where id=p_booking_id;
   actor_role:=private.scheduling_actor_role(caller);
   if not found or caller is null or not private.current_user_is_active()
     or not ((caller=b.teacher_user_id
-      and private.current_user_has_role(array['teacher'::public.app_role]))
+      and private.scheduling_teacher_authorized(b.teacher_user_id))
       or actor_role in('admin','super_admin')) then
     raise exception using errcode='42501',message='UNAUTHORIZED_BOOKING_ACTION';
   end if;
@@ -1128,10 +1305,14 @@ begin
     raise exception using errcode='22023',message='INVALID_LESSON_RECORD';
   end if;
   perform private.lock_lesson_schedule_resources(b.student_user_id,b.teacher_user_id);
-  select * into b from public.bookings where id=p_booking_id for update;
+  select entitlement.* into ent from public.entitlements entitlement
+  join public.lesson_credit_reservations credit on credit.entitlement_id=entitlement.id
+  where credit.id=b.credit_reservation_id for update of entitlement;
   select * into reservation from public.lesson_credit_reservations
     where id=b.credit_reservation_id for update;
-  perform 1 from public.entitlements where id=reservation.entitlement_id for update;
+  select * into b from public.bookings where id=p_booking_id for update;
+  select id into occurrence_id from public.recurring_lesson_occurrences
+    where booking_id=b.id for update;
   select * into lesson from public.lessons where id=b.lesson_id for update;
   if b.status='completed' and lesson.status='completed' and reservation.status='consumed' then return lesson.id; end if;
   if b.status not in('confirmed','rescheduled') or lesson.status<>'scheduled' then
@@ -1147,7 +1328,9 @@ begin
   ) values(lesson.id,coalesce(p_student_visible_notes,''),coalesce(p_private_teacher_notes,''),
     coalesce(p_performance_summary,''),coalesce(p_next_goal,''),coalesce(p_homework,''),now(),caller)
   on conflict(lesson_id) do nothing;
-  perform private.transition_scheduling_reservation(reservation.id,'consumed',caller,'Lesson completed');
+  perform private.consume_lesson_credit_core(
+    reservation.id,lesson.id,'lesson_completed',caller,
+    jsonb_build_object('booking_id',b.id,'reason','Lesson completed'));
   update public.bookings set status='completed',completed_at=now(),updated_at=now() where id=b.id;
   insert into public.audit_logs(actor_user_id,action,target_type,target_id,before_snapshot,after_snapshot,reason)
   values(caller,'booking.completed','booking',b.id,jsonb_build_object('status',b.status),
@@ -1305,8 +1488,13 @@ alter function private.scheduling_entitlement_eligible(uuid,uuid,uuid,public.boo
 alter function private.scheduling_slot_clear(uuid,uuid,timestamptz,timestamptz,uuid,uuid) owner to postgres;
 alter function private.ensure_recurring_occurrences(uuid,date) owner to postgres;
 alter function private.flexible_slot_is_available(uuid,uuid,timestamptz,integer,uuid,uuid) owner to postgres;
-alter function private.reserve_scheduling_credit(uuid,uuid,text,text,uuid,uuid) owner to postgres;
-alter function private.transition_scheduling_reservation(uuid,public.booking_credit_outcome,uuid,text) owner to postgres;
+alter function private.reserve_lesson_credit_core(uuid,uuid,text,uuid,text,uuid) owner to postgres;
+alter function private.release_lesson_credit_core(uuid,text,uuid,jsonb,boolean) owner to postgres;
+alter function private.consume_lesson_credit_core(uuid,uuid,text,uuid,jsonb) owner to postgres;
+alter function private.bind_lesson_credit_reservation_booking_core(uuid,uuid,uuid,uuid,uuid) owner to postgres;
+alter function public.reserve_lesson_credit(uuid,text,uuid,text) owner to postgres;
+alter function public.release_lesson_credit(uuid,text) owner to postgres;
+alter function public.consume_lesson_credit(uuid,uuid) owner to postgres;
 alter function public.set_teacher_scheduling_settings(uuid,text,integer,integer,integer,text) owner to postgres;
 alter function public.create_teacher_availability_rule(uuid,smallint,time,time,text,date,date,text) owner to postgres;
 alter function public.create_teacher_availability_exception(uuid,public.availability_exception_kind,timestamptz,timestamptz,text) owner to postgres;
@@ -1334,9 +1522,18 @@ revoke all on function private.resolve_scheduling_local_datetime(date,time,text)
   private.scheduling_slot_clear(uuid,uuid,timestamptz,timestamptz,uuid,uuid),
   private.ensure_recurring_occurrences(uuid,date),
   private.flexible_slot_is_available(uuid,uuid,timestamptz,integer,uuid,uuid),
-  private.reserve_scheduling_credit(uuid,uuid,text,text,uuid,uuid),
-  private.transition_scheduling_reservation(uuid,public.booking_credit_outcome,uuid,text)
+  private.reserve_lesson_credit_core(uuid,uuid,text,uuid,text,uuid),
+  private.release_lesson_credit_core(uuid,text,uuid,jsonb,boolean),
+  private.consume_lesson_credit_core(uuid,uuid,text,uuid,jsonb),
+  private.bind_lesson_credit_reservation_booking_core(uuid,uuid,uuid,uuid,uuid)
 from public,anon,authenticated,service_role;
+
+revoke all on function public.reserve_lesson_credit(uuid,text,uuid,text),
+  public.release_lesson_credit(uuid,text),public.consume_lesson_credit(uuid,uuid)
+from public,anon,authenticated,service_role;
+grant execute on function public.reserve_lesson_credit(uuid,text,uuid,text),
+  public.release_lesson_credit(uuid,text),public.consume_lesson_credit(uuid,uuid)
+to authenticated;
 
 revoke all on function public.set_teacher_scheduling_settings(uuid,text,integer,integer,integer,text),
   public.create_teacher_availability_rule(uuid,smallint,time,time,text,date,date,text),

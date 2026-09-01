@@ -275,6 +275,12 @@ update public.lessons set starts_at=now()-interval '1 hour',ends_at=now()-interv
 where id=(select lesson_id from public.bookings where id=(select id from pg_temp.epic6_context where name='flex_booking'));
 update public.bookings set starts_at=now()-interval '1 hour',ends_at=now()-interval '10 minutes'
 where id=(select id from pg_temp.epic6_context where name='flex_booking');
+insert into public.lesson_credit_ledger(
+  entitlement_id,beneficiary_user_id,entry_type,available_delta,operation_key,reason_code
+) values(
+  '60000000-0000-0000-0000-000000000020','60000000-0000-0000-0000-000000000001',
+  'adjustment',-7,'epic6-exhaustion-fixture-adjustment','test_fixture'
+);
 
 set local role authenticated;
 select set_config('request.jwt.claim.sub','60000000-0000-0000-0000-000000000003',true);
@@ -291,6 +297,14 @@ select is((select r.status from public.lesson_credit_reservations r join public.
   'consumed'::public.lesson_credit_reservation_status,'Completion consumes the shared credit reservation');
 select is((select count(*) from public.lesson_records lr join public.bookings b on b.lesson_id=lr.lesson_id where b.id=(select id from pg_temp.epic6_context where name='flex_booking')),1::bigint,
   'Completion creates exactly one Lesson record');
+select is((select status from public.entitlements where id='60000000-0000-0000-0000-000000000020'),
+  'exhausted'::public.entitlement_status,
+  'Scheduling completion uses the shared credit core exhausted-state semantics');
+select is((select reason_code from public.lesson_credit_ledger ledger
+  join public.bookings booking on booking.credit_reservation_id=ledger.reservation_id
+  where booking.id=(select id from pg_temp.epic6_context where name='flex_booking')
+    and ledger.entry_type='consumption'),'lesson_completed'::text,
+  'Scheduling completion records the lesson_completed credit reason code');
 
 insert into pg_temp.epic6_context(name,id)
 select 'removed_role_booking',id from public.bookings
@@ -307,6 +321,93 @@ select throws_ok($$select public.cancel_lesson_booking(
   '42501','UNAUTHORIZED_BOOKING_ACTION','Removed Teacher role cannot cancel a Booking');
 reset role;
 insert into public.user_roles(user_id,role) values('60000000-0000-0000-0000-000000000003','teacher');
+
+update public.teacher_profiles set teaching_status='paused'
+where user_id='60000000-0000-0000-0000-000000000003';
+set local role authenticated;
+select set_config('request.jwt.claim.sub','60000000-0000-0000-0000-000000000003',true);
+select throws_ok($$select public.set_teacher_scheduling_settings(
+  '60000000-0000-0000-0000-000000000003','Asia/Taipei',0,90,10,'Paused mutation')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot mutate scheduling settings');
+select throws_ok($$select public.create_teacher_availability_rule(
+  '60000000-0000-0000-0000-000000000003',2::smallint,'19:00'::time,'20:00'::time,
+  'Asia/Taipei',current_date,current_date+30,'Paused availability rule')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot create availability rules');
+select throws_ok($$select public.create_teacher_availability_exception(
+  '60000000-0000-0000-0000-000000000003','unavailable',now()+interval '20 days',
+  now()+interval '20 days 1 hour','Paused availability exception')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot create availability exceptions');
+select throws_ok($$select public.create_recurring_lesson_series(
+  '60000000-0000-0000-0000-000000000001','60000000-0000-0000-0000-000000000003',
+  '60000000-0000-0000-0000-000000000010','60000000-0000-0000-0000-000000000021',
+  2::smallint,'21:00'::time,'Asia/Taipei',50::smallint,current_date+7,current_date+28,
+  'Paused recurring series')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot create recurring series');
+select throws_ok($$select public.refresh_recurring_series_occurrences(
+  (select id from pg_temp.epic6_context where name='fixed_series'),current_date+60)$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot refresh recurring occurrences');
+select throws_ok($$select public.set_recurring_lesson_series_status(
+  (select id from pg_temp.epic6_context where name='fixed_series'),'paused','Paused status mutation')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot manage recurring series');
+select throws_ok($$select public.set_recurring_lesson_series_exception(
+  (select id from pg_temp.epic6_context where name='fixed_series'),
+  (select test_date+21 from pg_temp.epic6_context where name='slot_day'),
+  'skip_holiday',null,null,true,'Paused series exception')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot create series exceptions');
+select throws_ok($$select public.materialize_recurring_lesson_occurrence(
+  (select id from pg_temp.epic6_context where name='fixed_series'),
+  (select test_date+7 from pg_temp.epic6_context where name='slot_day'),
+  '60000000-0000-0000-0000-000000000021','epic6-paused-materialize')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot materialize recurring occurrences');
+select throws_ok($$select public.create_lesson_booking(
+  '60000000-0000-0000-0000-000000000002','60000000-0000-0000-0000-000000000003',
+  '60000000-0000-0000-0000-000000000011','60000000-0000-0000-0000-000000000022',
+  now()+interval '14 days','Asia/Taipei','epic6-paused-booking','Paused Teacher booking')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot create assigned Bookings');
+select throws_ok($$select public.cancel_lesson_booking(
+  (select id from pg_temp.epic6_context where name='removed_role_booking'),'released','Paused cancel')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot cancel assigned Bookings');
+select throws_ok($$select public.reschedule_lesson_booking(
+  (select id from pg_temp.epic6_context where name='removed_role_booking'),now()+interval '30 days',
+  'Asia/Taipei','Paused reschedule')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot reschedule assigned Bookings');
+select throws_ok($$select public.complete_lesson_booking(
+  (select id from pg_temp.epic6_context where name='removed_role_booking'),
+  'Visible','Private','Summary','Goal','Homework')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Paused Teacher cannot complete assigned Bookings');
+select set_config('request.jwt.claim.sub','60000000-0000-0000-0000-000000000002',true);
+select throws_ok($$select * from public.get_available_flexible_slots(
+  '60000000-0000-0000-0000-000000000003','60000000-0000-0000-0000-000000000022',
+  now()+interval '7 days',now()+interval '14 days')$$,
+  'P0001','SLOT_NOT_AVAILABLE','Paused Teacher exposes no new booking slots');
+reset role;
+
+set local role authenticated;
+select set_config('request.jwt.claim.sub','60000000-0000-0000-0000-000000000005',true);
+select lives_ok($$select public.set_teacher_scheduling_settings(
+  '60000000-0000-0000-0000-000000000003','Asia/Taipei',0,90,10,'Admin paused Teacher override')$$,
+  'Active Admin mutation authority is independent of Teacher teaching status');
+reset role;
+
+update public.teacher_profiles set teaching_status='draft'
+where user_id='60000000-0000-0000-0000-000000000003';
+set local role authenticated;
+select set_config('request.jwt.claim.sub','60000000-0000-0000-0000-000000000003',true);
+select throws_ok($$select public.set_teacher_scheduling_settings(
+  '60000000-0000-0000-0000-000000000003','Asia/Taipei',0,90,10,'Draft mutation')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Draft Teacher cannot execute scheduling mutations');
+reset role;
+
+update public.teacher_profiles set teaching_status='inactive'
+where user_id='60000000-0000-0000-0000-000000000003';
+set local role authenticated;
+select set_config('request.jwt.claim.sub','60000000-0000-0000-0000-000000000003',true);
+select throws_ok($$select public.set_teacher_scheduling_settings(
+  '60000000-0000-0000-0000-000000000003','Asia/Taipei',0,90,10,'Inactive mutation')$$,
+  '42501','UNAUTHORIZED_BOOKING_ACTION','Inactive Teacher cannot execute scheduling mutations');
+reset role;
+update public.teacher_profiles set teaching_status='active'
+where user_id='60000000-0000-0000-0000-000000000003';
 
 update public.profiles set account_status='suspended'
 where user_id='60000000-0000-0000-0000-000000000003';
@@ -337,8 +438,30 @@ select is((select count(*) from (values
   'Raw Epic 6 table privileges are revoked');
 select is(has_function_privilege('anon','public.create_lesson_booking(uuid,uuid,uuid,uuid,timestamptz,text,text,text)','EXECUTE'),false,
   'Anonymous has no Booking RPC grant');
-select is(has_function_privilege('service_role','private.reserve_scheduling_credit(uuid,uuid,text,text,uuid,uuid)','EXECUTE'),false,
-  'Service role cannot invoke private credit helper');
+select is((select count(*) from (values
+  ('private.reserve_lesson_credit_core(uuid,uuid,text,uuid,text,uuid)'),
+  ('private.release_lesson_credit_core(uuid,text,uuid,jsonb,boolean)'),
+  ('private.consume_lesson_credit_core(uuid,uuid,text,uuid,jsonb)'),
+  ('private.bind_lesson_credit_reservation_booking_core(uuid,uuid,uuid,uuid,uuid)')
+) core(signature) where has_function_privilege('service_role',core.signature,'EXECUTE')),0::bigint,
+  'Service role cannot invoke any private shared credit core');
+select is((select count(*) from pg_proc where pronamespace='public'::regnamespace
+  and proname in('reserve_lesson_credit','release_lesson_credit','consume_lesson_credit')
+  and pg_get_functiondef(oid) not like '%_lesson_credit_core%'),0::bigint,
+  'Every Epic 5 public credit RPC delegates to the shared authoritative core');
+select is((select count(*) from pg_proc where pronamespace='public'::regnamespace
+  and proname in('create_lesson_booking','cancel_lesson_booking','materialize_recurring_lesson_occurrence',
+    'complete_lesson_booking')
+  and pg_get_functiondef(oid) like '%insert into public.lesson_credit_ledger%'),0::bigint,
+  'Scheduling orchestration contains no direct shared ledger insert');
+select is((select count(*) from pg_proc where pronamespace='public'::regnamespace
+  and proname in('set_teacher_scheduling_settings','create_teacher_availability_rule',
+    'create_teacher_availability_exception','create_lesson_booking','cancel_lesson_booking',
+    'reschedule_lesson_booking','create_recurring_lesson_series','refresh_recurring_series_occurrences',
+    'set_recurring_lesson_series_status','set_recurring_lesson_series_exception',
+    'materialize_recurring_lesson_occurrence','complete_lesson_booking')
+  and pg_get_functiondef(oid) not like '%scheduling_teacher_authorized%'),0::bigint,
+  'Every Teacher scheduling mutation entry point delegates to the active-Teacher authorization helper');
 select is((select count(*) from pg_proc where pronamespace='public'::regnamespace
   and proname in('create_lesson_booking','cancel_lesson_booking','reschedule_lesson_booking',
     'create_recurring_lesson_series','materialize_recurring_lesson_occurrence','complete_lesson_booking')
