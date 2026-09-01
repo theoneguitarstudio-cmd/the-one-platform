@@ -1,5 +1,38 @@
 # DEVELOPMENT ROADMAP
 
+## Architecture Update — Learning Verification LMS & Membership
+
+**Status:** architecture direction documented; implementation pending approval.
+This update has no migration, schema change, remote push, or production code.
+
+### Proposed delivery sequence
+
+1. **Architecture Update A — Learning/Verification Model** (this docs-only
+   decision): map/node/resource, evidence, review, human verification,
+   assessment, achievement, versioning, and security boundaries.
+2. **Architecture Update B — Membership/Entitlement Model** (this docs-only
+   decision): plans, subscriptions, capability/entitlement separation, review
+   quota ledger, and Commerce fulfillment boundary.
+3. **Epic 5 — Entitlement Core & Lesson Credits:** consume existing
+   `order.paid` events idempotently; introduce entitlement foundation and
+   independent lesson-credit/package fulfillment. No LMS feature is implied by
+   this stage.
+4. **LMS A — Content Engine:** approved map/node/resource/standard schema and
+   provider-neutral content delivery.
+5. **LMS B — Student Progress:** learner progress and practice workflow.
+6. **LMS C — Assignments:** submission/evidence storage and private delivery.
+7. **LMS D — Reviews & Verification:** reviewer assignment, rubrics, feedback,
+   verified outcomes, and quota consumption.
+8. **LMS E — Stage Assessment & Certificates:** assessment attempts, immutable
+   achievement records, certificate verification/revoke/supersede lifecycle.
+9. **Subscription and review-quota operations:** provider integration,
+   lifecycle handling, quota allocation/reconciliation, and operational audit.
+10. **Later:** AI assistance, review queue automation, community/events, and
+    mobile experiences.
+
+Each implementation step requires its own approved PRD scope, versioned
+migration, RLS/grant design, tests, security review, and remote-push review.
+
 Status: Draft
 
 ## Purpose

@@ -1,5 +1,39 @@
 # SECURITY
 
+## Learning Verification & Membership security architecture (proposed)
+
+**Status:** requirements for future implementation; no new storage policy, RLS,
+RPC, migration, or remote configuration is made by this document update.
+
+- Premium resource, assessment, review, and certificate eligibility require
+  fresh server-side entitlement/authorization checks. UI visibility, browser
+  plan labels, and a client-submitted Teacher ID are never trusted.
+- Student submissions and feedback are private. Future storage uses private
+  buckets with short-lived signed URLs issued only after ownership, assigned
+  reviewer, or authorized Admin checks. Public buckets and durable public asset
+  URLs are not acceptable for practice evidence.
+- Premium PDF/audio/download delivery is similarly entitlement-gated with
+  short-lived signed delivery. VdoCipher playback tokens are minted server-side
+  after the same check; provider secrets and tokens never enter browser bundles
+  or logs.
+- Reviewers receive minimum necessary evidence only for work assigned to them,
+  inside their approved stage capability. Students see only their own records;
+  Admin overrides need an audited server-side privileged path.
+- Human review/verification, assessment, certificate issue/revoke/supersede,
+  membership entitlement changes, quota allocations/adjustments, and manual
+  overrides require durable audit records with actor, subject, reason, version,
+  and timestamp.
+- Public certificate verification, if introduced, exposes only a minimal
+  non-PII projection and never broadens access to profiles, submissions,
+  feedback, or internal assessment data.
+- Future security-definer database functions must pin `search_path` to empty,
+  schema-qualify object access, validate `auth.uid()` and active account state,
+  revoke `EXECUTE` from `PUBLIC`, grant only the necessary database role, and
+  make quota/evidence/verification transitions transactional and idempotent.
+- AI integrations must use approved server-side data minimization and cannot
+  execute final verification, assessment, certificate, entitlement, or quota
+  decisions.
+
 Status: Draft
 
 ## Purpose

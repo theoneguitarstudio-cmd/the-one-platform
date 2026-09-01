@@ -1,5 +1,46 @@
 # DATABASE DOMAIN MODEL
 
+## Learning Verification architecture proposal (not implemented)
+
+No migration is created by this documentation update. The following names are
+proposed future records, to be versioned only in an approved delivery epic.
+
+| Domain | Proposed records | Responsibility |
+| --- | --- | --- |
+| Content | `learning_maps`, map-stage links, `learning_modules`, `learning_nodes`, `learning_resources`, `practice_requirements` | Versioned curriculum and provider-neutral resources |
+| Progress | `student_node_progress` | `VIEWED` → `PRACTICED` → `SUBMITTED` → `UNDER_REVIEW` / `REVISION_REQUIRED` / `VERIFIED` |
+| Evidence | `assignments`, `submissions`, `submission_assets` | Practice instructions and private learner evidence |
+| Review | `submission_reviews`, `review_feedback`, `review_rubric_results` | Authorized human decisions, feedback, tags, next practice, reviewer and version snapshots |
+| Standards | `learning_standard_versions`, `rubrics`, `rubric_versions` | Criteria governance and historical reproducibility |
+| Assessment | `stage_assessments`, `assessment_versions`, `assessment_attempts` | Stage assessment after required verified nodes |
+| Achievement | `stage_completions`, `certificates` | Durable completion and immutable certificate issue/revoke/supersede history |
+| Membership | `membership_plans`, `subscriptions`, `entitlements`, capability catalog, entitlement-capability links | Commercial access lifecycle, not role/achievement |
+| Quota | `review_quota_allocations`, `review_quota_ledger` | Allocated, reserved, consumed, restored, expired, manually adjusted review capacity |
+
+Existing `learning_map_stages` and `teacher_stage_capabilities` remain the
+canonical Stage 1–5/capability base. Future map/version linkage must not
+silently redefine them.
+
+### Relationships and invariants
+
+- A Node has objective, prerequisites, ordered stage/module placement,
+  resources, requirements, verification/pass criteria, and standard version.
+- Only an authorized human verification can set `student_node_progress` to
+  `VERIFIED`; viewing or practice alone cannot complete a stage.
+- A submission snapshots its assignment/standard context. Reviews retain
+  reviewer, time, `pass`/`revision_required`/`resubmit` decision, feedback,
+  rubric result, rubric version, and standard version.
+- A stage completion needs configured verified nodes. A certificate retains
+  Student, stage, standard/assessment version, passed time, authorized
+  examiner, certificate number, and revoke/supersede history; it is never
+  silently rewritten.
+- Subscription states may be `active`, `trialing`, `past_due`,
+  `cancel_at_period_end`, `cancelled`, `expired`, or `paused`. Entitlements are
+  independently time-bounded; progress/achievement are not tied to them.
+- A future idempotent fulfillment consumer turns `order.paid` into entitlement.
+  Review use is an allocation/ledger transaction, not a mutable remaining-count
+  field.
+
 Status: Draft
 
 ## Purpose

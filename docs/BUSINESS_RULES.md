@@ -1,5 +1,66 @@
 # BUSINESS RULES
 
+## Learning Verification & Membership architecture proposal
+
+**Status:** future policy direction only. No LMS or subscription behavior is
+implemented by this documentation update.
+
+### Learning and verification
+
+- The curriculum hierarchy is map → stage → module → node → resources →
+  practice → evidence → verification. Stage 1–5 remain the approved canonical
+  progression.
+- Nodes declare objectives, prerequisites, practice requirements (for example
+  tempo/BPM, repetitions, duration, or required artifact), verification method,
+  pass criteria, and standard version.
+- `VIEWED` and `PRACTICED` represent learner activity. `SUBMITTED` begins an
+  evidence workflow; `UNDER_REVIEW` is assigned review; `REVISION_REQUIRED`
+  returns actionable feedback; only `VERIFIED` is a demonstrated outcome.
+- Teacher review includes a decision, text/video feedback, rubric result,
+  issue tags, next-practice instruction, reviewer, reviewed time, rubric
+  version, and learning-standard version. A Teacher cannot verify work outside
+  assigned, authorized stage capability.
+- A stage assessment is allowed only after its configured nodes are verified.
+  Certificate records are durable and immutable; later revocation or supersede
+  is a new auditable event, not a rewrite of the original pass.
+- A later standard/rubric/assessment version applies forward. A prior verified
+  result remains evidence against the historical version and is not silently
+  invalidated by a new standard.
+
+### Membership, entitlement, and quota
+
+- Membership plans/tiers are not roles. Their expected lifecycle is `active`,
+  `trialing`, `past_due`, `cancel_at_period_end`, `cancelled`, `expired`, and
+  `paused`.
+- Entitlement types are planned as `membership_access`,
+  `learning_content_access`, `premium_resource_access`, `training_access`,
+  `coaching_access`, `review_quota`, `assessment_access`,
+  `certification_attempt`, `lesson_package`, and `lesson_credit`.
+- Free supports basic-map/free-resource/progress use; Plus supports full
+  structured self-study and premium tools/resources; Pro adds human review,
+  verified progress, assessment/certificate access, and finite review capacity.
+  Exact plan matrix remains PRD work.
+- One-on-one lesson access is independent from membership. Commerce payment
+  success creates an outbox event; fulfillment later grants entitlement
+  idempotently. Payment/order state alone is never access or achievement.
+- First valid review submission is expected to reserve/consume quota. A bounded
+  reasonable resubmission policy may be offered, but no infinite free
+  resubmission is permitted. Counts, validity period, renewal, rollover, and
+  final resubmission rule await PRD approval.
+- Cancellation/expiry stops future premium access, new review consumption, and
+  future assessment access according to policy. It never erases learning
+  progress, submitted evidence, feedback, verification, completion, or
+  certificates.
+
+### AI and escalation
+
+- Future AI may assist onboarding, recommendation, progress summaries,
+  pre-screening, reviewer assistance, or reviewer matching. It cannot make a
+  formal verification, assessment, or certificate decision.
+- Review feedback may recommend one-on-one escalation; a lesson offer/credit
+  is a separate commercial entitlement, not an automatic consequence of a
+  review.
+
 Status: Draft
 
 ## Purpose

@@ -1,5 +1,31 @@
 # ROLE PERMISSION MATRIX
 
+## Learning Verification & Membership architecture proposal
+
+**Status:** planned authorization model only; no role, policy, grant, or table
+is changed by this document update.
+
+`student`, `teacher`, `admin`, and `super_admin` remain the Auth roles. Free,
+Plus, and Pro are membership tiers expressed through plans, subscriptions,
+entitlements, and capabilities. A premium-resource or review decision requires
+an active account plus live server-side entitlement; frontend plan labels are
+never authority.
+
+| Capability | Student | Teacher | Admin / Super Admin |
+| --- | --- | --- | --- |
+| Read learning records | Own only | Assigned review minimum only | Audited server path |
+| Submit evidence | Own eligible assignment | Only if also Student | Support path only |
+| Review / verify node | No | Assigned work plus stage `review` | Audited exception path |
+| Assess stage | No | Assigned work plus stage `assess` | Audited exception path |
+| Certificate outcome | No | No unilateral publication | Audited authorized path |
+| Premium resources / review quota | Entitlement-aware own use | Entitlement-aware learner use | Management path |
+| Change entitlement/quota | No | No | Audited privileged path |
+
+The future stage-scoped vocabulary is `teach`, `review`, `assess`, `mentor`,
+and `content_author`. It extends existing `teacher_stage_capabilities`, not
+client-controlled role state. Every protected action rechecks account status,
+assignment/ownership, and capability on server/database boundaries.
+
 Status: Draft
 
 ## Purpose
