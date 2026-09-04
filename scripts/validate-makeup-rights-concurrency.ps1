@@ -1,84 +1,29 @@
-# Manual LOCAL-only two-session validation for P1-5B Makeup Right authority.
-[CmdletBinding()]
-param(
-  [ValidatePattern('^supabase_db_[A-Za-z0-9_-]+$')]
-  [string]$ContainerName
-)
-$ErrorActionPreference='Stop'
-Set-StrictMode -Version Latest
+# LOCAL-only true multi-session validation for Makeup Right authority.
+[CmdletBinding()]param([ValidatePattern('^supabase_db_[A-Za-z0-9_-]+$')][string]$ContainerName)
+$ErrorActionPreference='Stop';Set-StrictMode -Version Latest
 $docker=(Get-Command docker -ErrorAction Stop).Source
-if(-not $ContainerName){
-  $names=@(& $docker --host 'npipe:////./pipe/docker_engine' ps --format '{{.Names}}' |
-    Where-Object { $_ -like 'supabase_db_*' })
-  if($names.Count-ne 1){throw "Expected one local Supabase DB container; found $($names.Count)."}
-  $ContainerName=$names[0]
-}
-
-function Invoke-Db([string]$Sql){
-  $out=& $docker --host 'npipe:////./pipe/docker_engine' exec $ContainerName psql -X -U postgres -d postgres `
-    -v ON_ERROR_STOP=1 -v VERBOSITY=verbose -At -c $Sql 2>&1 | Out-String
-  [pscustomobject]@{ExitCode=$LASTEXITCODE;Output=$out.Trim()}
-}
-function Start-Db([string]$Sql){
-  $i=[Diagnostics.ProcessStartInfo]::new()
-  $i.FileName=$docker
-  $i.Arguments="--host npipe:////./pipe/docker_engine exec -i $ContainerName psql -X -U postgres -d postgres -v ON_ERROR_STOP=1 -v VERBOSITY=verbose -At"
-  $i.UseShellExecute=$false;$i.RedirectStandardInput=$true
-  $i.RedirectStandardOutput=$true;$i.RedirectStandardError=$true
-  $p=[Diagnostics.Process]::new();$p.StartInfo=$i;[void]$p.Start()
-  $p.StandardInput.Write($Sql);$p.StandardInput.Close();$p
-}
-function Wait-Db($Process){
-  $stdout=$Process.StandardOutput.ReadToEndAsync();$stderr=$Process.StandardError.ReadToEndAsync()
-  if(-not $Process.WaitForExit(30000)){$Process.Kill();throw 'DB session timeout'}
-  [pscustomobject]@{ExitCode=$Process.ExitCode;Output=(($stdout.Result+"`n"+$stderr.Result).Trim())}
-}
+if(-not $ContainerName){$names=@(& $docker --host 'npipe:////./pipe/docker_engine' ps --format '{{.Names}}'|Where-Object{$_ -like 'supabase_db_*'});if($names.Count-ne 1){throw "Expected one local Supabase DB container; found $($names.Count)."};$ContainerName=$names[0]}
+function Invoke-Db([string]$Sql){$out=& $docker --host 'npipe:////./pipe/docker_engine' exec $ContainerName psql -X -U postgres -d postgres -v ON_ERROR_STOP=1 -v VERBOSITY=verbose -At -c $Sql 2>&1|Out-String;[pscustomobject]@{ExitCode=$LASTEXITCODE;Output=$out.Trim()}}
+function Start-Db([string]$Sql){$i=[Diagnostics.ProcessStartInfo]::new();$i.FileName=$docker;$i.Arguments="--host npipe:////./pipe/docker_engine exec -i $ContainerName psql -X -U postgres -d postgres -v ON_ERROR_STOP=1 -v VERBOSITY=verbose -At";$i.UseShellExecute=$false;$i.RedirectStandardInput=$true;$i.RedirectStandardOutput=$true;$i.RedirectStandardError=$true;$p=[Diagnostics.Process]::new();$p.StartInfo=$i;[void]$p.Start();$p.StandardInput.Write($Sql);$p.StandardInput.Close();$p}
+function Wait-Db($Process){$o=$Process.StandardOutput.ReadToEndAsync();$e=$Process.StandardError.ReadToEndAsync();if(-not $Process.WaitForExit(30000)){$Process.Kill();throw 'DB session timeout'};[pscustomobject]@{ExitCode=$Process.ExitCode;Output=(($o.Result+[Environment]::NewLine+$e.Result).Trim())}}
 function Race([string[]]$Sql){$processes=@($Sql|ForEach-Object{Start-Db $_});@($processes|ForEach-Object{Wait-Db $_})}
-function Auth([string]$User,[string]$Body){
-  "begin;set local role authenticated;select set_config('request.jwt.claim.role','authenticated',true);select set_config('request.jwt.claim.sub','$User',true);set local statement_timeout='15s';$Body commit;"
-}
+function Auth([string]$User,[string]$Body){"begin;set local role authenticated;select set_config('request.jwt.claim.role','authenticated',true);select set_config('request.jwt.claim.sub','$User',true);set local statement_timeout='15s';$Body commit;"}
 function Must($Result,[string]$Name){if($Result.ExitCode-ne 0){throw "$Name failed: $($Result.Output)"}}
-function One-Winner($Results,[string]$Name){
-  $wins=@($Results|Where-Object{$_.ExitCode-eq 0}).Count
-  $unexpected=@($Results|Where-Object{$_.ExitCode-ne 0-and$_.Output-notmatch'ERROR:\s+P0001'}).Count
-  if($wins-ne 1-or$unexpected-ne 0){throw "$Name expected one success and one domain rejection: $($Results.Output-join' | ')"}
-}
-function Count([string]$Sql,[int]$Expected,[string]$Name){
-  $result=Invoke-Db $Sql;Must $result $Name
-  $actual=[int](($result.Output-split"`r?`n")[-1])
-  if($actual-ne$Expected){throw "$Name expected $Expected got $actual"}
-}
-
-$student='69000000-0000-0000-0000-000000000001'
-$teacher='69000000-0000-0000-0000-000000000002'
-$relationship='69000000-0000-0000-0000-000000000010'
-$rightA='69000000-0000-0000-0000-000000000020'
-$rightB='69000000-0000-0000-0000-000000000021'
-$lessonA='69000000-0000-0000-0000-000000000030'
-$lessonB='69000000-0000-0000-0000-000000000031'
-$cleanup="begin;set local session_replication_role='replica';delete from public.makeup_right_operations where makeup_right_id in('$rightA','$rightB');delete from public.audit_logs where target_id in('$rightA','$rightB');delete from public.makeup_rights where id in('$rightA','$rightB');delete from public.lessons where id in('$lessonA','$lessonB');delete from public.student_teacher_relationships where id='$relationship';delete from public.teacher_profiles where user_id='$teacher';delete from public.user_roles where user_id='$teacher';delete from public.profiles where user_id in('$student','$teacher');delete from auth.users where id in('$student','$teacher');commit;"
-$setup=$cleanup+"insert into auth.users(id,email)values('$student','makeup-race-student@example.invalid'),('$teacher','makeup-race-teacher@example.invalid');insert into public.user_roles(user_id,role)values('$teacher','teacher');insert into public.teacher_profiles(user_id,public_slug,bio,teaching_status,is_public,teaching_modes,trial_price_twd,default_meeting_provider,default_meeting_url)values('$teacher','makeup-race-teacher','Race fixture','active',true,array['online']::public.teaching_mode[],500,'manual_google_meet','https://meet.google.com/abc-defg-hij');insert into public.student_teacher_relationships(id,student_user_id,teacher_user_id,relationship_status,preferred_mode)values('$relationship','$student','$teacher','active','online');insert into public.lessons(id,student_user_id,teacher_user_id,relationship_id,lesson_type,delivery_mode,starts_at,ends_at,duration_minutes,timezone_anchor,status,meeting_provider,meeting_url)values('$lessonA','$student','$teacher','$relationship','flexible','online',now()-interval '2 days',now()-interval '2 days'+interval '50 minutes',50,'Asia/Taipei','teacher_cancelled','manual_google_meet','https://meet.google.com/abc-defg-hij'),('$lessonB','$student','$teacher','$relationship','flexible','online',now()-interval '1 day',now()-interval '1 day'+interval '50 minutes',50,'Asia/Taipei','teacher_cancelled','manual_google_meet','https://meet.google.com/abc-defg-hij');insert into public.makeup_rights(id,student_user_id,origin_lesson_id,origin_teacher_user_id,current_teacher_user_id,source,source_operation_key,status,valid_until,reason,created_by)values('$rightA','$student','$lessonA','$teacher','$teacher','teacher_cancellation','p15b-race-create-a-001','available',now()+interval '10 days','Reserve race fixture','$teacher');insert into public.makeup_rights(id,student_user_id,origin_lesson_id,origin_teacher_user_id,current_teacher_user_id,source,source_operation_key,status,valid_until,reason,created_by,reserved_at,reserved_by)values('$rightB','$student','$lessonB','$teacher','$teacher','teacher_cancellation','p15b-race-create-b-001','reserved',now()+interval '10 days','Consume restore race fixture','$teacher',now(),'$student');"
-
+function Db-Uuid([string]$Sql){$r=Invoke-Db $Sql;Must $r 'UUID query';$m=[regex]::Matches($r.Output,'(?i)[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}');if($m.Count-eq 0){throw "No UUID found: $($r.Output)"};$m[$m.Count-1].Value}
+function Count([string]$Sql,[int]$Expected,[string]$Name){$r=Invoke-Db $Sql;Must $r $Name;$actual=[int](($r.Output-split'[\r\n]+')[-1]);if($actual-ne$Expected){$script:stats.Partial++;throw "$Name expected $Expected got $actual"}}
+function Inspect($Results){foreach($r in $Results){if($r.Output-match'ERROR:\s+40P01'){$script:stats.Deadlock++};if($r.Output-match'ERROR:\s+23505'){$script:stats.UniqueViolation++};if($r.Output-match'ERROR:\s+23P01'){$script:stats.ExclusionViolation++};if($r.Output-match'ERROR:\s+P0001'){$script:stats.Domain++};if($r.Output-match'ERROR:\s+23[0-9A-Z]{3}'-and$r.Output-notmatch'ERROR:\s+(23505|23P01)'){$script:stats.UnexpectedIntegrity++}}}
+function One-Winner($Results,[string]$Name){$wins=@($Results|Where-Object{$_.ExitCode-eq 0}).Count;$unexpected=@($Results|Where-Object{$_.ExitCode-ne 0-and$_.Output-notmatch'ERROR:\s+P0001'}).Count;if($wins-ne 1-or$unexpected-ne 0){$script:stats.Partial++;throw "$Name expected one success and one domain rejection: $($Results.Output-join' | ')"}}
+$stats=[ordered]@{Deadlock=0;UniqueViolation=0;ExclusionViolation=0;UnexpectedIntegrity=0;Domain=0;Partial=0}
+$student='69000000-0000-0000-0000-000000000001';$teacher='69000000-0000-0000-0000-000000000002';$relationship='69000000-0000-0000-0000-000000000010';$rightA='69000000-0000-0000-0000-000000000020';$rightB='69000000-0000-0000-0000-000000000021';$lessonA='69000000-0000-0000-0000-000000000030';$lessonB='69000000-0000-0000-0000-000000000031'
+$cleanup="begin;set local session_replication_role='replica';delete from public.lesson_records where lesson_id in(select id from public.lessons where student_user_id='$student');delete from public.makeup_right_operations where makeup_right_id in('$rightA','$rightB');delete from public.audit_logs where actor_user_id in('$student','$teacher') or target_id in('$rightA','$rightB');delete from public.bookings where student_user_id='$student';delete from public.lesson_credit_ledger where beneficiary_user_id='$student';delete from public.lesson_credit_reservations where beneficiary_user_id='$student';delete from public.makeup_rights where id in('$rightA','$rightB');delete from public.lessons where student_user_id='$student';delete from public.teacher_availability_rules where teacher_user_id='$teacher';delete from public.teacher_scheduling_settings where teacher_user_id='$teacher';delete from public.student_teacher_relationships where id='$relationship';delete from public.teacher_public_profiles where public_slug='makeup-race-teacher';delete from public.teacher_profiles where user_id='$teacher';delete from public.public_profiles where user_id in('$student','$teacher');delete from public.user_roles where user_id in('$student','$teacher');delete from public.profiles where user_id in('$student','$teacher');delete from auth.users where id in('$student','$teacher');commit;"
+$setup=$cleanup+"insert into auth.users(id,email)values('$student','makeup-race-student@example.invalid'),('$teacher','makeup-race-teacher@example.invalid');insert into public.user_roles(user_id,role)values('$teacher','teacher');insert into public.teacher_profiles(user_id,public_slug,bio,teaching_status,is_public,teaching_modes,trial_price_twd,default_meeting_provider,default_meeting_url)values('$teacher','makeup-race-teacher','Race fixture','active',true,array['online']::public.teaching_mode[],500,'manual_google_meet','https://meet.google.com/abc-defg-hij');insert into public.student_teacher_relationships(id,student_user_id,teacher_user_id,relationship_status,preferred_mode)values('$relationship','$student','$teacher','active','online');insert into public.teacher_scheduling_settings(teacher_user_id,timezone,minimum_booking_notice_minutes,booking_horizon_days,slot_interval_minutes)values('$teacher','UTC',0,90,10);insert into public.teacher_availability_rules(teacher_user_id,weekday,local_start_time,local_end_time,timezone,effective_from,effective_until,created_by)select '$teacher',extract(dow from current_date+14)::smallint,'08:00','23:30','UTC',current_date,current_date+90,'$teacher';insert into public.lessons(id,student_user_id,teacher_user_id,relationship_id,lesson_type,delivery_mode,starts_at,ends_at,duration_minutes,timezone_anchor,status,meeting_provider,meeting_url)values('$lessonA','$student','$teacher','$relationship','flexible','online',now()-interval '2 days',now()-interval '2 days'+interval '50 minutes',50,'UTC','teacher_cancelled','manual_google_meet','https://meet.google.com/abc-defg-hij'),('$lessonB','$student','$teacher','$relationship','flexible','online',now()-interval '1 day',now()-interval '1 day'+interval '50 minutes',50,'UTC','teacher_cancelled','manual_google_meet','https://meet.google.com/abc-defg-hij');insert into public.makeup_rights(id,student_user_id,origin_lesson_id,origin_teacher_user_id,current_teacher_user_id,source,source_operation_key,status,valid_until,reason,created_by)values('$rightA','$student','$lessonA','$teacher','$teacher','teacher_cancellation','p15-race-create-a-0001','available',now()+interval '30 days','Reserve race fixture','$teacher'),('$rightB','$student','$lessonB','$teacher','$teacher','teacher_cancellation','p15-race-create-b-0001','available',now()+interval '30 days','Booking race fixture','$teacher');"
+function Slot([int]$Hour){"((current_date+14)::timestamp+interval '$Hour hours') at time zone 'UTC'"}
 try{
   Must (Invoke-Db $setup) 'setup'
-  $reserveRace=Race @(
-    (Auth $student "select pg_sleep(.2);select public.reserve_makeup_right('$rightA','$student','$teacher','p15b-race-reserve-a-01','Concurrent reserve A');"),
-    (Auth $student "select pg_sleep(.2);select public.reserve_makeup_right('$rightA','$student','$teacher','p15b-race-reserve-b-01','Concurrent reserve B');")
-  )
-  One-Winner $reserveRace 'Same Right reserve race'
-  Count "select count(*) from public.makeup_rights where id='$rightA' and status='reserved'" 1 'One reserved state'
-  Count "select count(*) from public.makeup_right_operations where makeup_right_id='$rightA' and operation_type='reserve'" 1 'One reserve operation'
-  'A [PASS] Same available Right concurrent reserve has exactly one winner'
-
-  $terminalRace=Race @(
-    (Auth $teacher "select pg_sleep(.2);select public.consume_makeup_right('$rightB','p15b-race-consume-001','Concurrent consume');"),
-    (Auth $student "select pg_sleep(.2);select public.restore_makeup_right('$rightB','p15b-race-restore-001','Concurrent restore');")
-  )
-  One-Winner $terminalRace 'Consume vs restore race'
-  Count "select count(*) from public.makeup_rights where id='$rightB' and status in('used','available')" 1 'One valid final state'
-  Count "select count(*) from public.makeup_right_operations where makeup_right_id='$rightB' and operation_type in('consume','restore')" 1 'One terminal operation'
-  'B [PASS] Consume versus restore has one authoritative outcome'
-  'SUMMARY deadlock=0 integrity_leak=0 partial=0'
-} finally {
-  Must (Invoke-Db $cleanup) 'cleanup'
-}
+  $reserveRace=Race @((Auth $student "select pg_sleep(.2);select public.reserve_makeup_right('$rightA','$student','$teacher','p15-race-reserve-a-001','Concurrent reserve A');"),(Auth $student "select pg_sleep(.2);select public.reserve_makeup_right('$rightA','$student','$teacher','p15-race-reserve-b-001','Concurrent reserve B');"));Inspect $reserveRace;One-Winner $reserveRace 'A same Right reserve race';Count "select count(*) from public.makeup_rights where id='$rightA' and status='reserved'" 1 'A one reserved state';Count "select count(*) from public.makeup_right_operations where makeup_right_id='$rightA' and operation_type='reserve'" 1 'A one reserve operation';'A [PASS] Same available Right concurrent reserve has exactly one winner'
+  $booking=Db-Uuid (Auth $student "select public.create_makeup_lesson_booking('$rightB','$student','$teacher','$relationship',$(Slot 12),'UTC','p15-race-booking-b-0001','Booking-managed race');");$bookingLesson=Db-Uuid "select lesson_id from public.bookings where id='$booking'";Must (Invoke-Db "update public.lessons set starts_at=now()-interval '1 hour',ends_at=now()-interval '10 minutes' where id='$bookingLesson';update public.bookings set starts_at=now()-interval '1 hour',ends_at=now()-interval '10 minutes' where id='$booking';") 'B time fixture'
+  $direct=Wait-Db (Start-Db (Auth $teacher "select public.consume_makeup_right('$rightB','p15-race-direct-consume-001','Teacher direct consume control');"));if($direct.ExitCode-eq 0-or$direct.Output-notmatch'ERROR:\s+42501:\s+UNAUTHORIZED_MAKEUP_ACTION'){$stats.Partial++;throw "Teacher direct consume was not rejected correctly: $($direct.Output)"};'CONTROL [PASS] Teacher direct consume rejected with 42501 / UNAUTHORIZED_MAKEUP_ACTION'
+  $terminalRace=Race @((Auth $teacher "select pg_sleep(.2);select public.complete_lesson_booking('$booking','Visible','Private','Summary','Goal','Homework');"),(Auth $student "select pg_sleep(.2);select public.cancel_lesson_booking('$booking','released','Concurrent timely cancellation');"));Inspect $terminalRace;One-Winner $terminalRace 'B booking completion vs cancellation';Count "select count(*) from public.bookings b join public.lessons l on l.id=b.lesson_id join public.makeup_rights r on r.id=b.makeup_right_id where b.id='$booking' and ((b.status='completed' and l.status='completed' and r.status='used') or (b.status='cancelled' and l.status='student_cancelled' and r.status='available'))" 1 'B one authoritative terminal state';Count "select count(*) from public.makeup_right_operations where makeup_right_id='$rightB' and operation_type in('consume','restore')" 1 'B one terminal value movement';Count "select count(*) from public.lesson_credit_ledger where beneficiary_user_id='$student'" 0 'B no ordinary credit mutation';Count "select count(*) from public.lesson_credit_reservations where beneficiary_user_id='$student'" 0 'B no ordinary reservation';'B [PASS] Booking-managed completion versus cancellation has one authoritative value outcome'
+  if($stats.Deadlock-ne 0-or$stats.UniqueViolation-ne 0-or$stats.ExclusionViolation-ne 0-or$stats.UnexpectedIntegrity-ne 0-or$stats.Partial-ne 0){throw "Unexpected result: 40P01=$($stats.Deadlock) 23505=$($stats.UniqueViolation) 23P01=$($stats.ExclusionViolation) unexpected23xxx=$($stats.UnexpectedIntegrity) partial=$($stats.Partial)"}
+  "SUMMARY 40P01=$($stats.Deadlock) 23505=$($stats.UniqueViolation) 23P01=$($stats.ExclusionViolation) unexpected23xxx=$($stats.UnexpectedIntegrity) domain=$($stats.Domain) partial=$($stats.Partial)"
+}finally{Must (Invoke-Db $cleanup) 'cleanup';Count "select count(*) from auth.users where id in('$student','$teacher')" 0 'user cleanup';Count "select count(*) from public.makeup_rights where id in('$rightA','$rightB')" 0 'Right cleanup'}

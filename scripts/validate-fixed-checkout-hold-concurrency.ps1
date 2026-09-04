@@ -52,7 +52,10 @@ function Start-Db([string]$Sql, [string]$Name, [switch]$KeepInputOpen) {
     Stderr=$process.StandardError.ReadToEndAsync()
   }
   $sessions.Add($session)
-  $process.StandardInput.WriteLine("set application_name='$Name'; set statement_timeout='20s'; set idle_in_transaction_session_timeout='30s';")
+  # The deliberate race gate time and the cross-timezone ownership scan share
+  # this PostgreSQL statement budget. Keep assertions strict while avoiding a
+  # harness-only 57014 before the gated contenders can finish serialization.
+  $process.StandardInput.WriteLine("set application_name='$Name'; set statement_timeout='45s'; set idle_in_transaction_session_timeout='60s';")
   $process.StandardInput.WriteLine($Sql)
   $process.StandardInput.Flush()
   if (-not $KeepInputOpen) { $process.StandardInput.Close() }
