@@ -49,6 +49,7 @@ yarn-error.log*
 /backups/
 /migration-data/
 /private-data/
+/artifacts/remote-smoke/
 
 # vercel
 .vercel
