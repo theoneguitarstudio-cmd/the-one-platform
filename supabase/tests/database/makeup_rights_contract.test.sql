@@ -42,15 +42,17 @@ select ok(exists(select 1 from makeup_columns where attname='valid_until'),
 select ok(exists(select 1 from makeup_columns where attname~*'current_teacher|teacher_scope'),
   'M4: current Teacher scope is distinct from origin Teacher history');
 select ok(exists(select 1 from makeup_functions
-  where prosrc~*'book' and prosrc~*'makeup'
+  where proname~*'book' and proname!~*'cancel|complet|reschedul'
+    and prosrc~*'makeup'
     and prosrc!~*'reserve_lesson_credit_core'),
   'M5: Makeup booking reserves a Makeup Right, not ordinary entitlement credit');
 select ok(exists(select 1 from makeup_functions
-  where prosrc~*'complet' and prosrc~*'makeup'
+  where proname~*'complet' and prosrc~*'makeup'
     and prosrc!~*'consume_lesson_credit_core'),
   'M6: Makeup completion consumes the Makeup Right, not ordinary credit');
 select ok(exists(select 1 from makeup_functions
-  where prosrc~*'cancel' and prosrc~*'restor|available'),
+  where proname~*'cancel.*makeup|makeup.*cancel'
+    and prosrc~*'restor|available'),
   'M7: timely Makeup cancellation restores the same right');
 select ok(exists(select 1 from makeup_relations r
   join pg_constraint k on k.conrelid=r.oid and k.contype='u'

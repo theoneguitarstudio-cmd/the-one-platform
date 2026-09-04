@@ -274,7 +274,7 @@ export async function setTeacherSeriesException(formData: FormData) {
 
 export async function cancelTeacherBooking(formData: FormData) {
   await requireAreaAccess("teacher");
-  return mutateCancellation(formData, "/teacher/schedule", "released", "not_applicable");
+  return mutateCancellation(formData, "/teacher/schedule", "unchanged", "not_applicable");
 }
 
 export async function rescheduleTeacherBooking(formData: FormData) {

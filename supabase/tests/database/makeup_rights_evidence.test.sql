@@ -1,13 +1,13 @@
--- P1-5 evidence for current HEAD. This exercises the real cancellation RPC and
--- records the confirmed gap: Teacher cancellation releases ordinary credit and
--- creates no first-class Makeup Right. It should pass before the future fix and
--- fail once that behavior changes, forcing replacement with acceptance tests.
+-- P1-5A evidence for current HEAD. This preserves the original one-credit
+-- scenario while proving Teacher cancellation now transfers, rather than
+-- releases, that value into exactly one first-class Makeup Right.
 begin;
 select no_plan();
 
 insert into auth.users(id,email) values
   ('67000000-0000-0000-0000-000000000001','makeup-student@example.invalid'),
-  ('67000000-0000-0000-0000-000000000002','makeup-teacher@example.invalid');
+  ('67000000-0000-0000-0000-000000000002','makeup-teacher@example.invalid'),
+  ('67000000-0000-0000-0000-000000000003','makeup-admin@example.invalid');
 
 update public.profiles set display_name=case user_id
   when '67000000-0000-0000-0000-000000000001' then 'Makeup Student'
@@ -15,13 +15,14 @@ update public.profiles set display_name=case user_id
 where user_id::text like '67000000-%';
 
 insert into public.user_roles(user_id,role) values
-  ('67000000-0000-0000-0000-000000000002','teacher');
+  ('67000000-0000-0000-0000-000000000002','teacher'),
+  ('67000000-0000-0000-0000-000000000003','admin');
 insert into public.teacher_profiles(
   user_id,public_slug,bio,teaching_status,is_public,teaching_modes,trial_price_twd,
   default_meeting_provider,default_meeting_url
 ) values (
   '67000000-0000-0000-0000-000000000002','makeup-audit-teacher','Audit fixture',
-  'active',true,array['online']::public.teaching_mode[],500,
+  'active',false,array['online']::public.teaching_mode[],500,
   'manual_google_meet','https://meet.google.com/abc-defg-hij'
 );
 insert into public.student_teacher_relationships(
@@ -96,6 +97,14 @@ update public.lesson_credit_reservations
 set booking_id='67000000-0000-0000-0000-000000000050'
 where id='67000000-0000-0000-0000-000000000040';
 
+set local role authenticated;
+select set_config('request.jwt.claim.role','authenticated',true);
+select set_config('request.jwt.claim.sub','67000000-0000-0000-0000-000000000003',true);
+select lives_ok($$select public.set_makeup_right_policy(
+  'teacher_cancellation',604800,'Evidence policy: seven configured days')$$,
+  'Admin configures Teacher cancellation Makeup validity');
+reset role;
+
 select is((select available from private.lesson_credit_balance('67000000-0000-0000-0000-000000000020')),0::integer,
   'Precondition: the single ordinary value is unavailable while reserved');
 select is((select reserved from private.lesson_credit_balance('67000000-0000-0000-0000-000000000020')),1::integer,
@@ -107,41 +116,56 @@ set local role authenticated;
 select set_config('request.jwt.claim.role','authenticated',true);
 select set_config('request.jwt.claim.sub','67000000-0000-0000-0000-000000000002',true);
 select lives_ok($$select public.cancel_lesson_booking(
-  '67000000-0000-0000-0000-000000000050','released','Teacher caused cancellation')$$,
+  '67000000-0000-0000-0000-000000000050','unchanged','Teacher caused cancellation')$$,
   'Current Teacher cancellation RPC succeeds');
 select lives_ok($$select public.cancel_lesson_booking(
-  '67000000-0000-0000-0000-000000000050','released','Teacher caused cancellation retry')$$,
+  '67000000-0000-0000-0000-000000000050','unchanged','Teacher caused cancellation retry')$$,
   'Repeated Teacher cancellation returns idempotently');
 reset role;
 
-select is((select available from private.lesson_credit_balance('67000000-0000-0000-0000-000000000020')),1::integer,
-  'Confirmed gap: Teacher cancellation restores one ordinary available credit');
+select is((select available from private.lesson_credit_balance('67000000-0000-0000-0000-000000000020')),0::integer,
+  'Teacher cancellation does not restore ordinary available credit');
 select is((select reserved from private.lesson_credit_balance('67000000-0000-0000-0000-000000000020')),0::integer,
-  'Teacher cancellation releases the ordinary reservation');
+  'Teacher cancellation removes the ordinary reservation liability');
 select is((select consumed from private.lesson_credit_balance('67000000-0000-0000-0000-000000000020')),0::integer,
   'Teacher cancellation does not consume ordinary credit');
 select is((select status from public.lesson_credit_reservations
   where id='67000000-0000-0000-0000-000000000040'),
   'released'::public.lesson_credit_reservation_status,
-  'Reservation reaches released state');
+  'Converted reservation reaches terminal released state');
+select ok((select converted_makeup_right_id is not null from public.lesson_credit_reservations
+  where id='67000000-0000-0000-0000-000000000040'),
+  'Reservation has authoritative Makeup conversion linkage');
 select is((select status from public.lessons
   where id='67000000-0000-0000-0000-000000000030'),
   'teacher_cancelled'::public.lesson_status,
   'Actor identity only distinguishes Teacher cancellation at Lesson status');
 select is((select cancellation_credit_outcome from public.bookings
   where id='67000000-0000-0000-0000-000000000050'),
-  'released'::public.booking_credit_outcome,
-  'Booking records released ordinary credit');
+  'unchanged'::public.booking_credit_outcome,
+  'Booking records no ordinary credit release');
 select is((select count(*) from public.lesson_credit_ledger
   where reservation_id='67000000-0000-0000-0000-000000000040' and entry_type='release'),
-  1::bigint,'Retry creates exactly one ordinary release ledger entry');
+  0::bigint,'Teacher cancellation creates no ordinary release ledger entry');
+select is((select count(*) from public.lesson_credit_ledger
+  where reservation_id='67000000-0000-0000-0000-000000000040' and entry_type='adjustment'
+    and available_delta=0 and reserved_delta=-1 and consumed_delta=0
+    and reason_code='teacher_cancellation_makeup_transfer'),
+  1::bigint,'Retry leaves exactly one ordinary-to-Makeup transfer ledger entry');
 select is((select count(*) from public.audit_logs
   where target_id='67000000-0000-0000-0000-000000000050'
     and action='booking.cancelled' and actor_user_id='67000000-0000-0000-0000-000000000002'),
   1::bigint,'Teacher cancellation has one actor-aware booking audit event');
 select is((select count(*) from public.makeup_rights
-  where origin_lesson_id='67000000-0000-0000-0000-000000000030'),0::bigint,
-  'Confirmed P1-5A gap: Teacher cancellation still creates no Makeup Right');
+  where origin_lesson_id='67000000-0000-0000-0000-000000000030'
+    and origin_teacher_user_id='67000000-0000-0000-0000-000000000002'
+    and origin_entitlement_id='67000000-0000-0000-0000-000000000020'
+    and origin_reservation_id='67000000-0000-0000-0000-000000000040'
+    and source='teacher_cancellation' and status='available'),1::bigint,
+  'Teacher cancellation creates exactly one traceable available Makeup Right');
+select ok((select valid_until between now()+interval '6 days 23 hours' and now()+interval '7 days 1 minute'
+  from public.makeup_rights where origin_lesson_id='67000000-0000-0000-0000-000000000030'),
+  'Makeup valid_until snapshots the configured seven-day policy');
 
 select * from finish();
 rollback;
