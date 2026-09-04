@@ -11,11 +11,20 @@ future/post-launch scope a current blocker.
 
 Core scope:
 
-- Learning Map, Stage, Module, Node, and Resource;
+- a generic System Course architecture that supports multiple courses;
+- Learning Map, Stage or Level, Module, Node, and Resource within a System
+  Course;
 - Learning Objective, Prerequisite, and Skill Mapping;
 - content ownership and authorship;
 - standard versioning;
 - basic learning-progress foundation.
+
+Canonical hierarchy:
+
+`System Course → Curriculum / Learning Map → Stage / Level → Module → Node → Resource`
+
+The One Guitar Roadmap 2.0 is the first flagship implementation. Epic 7 must
+not hard-code the architecture to one guitar curriculum.
 
 ## Epic 8 — Membership & Content Access
 
@@ -23,8 +32,19 @@ Core scope:
 
 - Free, Plus, and Pro platform membership;
 - membership plan and subscription lifecycle;
+- Membership Catalog and approved System Course inclusion;
 - Content Access Policy;
-- training, recorded-course, and premium-resource entitlement.
+- subscription-to-entitlement mapping;
+- training, recorded-course, and premium-resource entitlement;
+- course-level capability policy for Plus access, Pro review, verification,
+  assessment, and certificate eligibility.
+
+Membership access authority is:
+
+`Membership Plan + Membership Inclusion / Access Policy + Entitlement`
+
+It does not derive from Teacher or Creator identity. Membership is not itself a
+System Course, and not every Creator Product is Membership-included.
 
 Preserve the boundary:
 

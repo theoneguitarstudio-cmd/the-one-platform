@@ -61,14 +61,20 @@ independent of Teacher teaching status.
 **Implementation status:** documentation only. These are future
 modular-monolith boundaries, not deployed tables, APIs, workers, or migrations.
 
+Membership and System Course are separate concepts. A Membership Catalog links
+approved System Courses to plans through inclusion/access policy and
+Entitlement. The architecture supports multiple System Courses; The One Guitar
+Roadmap 2.0 is the first flagship course, not a singleton platform assumption.
+
 | Boundary | Owns | Does not own |
 | --- | --- | --- |
-| Learning Map | Maps, stages, modules, nodes, standards, practice requirements, provider-neutral resources | Billing, review decisions, certificates |
+| System Course | Course identity, objectives, authorship, curriculum/Map association | Billing plan, access authority, settlement |
+| Learning Map | Course-scoped maps, stages/levels, modules, nodes, standards, practice requirements, provider-neutral resources | Billing, review decisions, certificates |
 | Learning Progress | Student activity and node state | Subscription lifecycle or reviewer authorization |
 | Assignments & Evidence | Submission instructions, evidence, private assets | Public content delivery/certificates |
 | Reviews & Verification | Assignment, rubric feedback, human decision | Role assignment or plan billing |
 | Assessment & Achievement | Assessment and immutable completion/certificate records | Active membership state |
-| Membership & Entitlement | Plans, subscriptions, capabilities, entitlements, quota ledger | Auth role, evidence, settlement |
+| Membership & Entitlement | Plans, Membership Catalog, System Course inclusion/access policy, subscriptions, capabilities, entitlements, quota ledger | Course authorship, Auth role, evidence, settlement |
 | Commerce Fulfillment | Idempotent `order.paid` consumption and entitlement grant/revocation | Progress or achievement mutation |
 
 `paid order → order.paid outbox → fulfillment → entitlement → server authorization → resource/review access`
@@ -89,8 +95,9 @@ check and never from the browser.
 
 ### Human verification and multi-teacher review
 
-The platform owns a Student's map. A review may later go to the current
-Teacher, a pool, a stage specialist, or manual Admin assignment, based on
+The platform owns a Student's course-scoped learning state. A review may later
+go to the current Teacher, a pool, a stage specialist, or manual Admin
+assignment, based on
 authorized stage capability and eventually language/workload/expertise rules.
 No automatic dispatch is introduced here. Existing
 `teacher_stage_capabilities` is the future base for `teach`, `review`,

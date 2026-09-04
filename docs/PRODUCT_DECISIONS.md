@@ -95,3 +95,75 @@ implementation should support allocation plus ledger/history.
 Creator pool percentages, qualified attribution weights, review compensation,
 assessment compensation, and platform share remain commercial configuration or
 TBD. Do not hard-code them during Epic 7 or Epic 8 unless separately approved.
+
+## PD-010 — Membership Is Not a System Course
+
+**Status: ACCEPTED**
+
+Free, Plus, and Pro are subscription and access plans provided by The One 2.0.
+Membership is not a System Course. Membership controls eligible access through
+plan, inclusion/access policy, and Entitlement.
+
+Free provides free or preview access. Plus provides self-directed access to
+eligible Membership System Courses and digital learning capabilities. Pro adds
+eligible human services such as Review, Feedback, Verification, Coaching, and
+Assessment eligibility; each System Course may support a different subset.
+
+## PD-011 — System Course
+
+**Status: ACCEPTED**
+
+A System Course is a first-class product/content concept: a structured learning
+program that may contain learning objectives, a curriculum or Learning Map,
+Stages or Levels, Modules, Nodes, Resources, Practice, Progress, Evidence,
+Review capability, and Assessment capability. The future domain model must
+support multiple System Courses without hard-coding one guitar curriculum.
+
+Examples include The One Guitar Roadmap 2.0, Blues Guitar System, Fingerstyle
+Foundation System, Jazz Guitar Roadmap, and future instrument learning systems.
+
+## PD-012 — Guitar Roadmap Is the Flagship System Course
+
+**Status: ACCEPTED**
+
+The One Guitar Roadmap 2.0 is The One's flagship guitar System Course. It is not
+the definition of Membership, the entire The One 2.0 platform, or the only
+System Course the platform may support.
+
+## PD-013 — Membership Catalog
+
+**Status: ACCEPTED**
+
+A Membership may provide access to multiple approved System Courses through a
+Membership Catalog. Access is determined by:
+
+`Membership Plan + Membership Inclusion / Access Policy + Entitlement`
+
+Teacher identity does not determine Membership access. Not every System Course
+must support every Plus or Pro capability; future policies decide course-level
+Plus access, Pro review, verification, assessment, and certificate eligibility.
+
+## PD-014 — Creator Participation Models
+
+**Status: ACCEPTED**
+
+A Teacher or Creator may contribute a System Course included in Membership,
+sell a standalone premium Product, or do both. A Creator's Membership-included
+System Course does not make their standalone masterclass part of Membership.
+One-on-one lessons and Pro human services remain separate human-service and
+compensation categories.
+
+## PD-015 — Membership Creator Attribution
+
+**Status: ACCEPTED**
+
+Membership revenue attribution uses a future configurable model, never an
+equal split by Teacher count:
+
+`Membership Revenue → Net Revenue → Configurable Revenue Pools → Qualified Content / Creator Attribution → Settlement`
+
+Future attribution should be traceable to Creator, Content, System Course,
+Membership inclusion, and qualified learning contribution. Pool percentages,
+Creator weights, review compensation, and platform share remain unapproved
+configuration in the future Finance domain. View-count-only attribution is not
+an approved model.

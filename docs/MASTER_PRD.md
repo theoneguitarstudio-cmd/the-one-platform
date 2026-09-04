@@ -5,8 +5,9 @@
 ### Two primary product lines
 
 The One 2.0 has two independent, mutually reinforcing core services: **1-on-1
-personalized guitar teaching** and **LMS / Training / Learning Verification
-membership**. LMS does not reduce one-on-one's strategic importance. Free is
+personalized guitar teaching** and **platform Membership providing eligible
+access to a catalog of System Courses and learning capabilities**. Membership
+does not reduce one-on-one's strategic importance. Free is
 traffic/trust/learning entry; Plus is structured self-study; Pro adds Teacher
 review and verified learning. **1-on-1 Fixed** is stable recurring personalized
 teaching, and **1-on-1 Flexible** is flexible high-value personalized teaching.
@@ -44,7 +45,12 @@ The One 樂玩吉他 2.0 combines free content, structured training, human Teach
 review, and verified progress: **YouTube teaches how; The One confirms that the
 learner can do it.** The future learning flow is:
 
-`learning_maps → stages → modules → learning_nodes → resources → practice → evidence → verification`.
+`system_course → learning_map → stage/level → module → learning_node → resource → practice → evidence → verification`.
+
+The One Guitar Roadmap 2.0 is the flagship guitar System Course, not the
+Membership itself or the platform's only possible System Course. Membership
+may include multiple approved System Courses through plan, inclusion/access
+policy, and Entitlement.
 
 The canonical five stages are: (1) 0 to 1 basic accompaniment, (2) technique
 and accompaniment refinement, (3) theory and fretboard, (4) transcription and
@@ -90,9 +96,11 @@ PRD.
 The One 2.0 has two independent, mutually reinforcing core services:
 
 1. **1-on-1 personalized guitar teaching**; and
-2. **LMS / Training / Learning Verification membership**.
+2. **platform Membership with a catalog of eligible System Courses and learning
+   capabilities**.
 
-LMS membership does not reduce the strategic importance of one-on-one teaching.
+Membership and System Course learning do not reduce the strategic importance of
+one-on-one teaching.
 Free is a traffic/trust/learning entry; Plus is structured self-study; Pro adds
 Teacher review and verified learning. **1-on-1 Fixed** is stable recurring
 personalized teaching, while **1-on-1 Flexible** is flexible, high-value
