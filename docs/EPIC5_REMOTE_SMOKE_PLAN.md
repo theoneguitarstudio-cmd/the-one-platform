@@ -13,6 +13,11 @@ Remote execution is an operator-controlled closure activity. The harness added
 by P2-4B is implemented and validated locally; it must not be run remotely as
 part of implementation review.
 
+Before `-Execute`, `BackupConfirmed` means BR-1, BR-2, and BR-3 have all passed
+under the canonical
+[Remote Backup and Recovery Runbook](REMOTE_BACKUP_RECOVERY_RUNBOOK.md) and a
+secret-free evidence record exists. The switch alone is not confirmation.
+
 ## Safety model
 
 The PowerShell wrapper and Node runner use the shared Epic 5/Epic 6 target gate.

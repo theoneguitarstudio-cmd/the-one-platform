@@ -1,5 +1,12 @@
 # SECURITY
 
+## Security incident recovery
+
+Remote rollout must stop on an RLS, grant, service-role authority, private
+helper, or authorization regression. Classification, write-freeze, evidence,
+and forward-fix requirements are defined only in the canonical
+[Remote Backup and Recovery Runbook](REMOTE_BACKUP_RECOVERY_RUNBOOK.md).
+
 ## Epic 6 Scheduling / one-on-one security
 
 - Fixed-slot priority, Flexible availability, booking, series exception,

@@ -4,6 +4,11 @@ Status: **REMOTE-SAFE HARNESS CANDIDATE**. The harness has been implemented and
 validated against local Supabase only. Do not run it remotely until the target
 migration, backup prerequisite, and operator approval have all been confirmed.
 
+Before `-Execute`, `BackupConfirmed` means BR-1, BR-2, and BR-3 have all passed
+under the canonical
+[Remote Backup and Recovery Runbook](REMOTE_BACKUP_RECOVERY_RUNBOOK.md) and a
+secret-free evidence record exists. The switch alone is not confirmation.
+
 ## Before
 
 Record and verify all of the following before a remote run:
