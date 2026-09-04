@@ -57,20 +57,18 @@ select lives_ok($$
     (select id from pg_temp.p17_ids where name='ent-50'),
     (select id from pg_temp.p17_ids where name='event-50'),'P1-7 compatible cycle evidence'))
 $$,'Evidence: equal-duration Fixed cycle attachment succeeds');
-select lives_ok($$
-  insert into pg_temp.p17_ids values('cycle-80-on-50',public.attach_fixed_entitlement_cycle(
+select throws_ok($$
+  select public.attach_fixed_entitlement_cycle(
     (select id from pg_temp.p17_ids where name='series-50'),
     (select id from pg_temp.p17_ids where name='ent-80'),
-    (select id from pg_temp.p17_ids where name='event-80'),'P1-7 mismatched cycle evidence'))
-$$,'Evidence: current cycle authority also accepts an 80-minute Entitlement on a 50-minute Series');
+    (select id from pg_temp.p17_ids where name='event-80'),'P1-7 mismatched cycle evidence')
+$$,'P0001','LESSON_DURATION_MISMATCH',
+  'Evidence: cycle authority rejects an 80-minute Entitlement on a 50-minute Series');
 reset role;
 select is(
-  (select array[e.lesson_duration_minutes,s.duration_minutes::integer]
-    from public.fixed_entitlement_cycles c
-    join public.entitlements e on e.id=c.entitlement_id
-    join public.recurring_lesson_series s on s.id=c.series_id
-    where c.id=(select id from pg_temp.p17_ids where name='cycle-80-on-50')),
-  array[80,50],'Evidence: attached cycle persists the opposite-direction duration mismatch'
+  (select count(*) from public.fixed_entitlement_cycles c
+    where c.entitlement_id=(select id from pg_temp.p17_ids where name='ent-80')),
+  0::bigint,'Evidence: rejected cycle mismatch persists no incompatible attachment'
 );
 
 set local role authenticated;
