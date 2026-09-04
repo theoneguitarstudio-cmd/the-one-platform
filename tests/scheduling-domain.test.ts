@@ -5,6 +5,7 @@ import {
   availabilityRuleSchema,
   flexibleBookingSchema,
   mapSchedulingDomainError,
+  makeupBookingSchema,
   recurringSeriesSchema,
   schedulingBookingSchema,
   seriesExceptionSchema,
@@ -42,6 +43,21 @@ describe("scheduling domain", () => {
       timezone: "Asia/Taipei",
     }).success).toBe(true);
     expect(flexibleBookingSchema.safeParse({}).success).toBe(false);
+  });
+
+  it("requires an explicit Makeup Right for Makeup Booking", () => {
+    expect(makeupBookingSchema.safeParse({
+      idempotencyKey: "11111111-1111-4111-8111-111111111111",
+      makeupRightId: "22222222-2222-4222-8222-222222222222",
+      relationshipId: "33333333-3333-4333-8333-333333333333",
+      startsAt: "2026-09-10T12:00:00.000Z",
+      studentUserId: "44444444-4444-4444-8444-444444444444",
+      teacherUserId: "55555555-5555-4555-8555-555555555555",
+      timezone: "Asia/Taipei",
+    }).success).toBe(true);
+    expect(makeupBookingSchema.safeParse({
+      relationshipId: "33333333-3333-4333-8333-333333333333",
+    }).success).toBe(false);
   });
 
   it("validates local weekly availability without hard-coding 50 minutes", () => {

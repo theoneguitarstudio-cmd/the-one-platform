@@ -460,7 +460,18 @@ select is((select count(*) from pg_proc where pronamespace='public'::regnamespac
     'reschedule_lesson_booking','create_recurring_lesson_series','refresh_recurring_series_occurrences',
     'set_recurring_lesson_series_status','set_recurring_lesson_series_exception',
     'materialize_recurring_lesson_occurrence','complete_lesson_booking')
-  and pg_get_functiondef(oid) not like '%scheduling_teacher_authorized%'),0::bigint,
+  and case proname
+    when 'cancel_lesson_booking' then not (
+      pg_get_functiondef(oid) like '%private.cancel_makeup_lesson_booking_core%'
+      and pg_get_functiondef(oid) like '%private.cancel_ordinary_lesson_booking_authority%')
+    when 'reschedule_lesson_booking' then not (
+      pg_get_functiondef(oid) like '%private.reschedule_makeup_lesson_booking_core%'
+      and pg_get_functiondef(oid) like '%private.reschedule_ordinary_lesson_booking_authority%')
+    when 'complete_lesson_booking' then not (
+      pg_get_functiondef(oid) like '%private.complete_makeup_lesson_booking_core%'
+      and pg_get_functiondef(oid) like '%private.complete_ordinary_lesson_booking_authority%')
+    else pg_get_functiondef(oid) not like '%scheduling_teacher_authorized%'
+  end),0::bigint,
   'Every Teacher scheduling mutation entry point delegates to the active-Teacher authorization helper');
 select is((select count(*) from pg_proc where pronamespace='public'::regnamespace
   and proname in('create_lesson_booking','cancel_lesson_booking','reschedule_lesson_booking',

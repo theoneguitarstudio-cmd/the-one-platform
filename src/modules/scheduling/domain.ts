@@ -3,7 +3,7 @@ import { z } from "zod";
 export const bookingStatuses = [
   "confirmed", "cancelled", "rescheduled", "completed", "credit_required", "failed",
 ] as const;
-export const bookingSources = ["flexible", "fixed"] as const;
+export const bookingSources = ["flexible", "fixed", "makeup"] as const;
 export const creditOutcomes = ["released", "consumed", "unchanged", "manual_review_required"] as const;
 
 export const schedulingBookingSchema = z.object({
@@ -23,6 +23,16 @@ export type SchedulingBooking = z.infer<typeof schedulingBookingSchema>;
 export const flexibleBookingSchema = z.object({
   entitlementId: z.uuid(),
   idempotencyKey: z.uuid(),
+  relationshipId: z.uuid(),
+  startsAt: z.iso.datetime({ offset: true }),
+  studentUserId: z.uuid(),
+  teacherUserId: z.uuid(),
+  timezone: z.string().min(3).max(80),
+});
+
+export const makeupBookingSchema = z.object({
+  idempotencyKey: z.uuid(),
+  makeupRightId: z.uuid(),
   relationshipId: z.uuid(),
   startsAt: z.iso.datetime({ offset: true }),
   studentUserId: z.uuid(),
@@ -131,6 +141,9 @@ const domainMessages: Record<string, string> = {
   BOOKING_NOT_RESCHEDULABLE: "此預約目前不可改期。",
   ENTITLEMENT_NOT_ELIGIBLE: "此課程方案不符合本次預約資格。",
   INSUFFICIENT_LESSON_CREDITS: "可用課程點數不足。",
+  MAKEUP_RIGHT_EXPIRED: "此補課權利已過期，或排定時間超過有效期限。",
+  MAKEUP_RIGHT_NOT_AVAILABLE: "此補課權利目前不可用。",
+  MAKEUP_RIGHT_MANAGED_BY_BOOKING: "此補課權利已由既有預約管理。",
   NONEXISTENT_LOCAL_TIME: "此當地時間因日光節約切換而不存在。",
   OCCURRENCE_ALREADY_MATERIALIZED: "此固定課次已建立。",
   RECURRING_SERIES_CONFLICT: "固定時段與既有安排衝突。",

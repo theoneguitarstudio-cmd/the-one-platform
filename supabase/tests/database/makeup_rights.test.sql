@@ -107,11 +107,11 @@ select is((select count(*) from public.makeup_right_operations where makeup_righ
   'Reserve retry creates one operation and one value reservation');
 
 set local role authenticated;
-select set_config('request.jwt.claim.sub','68000000-0000-0000-0000-000000000003',true);
+select set_config('request.jwt.claim.sub','68000000-0000-0000-0000-000000000005',true);
 select lives_ok($$select public.consume_makeup_right((select id from makeup_ids where name='main'),
-  'p15b-consume-main-001','Teacher consumes reserved Makeup Right')$$,'B6 scoped Teacher consumes reserved Right');
+  'p15b-consume-main-001','Admin consumes unbound reserved Makeup Right')$$,'B6 Admin consumes unbound reserved Right');
 select lives_ok($$select public.consume_makeup_right((select id from makeup_ids where name='main'),
-  'p15b-consume-main-001','Teacher consumes reserved Makeup Right')$$,'Consume retry is stable');
+  'p15b-consume-main-001','Admin consumes unbound reserved Makeup Right')$$,'Consume retry is stable');
 reset role;
 select is((select status from public.makeup_rights where id=(select id from makeup_ids where name='main')),
   'used'::public.makeup_right_status,'B6 reserved transitions to used');
@@ -168,7 +168,7 @@ reset role;
 select is((select status from public.makeup_rights where id='68000000-0000-0000-0002-000000000003'),
   'expired'::public.makeup_right_status,'Expired Right reaches terminal expired status');
 set local role authenticated;
-select set_config('request.jwt.claim.sub','68000000-0000-0000-0000-000000000003',true);
+select set_config('request.jwt.claim.sub','68000000-0000-0000-0000-000000000005',true);
 select throws_ok($$select public.consume_makeup_right('68000000-0000-0000-0002-000000000004',
   'p15b-expired-consume-2','Reject expired use')$$,'P0001','MAKEUP_RIGHT_EXPIRED','B9 expired reserved Right cannot be used');
 reset role;
@@ -187,7 +187,7 @@ reset role;
 select is((select status from public.makeup_rights where id=(select id from makeup_ids where name='revoke')),
   'revoked'::public.makeup_right_status,'B10 revoke creates terminal revoked status');
 set local role authenticated;
-select set_config('request.jwt.claim.sub','68000000-0000-0000-0000-000000000003',true);
+select set_config('request.jwt.claim.sub','68000000-0000-0000-0000-000000000005',true);
 select throws_ok($$select public.consume_makeup_right((select id from makeup_ids where name='revoke'),
   'p15b-revoked-consume-1','Reject revoked use')$$,'P0001','MAKEUP_RIGHT_NOT_RESERVED',
   'B10 revoked Right cannot be consumed');

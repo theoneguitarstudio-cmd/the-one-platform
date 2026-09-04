@@ -13,6 +13,7 @@ import {
   cancellationSchema,
   flexibleBookingSchema,
   lessonCompletionSchema,
+  makeupBookingSchema,
   occurrenceMaterializationSchema,
   recurringSeriesSchema,
   rescheduleSchema,
@@ -275,6 +276,34 @@ export async function setTeacherSeriesException(formData: FormData) {
 export async function cancelTeacherBooking(formData: FormData) {
   await requireAreaAccess("teacher");
   return mutateCancellation(formData, "/teacher/schedule", "unchanged", "not_applicable");
+}
+
+export async function createMakeupBooking(formData: FormData) {
+  const identity = await requireAreaAccess("student");
+  const parsed = makeupBookingSchema.safeParse({
+    idempotencyKey: read(formData, "idempotencyKey"),
+    makeupRightId: read(formData, "makeupRightId"),
+    relationshipId: read(formData, "relationshipId"),
+    startsAt: read(formData, "startsAt"),
+    studentUserId: identity.userId,
+    teacherUserId: read(formData, "teacherUserId"),
+    timezone: read(formData, "timezone"),
+  });
+  if (!parsed.success) redirect("/student/schedule?error=invalid_makeup_booking");
+  const supabase = await createServerSupabaseClient();
+  const { error } = await supabase.rpc("create_makeup_lesson_booking", {
+    p_idempotency_key: parsed.data.idempotencyKey,
+    p_makeup_right_id: parsed.data.makeupRightId,
+    p_reason: "Student Makeup booking",
+    p_relationship_id: parsed.data.relationshipId,
+    p_starts_at: parsed.data.startsAt,
+    p_student_user_id: parsed.data.studentUserId,
+    p_teacher_user_id: parsed.data.teacherUserId,
+    p_timezone: parsed.data.timezone,
+  });
+  if (error) redirect("/student/schedule?error=makeup_booking_failed");
+  revalidatePath("/student/schedule");
+  redirect("/student/schedule?status=makeup_booked");
 }
 
 export async function rescheduleTeacherBooking(formData: FormData) {
