@@ -65,7 +65,7 @@ describe("Epic6 remote smoke safety contract", () => {
   });
 
   it("statically rejects dangerous cleanup and requires every SQL marker", async () => {
-    const sql = await readFile("supabase/tests/remote/epic6_remote_smoke.sql", "utf8");
+    const sql = await readFile("supabase/tests/remote/epic6_remote_smoke.sql.template", "utf8");
     expect(validateSqlTemplate(sql)).toBe(true);
     expect(() => validateSqlTemplate(sql + "\nset session_replication_role='replica';")).toThrow(/forbidden sql marker/i);
     expect(() => validateSqlTemplate(sql + "\ndelete from public.bookings;")).toThrow(/forbidden sql marker/i);

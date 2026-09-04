@@ -1,0 +1,363 @@
+-- P2-4B Epic5 remote smoke payload.
+--
+-- One statement contains every synthetic fixture and domain transition. The
+-- success sentinel deliberately aborts its subtransaction, so financial and
+-- append-only history never needs destructive cleanup. The wrapper then runs
+-- an independent, run-scoped residue query.
+--
+-- Direct writes below are limited to synthetic identity, relationship,
+-- scheduling, Product, and completed-Lesson fixture setup. Order, payment,
+-- fulfillment, Entitlement, credit, and revoke behavior use public domain RPCs.
+do $epic5_remote_smoke$
+declare
+  run_tag text := '__RUN_TAG__';
+  current_case text := 'fixture-bootstrap';
+  student_id uuid := gen_random_uuid();
+  teacher_id uuid := gen_random_uuid();
+  admin_id uuid := gen_random_uuid();
+  relationship_id uuid := gen_random_uuid();
+  product_a uuid := gen_random_uuid();
+  product_b uuid := gen_random_uuid();
+  order_a uuid;
+  order_b uuid;
+  order_c uuid;
+  event_a uuid;
+  event_b uuid;
+  event_c uuid;
+  entitlement_a uuid;
+  entitlement_b uuid;
+  entitlement_c uuid;
+  reservation_b uuid;
+  reservation_consume uuid;
+  completed_lesson uuid := gen_random_uuid();
+  mismatch_series uuid;
+  revoke_booking uuid;
+  a_available_before integer;
+  failure_message text;
+begin
+  begin
+    insert into auth.users(id,email) values
+      (student_id,run_tag||'-student@example.invalid'),
+      (teacher_id,run_tag||'-teacher@example.invalid'),
+      (admin_id,run_tag||'-admin@example.invalid');
+    insert into public.user_roles(user_id,role) values
+      (student_id,'student'),(teacher_id,'teacher'),(admin_id,'admin')
+    on conflict do nothing;
+    insert into public.teacher_profiles(
+      user_id,public_slug,bio,teaching_status,is_public,teaching_modes,
+      trial_price_twd,default_meeting_provider,default_meeting_url
+    ) values(
+      teacher_id,run_tag||'-teacher','Synthetic Epic5 remote smoke Teacher',
+      'active',true,array['online']::public.teaching_mode[],500,
+      'manual_google_meet','https://meet.google.com/epic-five-smoke'
+    );
+    insert into public.student_teacher_relationships(
+      id,student_user_id,teacher_user_id,relationship_status,preferred_mode
+    ) values(relationship_id,student_id,teacher_id,'active','online');
+    insert into public.teacher_scheduling_settings(
+      teacher_user_id,timezone,minimum_booking_notice_minutes,
+      booking_horizon_days,slot_interval_minutes
+    ) values(teacher_id,'UTC',0,90,10);
+    insert into public.teacher_availability_rules(
+      teacher_user_id,weekday,local_start_time,local_end_time,timezone,
+      effective_from,effective_until,is_active,created_by
+    ) select teacher_id,d::smallint,'00:00','23:59','UTC',current_date,
+      current_date+90,true,teacher_id from generate_series(0,6) d;
+    insert into public.products(
+      id,product_type,status,public_slug,name,currency,base_price_amount,
+      owner_type,is_public,is_purchasable,published_at
+    ) values
+      (product_a,'lesson_package','active',run_tag||'-package-a',run_tag||' Package A','TWD',1200,'platform',true,true,now()),
+      (product_b,'lesson_package','active',run_tag||'-package-b',run_tag||' Package B','TWD',900,'platform',true,true,now());
+
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',admin_id::text,true);
+    perform public.admin_set_lesson_package_product_config(
+      product_a,3,12,'months',50,'flexible',run_tag||' Product A config'
+    );
+    perform public.admin_set_lesson_package_product_config(
+      product_b,2,12,'months',50,'both',run_tag||' Product B purchase config'
+    );
+    perform set_config('request.jwt.claim.sub',student_id::text,true);
+    order_a := public.create_checkout_order(run_tag||'-package-a',1,run_tag||'-order-a');
+    order_b := public.create_checkout_order(run_tag||'-package-b',1,run_tag||'-order-b');
+    order_c := public.create_checkout_order(run_tag||'-package-a',1,run_tag||'-order-c');
+    perform set_config('request.jwt.claim.sub',admin_id::text,true);
+    -- Change the Product after B's Order Item snapshot but before fulfillment.
+    perform public.admin_set_lesson_package_product_config(
+      product_b,2,12,'months',80,'both',run_tag||' Product B later config'
+    );
+    perform public.admin_confirm_cash_payment(order_a,run_tag||'-cash-a',run_tag||' Payment A');
+    perform public.admin_confirm_cash_payment(order_b,run_tag||'-cash-b',run_tag||' Payment B');
+    perform public.admin_confirm_cash_payment(order_c,run_tag||'-cash-c',run_tag||' Payment C');
+    execute 'reset role';
+    select id into event_a from public.order_fulfillment_events where order_id=order_a;
+    select id into event_b from public.order_fulfillment_events where order_id=order_b;
+    select id into event_c from public.order_fulfillment_events where order_id=order_c;
+
+    current_case := 'E5-RS-001';
+    execute 'set local role service_role';
+    perform set_config('request.jwt.claim.role','service_role',true);
+    perform public.process_order_fulfillment_event(event_a);
+    execute 'reset role';
+    select id into entitlement_a from public.entitlements where source_order_id=order_a;
+    if entitlement_a is null or not exists(
+      select 1 from public.entitlements e
+      cross join lateral private.lesson_credit_balance(e.id) b
+      where e.id=entitlement_a and e.status='active'
+        and e.booking_mode_eligibility='flexible' and e.lesson_duration_minutes=50
+        and b.available=3 and b.reserved=0 and b.consumed=0 and b.total=3
+    ) then raise exception 'E5-RS-001 fulfillment did not create the configured Entitlement'; end if;
+    raise notice 'E5-RS-001 PASS';
+
+    current_case := 'E5-RS-002';
+    execute 'set local role service_role';
+    perform set_config('request.jwt.claim.role','service_role',true);
+    perform public.process_order_fulfillment_event(event_a);
+    execute 'reset role';
+    if (select count(*) from public.entitlements where source_order_id=order_a) <> 1
+      or (select count(*) from public.lesson_credit_ledger where source_fulfillment_event_id=event_a and entry_type='allocation') <> 1
+      or not exists(select 1 from public.order_fulfillment_events where id=event_a and status='processed') then
+      raise exception 'E5-RS-002 duplicate fulfillment created duplicate value';
+    end if;
+    raise notice 'E5-RS-002 PASS';
+
+    execute 'set local role service_role';
+    perform set_config('request.jwt.claim.role','service_role',true);
+    perform public.process_order_fulfillment_event(event_b);
+    perform public.process_order_fulfillment_event(event_c);
+    execute 'reset role';
+    select id into entitlement_b from public.entitlements where source_order_id=order_b;
+    select id into entitlement_c from public.entitlements where source_order_id=order_c;
+
+    current_case := 'E5-RS-003';
+    select available into a_available_before from private.lesson_credit_balance(entitlement_a);
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',student_id::text,true);
+    reservation_b := public.reserve_lesson_credit(
+      entitlement_b,run_tag||'-reserve-explicit-b',null,run_tag||'-reference-b'
+    );
+    execute 'reset role';
+    if not exists(
+      select 1 from public.lesson_credit_reservations
+      where id=reservation_b and entitlement_id=entitlement_b and status='reserved'
+    ) then raise exception 'E5-RS-003 explicit Entitlement B was not reserved'; end if;
+    raise notice 'E5-RS-003 PASS';
+
+    current_case := 'E5-RS-004';
+    if (select available from private.lesson_credit_balance(entitlement_a)) <> a_available_before
+      or (select reserved from private.lesson_credit_balance(entitlement_a)) <> 0
+      or (select reserved from private.lesson_credit_balance(entitlement_b)) <> 1 then
+      raise exception 'E5-RS-004 multiple-package reserve used an implicit source';
+    end if;
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',student_id::text,true);
+    begin
+      perform public.reserve_lesson_credit(
+        entitlement_a,run_tag||'-reserve-explicit-b',null,run_tag||'-reference-b'
+      );
+      raise exception using errcode='P6504',message='E5-RS-004 same request silently fell back to A';
+    exception when sqlstate 'P0001' then
+      if sqlerrm <> 'CREDIT_RESERVATION_PAYLOAD_MISMATCH' then raise; end if;
+    end;
+    execute 'reset role';
+    raise notice 'E5-RS-004 PASS';
+
+    current_case := 'E5-RS-005';
+    if not exists(
+      select 1 from public.lesson_credit_ledger
+      where reservation_id=reservation_b and entitlement_id=entitlement_b
+        and entry_type='reservation' and available_delta=-1 and reserved_delta=1
+        and operation_key='reserve:'||run_tag||'-reserve-explicit-b'
+    ) then raise exception 'E5-RS-005 reservation history is incomplete'; end if;
+    raise notice 'E5-RS-005 PASS';
+
+    current_case := 'E5-RS-006';
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',student_id::text,true);
+    perform public.release_lesson_credit(reservation_b,run_tag||' release');
+    perform public.release_lesson_credit(reservation_b,run_tag||' release retry');
+    execute 'reset role';
+    if (select count(*) from public.lesson_credit_ledger where reservation_id=reservation_b and entry_type='release') <> 1
+      or not exists(select 1 from public.lesson_credit_reservations where id=reservation_b and status='released')
+      or (select available from private.lesson_credit_balance(entitlement_b)) <> 2 then
+      raise exception 'E5-RS-006 release was not idempotent';
+    end if;
+    raise notice 'E5-RS-006 PASS';
+
+    -- Completed Lesson is infrastructure for the credit-consume authority test.
+    insert into public.lessons(
+      id,student_user_id,teacher_user_id,relationship_id,lesson_type,delivery_mode,
+      starts_at,ends_at,duration_minutes,timezone_anchor,status,meeting_provider,meeting_url
+    ) values(
+      completed_lesson,student_id,teacher_id,relationship_id,'flexible','online',
+      now()-interval '2 hours',now()-interval '70 minutes',50,'UTC','completed',
+      'manual_google_meet','https://meet.google.com/epic-five-smoke'
+    );
+    current_case := 'E5-RS-007';
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',student_id::text,true);
+    reservation_consume := public.reserve_lesson_credit(
+      entitlement_a,run_tag||'-reserve-consume-a',completed_lesson,null
+    );
+    perform set_config('request.jwt.claim.sub',teacher_id::text,true);
+    perform public.consume_lesson_credit(reservation_consume,completed_lesson);
+    execute 'reset role';
+    if not exists(
+      select 1 from public.lesson_credit_ledger
+      where reservation_id=reservation_consume and entry_type='consumption'
+        and reserved_delta=-1 and consumed_delta=1 and lesson_id=completed_lesson
+    ) then raise exception 'E5-RS-007 consumption history is incomplete'; end if;
+    raise notice 'E5-RS-007 PASS';
+
+    current_case := 'E5-RS-008';
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',teacher_id::text,true);
+    perform public.consume_lesson_credit(reservation_consume,completed_lesson);
+    execute 'reset role';
+    if (select count(*) from public.lesson_credit_ledger where reservation_id=reservation_consume and entry_type='consumption') <> 1
+      or not exists(select 1 from public.lesson_credit_reservations where id=reservation_consume and status='consumed') then
+      raise exception 'E5-RS-008 repeated consume duplicated value';
+    end if;
+    raise notice 'E5-RS-008 PASS';
+
+    current_case := 'E5-RS-009';
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',student_id::text,true);
+    begin
+      perform public.reserve_lesson_credit(
+        gen_random_uuid(),run_tag||'-invalid-entitlement',null,run_tag||'-invalid-reference'
+      );
+      raise exception using errcode='P6509',message='E5-RS-009 nonexistent Entitlement reserved';
+    exception when sqlstate '42501' then null;
+    end;
+    execute 'reset role';
+    raise notice 'E5-RS-009 PASS';
+
+    current_case := 'E5-RS-010';
+    if not exists(
+      select 1 from public.entitlements e
+      join public.order_item_fulfillment_snapshots s on s.order_item_id=e.source_order_item_id
+      join public.lesson_package_product_configs c on c.product_id=e.product_id
+      where e.id=entitlement_b and e.lesson_duration_minutes=50
+        and s.lesson_duration_minutes=50 and (e.config_snapshot->>'lesson_duration_minutes')::integer=50
+        and c.lesson_duration_minutes=80
+    ) then raise exception 'E5-RS-010 purchase-time duration snapshot changed retroactively'; end if;
+    raise notice 'E5-RS-010 PASS';
+
+    current_case := 'E5-RS-011';
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',teacher_id::text,true);
+    mismatch_series := public.create_recurring_lesson_series(
+      student_id,teacher_id,relationship_id,null,
+      extract(dow from current_date+20)::smallint,'14:00','UTC',80::smallint,
+      current_date+20,current_date+20,run_tag||' mismatch series'
+    );
+    begin
+      perform public.materialize_recurring_lesson_occurrence(
+        mismatch_series,current_date+20,entitlement_b,run_tag||'-duration-mismatch'
+      );
+      raise exception using errcode='P6511',message='E5-RS-011 duration mismatch accepted';
+    exception when sqlstate 'P0001' then
+      if sqlerrm <> 'LESSON_DURATION_MISMATCH' then raise; end if;
+    end;
+    execute 'reset role';
+    if exists(select 1 from public.bookings where recurring_series_id=mismatch_series) then
+      raise exception 'E5-RS-011 mismatch created downstream state';
+    end if;
+    raise notice 'E5-RS-011 PASS';
+
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',student_id::text,true);
+    revoke_booking := public.create_lesson_booking(
+      student_id,teacher_id,relationship_id,entitlement_c,
+      (current_date+21)::timestamp+time '10:00','UTC',
+      run_tag||'-revoke-booking',run_tag||' revoke booking'
+    );
+    perform set_config('request.jwt.claim.sub',admin_id::text,true);
+    current_case := 'E5-RS-012';
+    perform public.admin_revoke_entitlement(
+      entitlement_c,run_tag||' revoke reason',run_tag||'-revoke-operation'
+    );
+    execute 'reset role';
+    if not exists(select 1 from public.entitlements where id=entitlement_c and status='revoked') then
+      raise exception 'E5-RS-012 Entitlement did not reach revoked';
+    end if;
+    raise notice 'E5-RS-012 PASS';
+
+    current_case := 'E5-RS-013';
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',admin_id::text,true);
+    perform public.admin_revoke_entitlement(
+      entitlement_c,run_tag||' revoke reason',run_tag||'-revoke-operation'
+    );
+    execute 'reset role';
+    if (select count(*) from public.entitlement_revoke_operations where entitlement_id=entitlement_c) <> 1
+      or (select count(*) from public.audit_logs where action='entitlement.revoked' and target_id=entitlement_c) <> 1 then
+      raise exception 'E5-RS-013 repeated revoke duplicated history';
+    end if;
+    raise notice 'E5-RS-013 PASS';
+
+    current_case := 'E5-RS-014';
+    if not exists(
+      select 1 from public.bookings b
+      join public.lessons l on l.id=b.lesson_id
+      join public.lesson_credit_reservations r on r.id=b.credit_reservation_id
+      where b.id=revoke_booking and b.status='cancelled' and l.status='admin_cancelled'
+        and r.status='released' and r.entitlement_id=entitlement_c
+    ) or (select reserved from private.lesson_credit_balance(entitlement_c)) <> 0 then
+      raise exception 'E5-RS-014 revoke left invalid future ordinary value';
+    end if;
+    execute 'set local role authenticated';
+    perform set_config('request.jwt.claim.role','authenticated',true);
+    perform set_config('request.jwt.claim.sub',student_id::text,true);
+    begin
+      perform public.reserve_lesson_credit(
+        entitlement_c,run_tag||'-revoked-reserve',null,run_tag||'-revoked-reference'
+      );
+      raise exception using errcode='P6514',message='E5-RS-014 revoked Entitlement reserved again';
+    exception when sqlstate 'P0001' then
+      if sqlerrm <> 'ENTITLEMENT_NOT_ACTIVE' then raise; end if;
+    end;
+    execute 'reset role';
+    raise notice 'E5-RS-014 PASS';
+
+    current_case := 'E5-RS-015';
+    if (select count(*) from pg_trigger where tgrelid='public.lesson_credit_ledger'::regclass and tgname='lesson_credit_ledger_append_only' and tgenabled='O') <> 1
+      or (select count(*) from pg_trigger where tgrelid='public.order_item_fulfillment_snapshots'::regclass and tgname='order_item_fulfillment_snapshots_append_only' and tgenabled='O') <> 1
+      or (select count(*) from pg_trigger where tgrelid='public.entitlement_revoke_operations'::regclass and tgname='entitlement_revoke_operation_immutable' and tgenabled='O') <> 1
+      or (select count(*) from public.lesson_credit_ledger where entitlement_id in(entitlement_a,entitlement_b,entitlement_c))
+         <> (select count(distinct operation_key) from public.lesson_credit_ledger where entitlement_id in(entitlement_a,entitlement_b,entitlement_c))
+      or not exists(
+        select 1 from private.lesson_credit_balance(entitlement_a)
+        where available=2 and reserved=0 and consumed=1 and total=3
+      ) or not exists(
+        select 1 from private.lesson_credit_balance(entitlement_b)
+        where available=2 and reserved=0 and consumed=0 and total=2
+      ) then raise exception 'E5-RS-015 immutable history or economic totals are invalid'; end if;
+    raise notice 'E5-RS-015 PASS';
+
+    raise exception using errcode='P6500',message=
+      'EPIC5_REMOTE_SMOKE_ROLLBACK E5-RS-001 PASS E5-RS-002 PASS E5-RS-003 PASS E5-RS-004 PASS E5-RS-005 PASS E5-RS-006 PASS E5-RS-007 PASS E5-RS-008 PASS E5-RS-009 PASS E5-RS-010 PASS E5-RS-011 PASS E5-RS-012 PASS E5-RS-013 PASS E5-RS-014 PASS E5-RS-015 PASS';
+  exception
+    when sqlstate 'P6500' then raise;
+    when others then
+      get stacked diagnostics failure_message=message_text;
+      execute 'reset role';
+      raise exception using
+        errcode=sqlstate,
+        message=current_case||': '||failure_message,
+        detail='Epic5 smoke subtransaction was rolled back; run the independent residue query.';
+  end;
+end
+$epic5_remote_smoke$;
