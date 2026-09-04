@@ -137,10 +137,11 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
   `search_path`, schema-qualified object references, and revoked direct
   execution permissions.
 
-## Epic 2 operational work still required
+## Epic 2 post-closure operational work
 
-- Apply and test the Epic 2 migration in local/staging before any production
-  rollout.
+- Epic 2 is included in the applied remote chain reported through `00600`.
+  Future remote changes still require the canonical migration and recovery
+  gates.
 - Establish an audited Admin assignment workflow and slug-change redirect
   history before operational staff use the management screen at scale.
 
@@ -170,9 +171,11 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
 - Admin Trial mutations use the authenticated session so database role checks
   remain effective; the service role is used only for server-only Admin reads.
 
-## Epic 3 operational work still required
+## Epic 3 post-closure operational work
 
-- Apply the migration to local/staging and run pgTAP before remote rollout.
+- Epic 3 is included in the applied remote chain reported through `00600`.
+  Future remote changes still require local pgTAP and the canonical migration
+  and recovery gates.
 - Add durable privileged-operation audit events before production staff scale.
 - Replace manual payment and meeting references only in their dedicated future
   integration epics; do not broaden Trial table client grants.

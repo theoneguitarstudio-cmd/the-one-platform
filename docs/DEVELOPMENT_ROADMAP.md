@@ -1,6 +1,10 @@
 # DEVELOPMENT ROADMAP
 
-## Epic 6 — Scheduling & Booking Core
+Canonical Epic 7+ numbering and approved scope now live in
+[CANONICAL_ROADMAP.md](CANONICAL_ROADMAP.md). The LMS sequence below is retained
+as historical architecture decomposition and does not override that roadmap.
+
+## Epic 6 — Scheduling & Booking Core (local closure candidate)
 
 After **Epic 5 — Entitlement Core & Lesson Credits**, Epic 6 implements Teacher
 availability, Flexible Booking, recurring
@@ -96,13 +100,13 @@ and recurring scheduling remain out of scope.
 - Purchase-time Lesson Package fulfillment snapshots
 - Item-granular, idempotent paid-order fulfillment into Entitlements
 - Shared append-only Lesson Credit allocation/reservation/release/consumption
-  foundation for future Fixed and Flexible scheduling
+  foundation used by Fixed and Flexible scheduling
 - Role-scoped Student, Teacher, and Admin DTO/mutation paths
 - Audited Teacher expiry extension and Admin adjustment/revocation foundations
 - Versioned migration, RLS/grant contracts, pgTAP, unit/contract, and true
   independent-session concurrency validation
 
 This status means local implementation and validation only. Remote migration
-push, background fulfillment scheduling, Epic 6 Booking, refund automation,
+push, background fulfillment scheduling, refund automation,
 membership/subscription, review quota, LMS access, and achievement remain
 pending their own approval and review.

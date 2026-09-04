@@ -178,7 +178,7 @@ The Entitlement module completes the current transactional path:
 `Commerce Order Item snapshot → order.paid outbox → idempotent fulfillment → Entitlement → append-only Lesson Credit ledger`
 
 Commerce still owns Product price and payment truth. Entitlement owns access
-and credit state. Epic 6 Scheduling will own time, Booking, recurring series,
+and credit state. Epic 6 Scheduling owns time, Booking, recurring series,
 and the reserve/release/consume lifecycle. A credit is therefore neither a
 Booking nor a Lesson.
 

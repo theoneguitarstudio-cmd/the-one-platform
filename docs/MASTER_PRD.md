@@ -144,5 +144,7 @@ To be completed from the approved formal PRD.
 
 The implemented Commerce Core covers Product → Order → Order Item → Payment →
 `order.paid` outbox. It supports manual bank-transfer review and cash confirmation
-without a live gateway. Course packages, credits, subscriptions, refunds,
-invoices, earnings, and LMS entitlement remain future PRD work.
+without a live gateway. Epic 4 itself does not grant entitlements or credits;
+Epic 5's local closure candidate now implements Lesson Package fulfillment and
+Lesson Credits. Subscriptions, refunds, invoices, earnings, and LMS entitlement
+remain future PRD work.
