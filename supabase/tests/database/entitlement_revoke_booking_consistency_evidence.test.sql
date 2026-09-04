@@ -112,14 +112,13 @@ select ok((select b.status='confirmed' and l.status='scheduled' and mr.status='r
   join public.makeup_rights mr on mr.id=b.makeup_right_id
   where b.id=(select id from p16_ids where name='makeup_booking')),
   'Makeup booking remains isolated from unrelated ordinary revoke');
-select ok((select c.status='active' and e.status='revoked'
+select ok((select c.status='invalidated' and e.status='revoked'
   from public.fixed_entitlement_cycles c join public.entitlements e on e.id=c.entitlement_id
   where c.id='7b000000-0000-0000-0000-000000000045'),
-  'EVIDENCE: Fixed Cycle remains active while attached Entitlement is revoked');
+  'Fixed Cycle is invalidated when its attached Entitlement is revoked');
 select is((select preferred_entitlement_id from public.recurring_lesson_series
-  where id='7b000000-0000-0000-0000-000000000044'),
-  '7b000000-0000-0000-0000-000000000020'::uuid,
-  'EVIDENCE: series preferred_entitlement_id remains pointed at revoked Entitlement');
+  where id='7b000000-0000-0000-0000-000000000044'),null::uuid,
+  'Series preferred_entitlement_id is cleared when that Entitlement is revoked');
 select is(private.scheduling_entitlement_eligible(
   '7b000000-0000-0000-0000-000000000020',
   '7b000000-0000-0000-0000-000000000001',

@@ -124,14 +124,18 @@ select ok((select b.status='cancelled' and l.status='admin_cancelled'
   join public.lesson_credit_reservations r on r.id=b.credit_reservation_id
   where b.id=(select id from p16_ids where name='fixed_a_booking') and b.source='fixed'),
   'A7 Fixed materialized ordinary Booking receives the same reconciliation');
-select ok((select to_jsonb(s)=(select fixed_series from p16a_before)
+select ok((select s.status='active' and s.preferred_entitlement_id is null
+    and to_jsonb(s)-'preferred_entitlement_id'-'updated_at'=
+      (select fixed_series-'preferred_entitlement_id'-'updated_at' from p16a_before)
   from public.recurring_lesson_series s
   where s.id='7b000000-0000-0000-0000-000000000044'),
-  'A7 Fixed recurring priority and series state are unchanged');
-select ok((select to_jsonb(c)=(select fixed_cycle from p16a_before)
+  'A7 Fixed recurring priority is unchanged and revoked preferred source is cleared');
+select ok((select c.status='invalidated'
+    and to_jsonb(c)-'status'-'updated_at'=
+      (select fixed_cycle-'status'-'updated_at' from p16a_before)
   from public.fixed_entitlement_cycles c
   where c.id='7b000000-0000-0000-0000-000000000045'),
-  'A7 Fixed Cycle lifecycle remains outside P1-6A');
+  'A7 Fixed Cycle identity is preserved while revoke invalidates its authority');
 
 select is((select l.status from public.lessons l join public.bookings b on b.lesson_id=l.id
   where b.id=(select id from p16_ids where name='completed_booking')),
