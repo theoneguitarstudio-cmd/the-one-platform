@@ -65,7 +65,7 @@ select set_config('request.jwt.claim.sub','7b000000-0000-0000-0000-000000000002'
 select throws_ok($$select public.complete_lesson_booking(
   (select id from pg_temp.p16_ids where name='future_a_booking'),
   'Visible','Private','Summary','Goal','Homework')$$,
-  'P0001','BOOKING_NOT_COMPLETABLE','Completion rejects the reconciled Booking lifecycle');
+  'P0001','CREDIT_ALREADY_RELEASED','Completion explicitly rejects the released value source');
 reset role;
 select is((select status from public.bookings where id=(select id from p16_ids where name='future_a_booking')),
   'cancelled'::public.booking_status,'Failed completion leaves Booking cancelled');
