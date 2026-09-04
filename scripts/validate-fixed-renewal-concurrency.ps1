@@ -146,6 +146,44 @@ where g.application_name='$gateName';
   }
 }
 
+function Reverse-FulfillmentRenewal($Case) {
+  $gateName = "$run-E-g"
+  $convertName = "$run-E-convert"
+  $eventName = "$run-E-event"
+  $gate = Start-Db "begin; select private.lock_scheduling_teacher('$($users.teacher)');" $gateName -KeepInputOpen
+  try {
+    Wait-Condition "select exists(select 1 from pg_stat_activity where application_name='$gateName' and state='idle in transaction');" 'renewal reverse-order gate'
+    $convert = Start-Db (Convert-Sql $Case) $convertName
+    Wait-Condition "select exists(select 1 from pg_stat_activity where application_name='$convertName' and wait_event_type='Lock');" 'schedule-first renewal conversion'
+    $event = Start-Db @"
+begin;
+select id from public.order_fulfillment_events where id='$($Case.Event)' for update;
+select pg_sleep(2);
+set local role service_role;
+select set_config('request.jwt.claim.role','service_role',true);
+select set_config('request.jwt.claim.sub','',true);
+select public.process_order_fulfillment_event('$($Case.Event)');
+commit;
+"@ $eventName
+    Wait-Condition "select exists(select 1 from pg_stat_activity where application_name='$eventName' and wait_event='PgSleep');" 'event-first fulfillment session'
+    $gate.Process.StandardInput.WriteLine('commit;')
+    $gate.Process.StandardInput.Close()
+    Must (Wait-Db $gate) 'release renewal reverse-order gate'
+    Wait-Condition @"
+select exists(
+  select 1 from pg_stat_activity waiting
+  join pg_stat_activity blocker on blocker.pid=any(pg_blocking_pids(waiting.pid))
+  where waiting.application_name='$convertName' and blocker.application_name='$eventName'
+);
+"@ 'schedule-first conversion waiting for event-first fulfillment'
+    return @((Wait-Db $event),(Wait-Db $convert))
+  } finally {
+    if (-not $gate.Process.HasExited) {
+      try { $gate.Process.StandardInput.WriteLine('rollback;'); $gate.Process.StandardInput.Close() } catch { }
+    }
+  }
+}
+
 $cleanup = @"
 begin;
 set local session_replication_role='replica';
@@ -304,6 +342,13 @@ commit;
   Count "select count(*) from public.fixed_checkout_holds where idempotency_key='$run-D-new-owner' and status='active' and expires_at>clock_timestamp();" 1 'one effective holder'
   Count "select count(*) from public.recurring_lesson_series where id='$($caseD.Series)' and status='active';" 0 'old priority released'
   Write-Host 'D PASS: hold expiry/release vs new claim has one effective holder'
+
+  $caseE=New-Case 'E' 16 3600 600
+  $race=Reverse-FulfillmentRenewal $caseE
+  Must $race[0] 'event-first fulfillment retry';Expect-Conversion $race[1] 'renewed';Check-Case $caseE 'renewed' 2
+  Count "select count(*) from public.entitlements where source_fulfillment_event_id='$($caseE.Event)';" 1 'one renewal entitlement'
+  Count "select count(*) from public.fixed_renewal_holds where id='$($caseE.Hold)' and status='converted';" 1 'renewal hold converted once'
+  Write-Host 'E PASS P2-2: event-first fulfillment vs schedule-first renewal has no reverse edge or partial state'
   $passed=$true
 } finally {
   try {
@@ -314,4 +359,4 @@ commit;
     } finally {foreach($session in $sessions){if(-not $session.Process.HasExited){$session.Process.Kill()};$session.Process.Dispose()}}
   }
 }
-if($passed){Write-Host 'P1-4B CONCURRENCY PASS: A/B/C/D; no duplicates, partial writes or deadlock leakage'}
+if($passed){Write-Host 'P2-2 FIXED RENEWAL LOCK-ORDER PASS: A/B/C/D/E; 40P01=0 23505=0 23P01=0 unexpected integrity=0 partial=0 fixture residue=0'}

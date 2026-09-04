@@ -20,9 +20,13 @@
   and `service_role`, and mutation functions are `SECURITY DEFINER`, owned by
   `postgres`, schema-qualified, and pinned to an empty `search_path`.
 - All Booking, occurrence, series, and availability mutations converge on the
-  canonical order: deterministic Epic 3 Student/Teacher advisory locks,
-  Entitlement, credit Reservation, Booking, optional recurring Occurrence, then
-  Lesson. Epic 5-only paths use Entitlement then Reservation. GiST exclusion
+  branch-aware global lock DAG in `docs/LOCK_ORDER_CONTRACT.md`. Ordinary paths
+  use deterministic Epic 3 Student/Teacher advisory locks, Entitlement, credit
+  Reservation, Booking, optional recurring Occurrence, then Lesson. Fixed,
+  Makeup, Revoke, Commerce, and Fulfillment paths have explicit nested-lock and
+  inherited-lock rules. The executable contract rejects cycles, source-order
+  reversal, and any new mutation-capable SECURITY DEFINER function or overload
+  that lacks an inventory entry or justified exemption. GiST exclusion
   constraints remain the final UTC-instant integrity guard; constraint and
   deadlock errors are translated to stable domain errors.
 - Teacher mutation authorization requires an active account, Teacher role,

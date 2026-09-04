@@ -18,13 +18,19 @@ not insert credit-ledger entries or create mode-specific credit balances.
 
 ### Canonical cross-domain lock order
 
-Every path that crosses Epic 3 scheduling, Epic 5 credit, and Epic 6 Booking
-uses one order: deterministic Student/Teacher schedule advisory locks,
-Entitlement row, credit Reservation row, Booking row, recurring Occurrence row
-when present, then Lesson row. A path that begins inside Epic 5 omits the
-schedule locks but still locks Entitlement before Reservation. Booking-bound
-reservations are released by Scheduling orchestration so Booking, Lesson,
-credit, and audit state commit or roll back together.
+The canonical contract is the branch-aware DAG documented in
+`docs/LOCK_ORDER_CONTRACT.md` and enforced by
+`global_lock_order_contract.test.sql`. Ordinary Scheduling uses deterministic
+Student/Teacher schedule advisory locks, Entitlement, Reservation, Booking,
+optional recurring Occurrence, then Lesson. Commerce/Fulfillment, Fixed
+attachment/Renewal, Makeup, and Entitlement Revoke use declared branches rather
+than being forced into a false total order. Nested helpers may only reacquire an
+inherited lock or acquire a later resource in their branch. The machine
+contract rejects graph cycles, unregistered mutation-capable SECURITY DEFINER
+functions, unexpected overloads, and critical SQL source-order reversals.
+
+Booking-bound reservations are released by Scheduling orchestration so
+Booking, Lesson, credit, and audit state commit or roll back together.
 
 Fixed uses `recurring_lesson_series`, bounded `recurring_lesson_occurrences`,
 series exceptions, priority reservation, and lazily generated lesson instances
