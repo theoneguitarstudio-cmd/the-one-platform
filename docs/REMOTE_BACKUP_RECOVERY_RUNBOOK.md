@@ -1,6 +1,15 @@
 # Remote Backup and Recovery Runbook
 
-Status: **REMOTE DEPLOYMENT READY RUNBOOK CANDIDATE**
+Status: **P2 OPERATIONAL RECOVERY GATES PASSED — policy remains applicable**
+
+## P2 closure update — 2026-09-05
+
+Remote Deployment and both Epic 5/Epic 6 production smoke runs passed.
+BR-1/BR-2/BR-3 passed for those operations using the verified logical recovery
+method and existing operational restore evidence. See
+[P2 Remote Closure Evidence](P2_REMOTE_CLOSURE_EVIDENCE.md) for provenance,
+external backup paths, timestamps, and results. No restore was rerun during
+documentation reconciliation. Future operations require fresh gate checks.
 
 This is the canonical backup and recovery policy for The One 2.0 remote
 database deployments. The migration, security, and Epic 5/Epic 6 smoke
@@ -24,7 +33,12 @@ database mutation, restore, PITR operation, project relink, or production reset.
 - A restore is an incident operation of last resort, not a routine response to
   a migration error.
 
-## Current capability audit
+## Historical P2-3A capability audit (superseded for closure status)
+
+The following records the initial audit before operational recovery evidence
+and deployment were completed. Its gaps describe that audit, not current P2
+closure gates. Logical recovery subsequently passed; managed backup/PITR
+coverage is not established by that result.
 
 Audit date: 2026-09-05 UTC+08:00. This audit used repository files, Supabase CLI
 help, a local link ref, and read-only backup metadata. It performed no SQL,
@@ -324,9 +338,10 @@ must verify backup usability, chosen recovery point, migration parity, security
 catalog, application connection, Storage/configuration gaps, and both smoke
 harnesses. Record measured RPO/RTO and teardown approval.
 
-No recovery project is established by this repository. Creating one and
-performing the first drill are **FUTURE REQUIREMENTS** and require separate
-operator approval.
+P2 uses the operator-confirmed verified logical recovery method and completed
+operational restore evidence recorded in the closure evidence summary. Ongoing
+drills and any new recovery destination require their own operator approval;
+P2 closure does not establish managed PITR or authorize another restore.
 
 ## Secrets and evidence handling
 

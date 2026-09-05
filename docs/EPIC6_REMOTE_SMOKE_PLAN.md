@@ -1,8 +1,12 @@
 # Epic 6 Remote Smoke Runbook
 
-Status: **REMOTE-SAFE HARNESS CANDIDATE**. The harness has been implemented and
-validated against local Supabase only. Do not run it remotely until the target
-migration, backup prerequisite, and operator approval have all been confirmed.
+Status: **PRODUCTION SMOKE PASS — Epic 6 REMOTE CLOSED (2026-09-05)**.
+Run `epic6-smoke-20260905144629-8e8710f0`: 16 PASS / 0 FAIL / 0 SKIP;
+Security, Cleanup, and Overall PASS; operational/unexpected residue 0 and
+immutable expected evidence 0. See
+[P2 Remote Closure Evidence](P2_REMOTE_CLOSURE_EVIDENCE.md).
+Any future run still requires target, migration, backup, and operator approval
+to be confirmed again; this result is not permission to rerun production smoke.
 
 Before `-Execute`, `BackupConfirmed` means BR-1, BR-2, and BR-3 have all passed
 under the canonical
@@ -60,6 +64,10 @@ production approval, migration parity, required RPC signatures, RLS, raw table
 mutation grants, private helper execution grants, and SECURITY DEFINER
 `search_path`. It fails closed and performs no smoke fixture work if any check
 does not match.
+
+The search-path predicate is symmetrical with Epic 5: application functions
+require an empty path, with only the verified RLS event-trigger exception
+specified in [Security](SECURITY.md#remote-smoke-search-path-exception).
 
 Stop on project-ref mismatch, missing intent or approval, an unconfirmed backup,
 migration drift, a missing RPC, a security finding, fixture failure, any failed

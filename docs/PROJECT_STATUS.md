@@ -16,33 +16,49 @@ accepted product rules are canonical in
 | Epic 2 | Teacher Public Discovery | **CLOSED** |
 | Epic 3 | Trial Flow | **CLOSED** |
 | Epic 4 | Commerce | **CLOSED** |
-| Epic 5 | Entitlement & Lesson Credit | **LOCAL CLOSURE CANDIDATE** |
-| Epic 6 | Scheduling & Booking | **LOCAL CLOSURE CANDIDATE** |
+| Epic 5 | Entitlement & Lesson Credit | **REMOTE CLOSED** |
+| Epic 6 | Scheduling & Booking | **REMOTE CLOSED** |
 
-The handoff baseline for this governance update is Git commit
-`f3744472d22e01a509a808b4af4acf48717cbbd2`.
+The verified production smoke baseline is branch `main`, with Git `HEAD` and
+`origin/main` at `899906b556b4dc282538920baec8cdfb0546f6df` (ahead/behind 0/0).
+This documentation reconciliation follows that execution baseline.
 
 ## Remote closure state
 
-- P2-3A Backup / Recovery Runbook: **DONE — PASS WITH WARNINGS**.
-- Remote database: **UNCHANGED** by P2-3A and this governance update.
-- Remote latest migration reported at handoff:
-  `20260901000600_scheduling_booking_core.sql`.
-- Local latest migration:
-  `20260904001100_harden_commerce_service_role_authority.sql`.
-- Local-only migrations after the reported remote boundary: **18**.
-- A currently usable backup/restore point has not yet been proven. Deployment
-  gates BR-1, BR-2, and BR-3 therefore remain open.
+- **P2 Remote Closure: COMPLETE — 2026-09-05**.
+- Remote Deployment: **PASS**, target `ygxeihtcolpiulupieeq`.
+- Migration parity: **29 local / 29 remote; local-only 0 / remote-only 0**.
+- Local and remote latest: `20260904001100`
+  (`20260904001100_harden_commerce_service_role_authority.sql`).
+- Backup/recovery: **BR-1 PASS / BR-2 PASS / BR-3 PASS** at the approved
+  operation gates, using the verified logical recovery method. Freshness must
+  be rechecked for any future operation; no restore was rerun for closure docs.
+- Epic 5 production smoke: **15 PASS / 0 FAIL / 0 SKIP; Overall PASS**.
+  Run: `remote-smoke-epic5-20260905140007-98c7d02e`.
+  Security PASS; Cleanup PASS; operational residue 0; immutable expected
+  evidence 0; unexpected evidence 0.
+- Epic 6 production smoke: **16 PASS / 0 FAIL / 0 SKIP; Overall PASS**.
+  Run: `epic6-smoke-20260905144629-8e8710f0`.
+  Security PASS; Cleanup PASS; operational/unexpected residue 0; immutable
+  expected evidence 0. Both artifacts contain no errors.
+- [P2 Remote Closure Evidence](P2_REMOTE_CLOSURE_EVIDENCE.md) records evidence
+  provenance, timestamps, backup metadata, artifact hashes, and gate review.
 
-## Remaining closure sequence
+## Closure decision and next step
 
-1. Operator backup/restore capability verification.
-2. Remote Migration Preflight.
-3. Remote Deployment.
-4. Epic 5 Remote Smoke.
-5. Epic 6 Remote Smoke.
-6. Closure Documentation.
-7. Mark Epic 5 and Epic 6 **REMOTE CLOSED** only after all prior steps pass.
+The required sequence is complete: backup/restore capability verification →
+remote migration preflight → remote deployment → Epic 5 production smoke →
+Epic 6 production smoke → closure documentation. Both Epics satisfy the
+canonical schema/smoke criteria for **REMOTE CLOSED**.
+
+Next: **Epic 7 — Learning Map Core scope definition and approval** under
+[Canonical Roadmap](CANONICAL_ROADMAP.md). Implementation has not started in
+this task. No Epic numbering or accepted Product Decision changes are implied.
+
+Non-blocking operational follow-up: retain the external backups and smoke
+artifacts, maintain restore drills, and revalidate logical recovery when data
+is populated. The circular-FK dump warning involved tables verified empty at
+preflight. Managed backup/PITR coverage must not be inferred from logical dumps.
 
 ## Production payment boundary
 

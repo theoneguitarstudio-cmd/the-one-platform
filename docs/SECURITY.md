@@ -1,5 +1,27 @@
 # SECURITY
 
+## P2 remote closure verification
+
+Remote Deployment and Epic 5/Epic 6 production smoke are **PASS** as of
+2026-09-05; both Epics are **REMOTE CLOSED**. Both artifacts show all inspected
+security counts at 0, Cleanup PASS, and no run-scoped residue. Migration parity
+is 29/29 through `20260904001100`. See
+[P2 Remote Closure Evidence](P2_REMOTE_CLOSURE_EVIDENCE.md) for the execution
+baseline and run IDs. This does not complete the production payment-provider
+webhook or full production payment closure.
+
+## Remote smoke search-path exception
+
+Both runners retain the empty-search-path rule for application SECURITY DEFINER
+functions. The only non-empty exception requires all of: schema `public`, name
+`rls_auto_enable`, zero arguments, `event_trigger` return type, `postgres`
+ownership, and exact config array containing only `search_path=pg_catalog`.
+The same function OID must be bound to `ensure_rls`, event `ddl_command_end`,
+enabled state `O`, with exact tags `CREATE TABLE`, `CREATE TABLE AS`, `SELECT INTO`.
+Missing or non-matching conditions do not bypass the empty-path check. This
+documents the reviewed operational trigger; it does not relax application RPC
+policy or grant mutation authority. Both runners use the same predicate.
+
 ## Security incident recovery
 
 Remote rollout must stop on an RLS, grant, service-role authority, private
@@ -107,7 +129,8 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
 ## Operational work still required
 
 - Set real credentials only in local/Vercel environment settings.
-- Apply the versioned migration to a Supabase project and run the pgTAP suite.
+- The P2 versioned chain is deployed; future migrations still require their
+  own local database tests and remote recovery/deployment gates.
 - Configure the Supabase Site URL, redirect allowlist, email templates, SMTP,
   password policy, and production cookie/HTTPS behavior before launch.
 - A formal threat model, incident response policy, audit-log design, and
@@ -139,7 +162,7 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
 
 ## Epic 2 post-closure operational work
 
-- Epic 2 is included in the applied remote chain reported through `00600`.
+- Epic 2 is included in the applied remote chain through `20260904001100`.
   Future remote changes still require the canonical migration and recovery
   gates.
 - Establish an audited Admin assignment workflow and slug-change redirect
@@ -173,7 +196,7 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
 
 ## Epic 3 post-closure operational work
 
-- Epic 3 is included in the applied remote chain reported through `00600`.
+- Epic 3 is included in the applied remote chain through `20260904001100`.
   Future remote changes still require local pgTAP and the canonical migration
   and recovery gates.
 - Add durable privileged-operation audit events before production staff scale.
@@ -209,8 +232,10 @@ Define security-by-design requirements, data-handling rules, and secret-manageme
   until a real signature-verifying adapter and idempotent callback RPC exist.
 
 Operationally, provider secrets and manual bank instructions remain server-only
-environment configuration. A dedicated pre-push review is required before the
-new migration reaches remote Supabase.
+environment configuration. The P2 migration chain is deployed; future remote
+changes still require a dedicated review. Production payment-provider webhook
+processing remains **NOT COMPLETE**, blocking full production payment closure
+but not the completed Epic 5/Epic 6 schema/smoke closure.
 
 ## Epic 5 implemented baseline
 
@@ -257,6 +282,7 @@ new migration reaches remote Supabase.
   or failed manual attempt writes one immutable actor/role/result record and one
   central audit event; retries with the same key do not duplicate either.
 
-Before remote rollout, operators must confirm every purchasable existing
-`lesson_package` Product has an approved fulfillment config. Missing config
-fails checkout safely; no production value is guessed by the migration.
+Before future remote rollout or product activation, operators must confirm
+every purchasable existing `lesson_package` Product has an approved fulfillment
+config. Missing config fails checkout safely; no production value is guessed
+by the migration.

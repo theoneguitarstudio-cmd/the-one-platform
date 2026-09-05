@@ -1,5 +1,11 @@
 # Epic 5 Remote Smoke Runbook
 
+Status: **PRODUCTION SMOKE PASS — Epic 5 REMOTE CLOSED (2026-09-05)**.
+Run `remote-smoke-epic5-20260905140007-98c7d02e`: 15 PASS / 0 FAIL / 0 SKIP;
+Security, Cleanup, and Overall PASS; operational, immutable expected, and
+unexpected evidence totals all 0. See
+[P2 Remote Closure Evidence](P2_REMOTE_CLOSURE_EVIDENCE.md).
+
 ## Purpose and scope
 
 This harness verifies the deployed Epic 5 authority chain from paid commerce
@@ -9,9 +15,9 @@ append-only economic history. Epic 6 owns broader Booking, recurring, Fixed,
 Renewal, and Makeup coverage; this harness includes only the minimum downstream
 assertions needed to prove Epic 5 value-source integrity.
 
-Remote execution is an operator-controlled closure activity. The harness added
-by P2-4B is implemented and validated locally; it must not be run remotely as
-part of implementation review.
+Remote execution remains operator-controlled. The harness has passed local
+validation and the recorded production run; do not rerun it as part of
+implementation or documentation review.
 
 Before `-Execute`, `BackupConfirmed` means BR-1, BR-2, and BR-3 have all passed
 under the canonical
@@ -118,8 +124,10 @@ events/snapshots, or revoke operations.
 Execution stops unless every required RPC exists, every protected table has RLS
 enabled, authenticated has no generic raw mutation grant, service_role has no
 high-risk commerce/credit raw mutation grant, application roles cannot execute
-private mutation helpers, and all inspected SECURITY DEFINER functions pin an
-empty search path.
+private mutation helpers, and application SECURITY DEFINER functions pin an
+empty search path. The only non-empty-path exception is the verified
+`public.rls_auto_enable()` event trigger with all identity/configuration/binding
+checks described in [Security](SECURITY.md#remote-smoke-search-path-exception).
 
 ## Evidence
 
