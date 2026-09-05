@@ -122,10 +122,12 @@ function sqlLiteral(value) {
   return `'${String(value).replaceAll("'", "''")}'`;
 }
 
-function parseJsonRows(output) {
-  const start = output.indexOf("{");
-  if (start < 0) throw new Error("Supabase query returned no JSON object.");
-  return JSON.parse(output.slice(start)).rows ?? [];
+export function parseJsonRows(output) {
+  // CLI non-agent mode returns an array; agent mode wraps it in { rows }.
+  const payload = JSON.parse(output.trim());
+  if (Array.isArray(payload)) return payload;
+  if (payload && Array.isArray(payload.rows)) return payload.rows;
+  throw new Error("Supabase query returned neither a row array nor a rows envelope.");
 }
 
 async function runCommand(args) {
