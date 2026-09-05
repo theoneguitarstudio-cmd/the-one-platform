@@ -14,6 +14,23 @@ import {
 } from "./remote-smoke-test-epic6.mjs";
 
 describe("Epic6 remote smoke safety contract", () => {
+  it("keeps local targeting and pairs the remote project ref with --linked", async () => {
+    const runner = await readFile("scripts/remote-smoke-test-epic6.mjs", "utf8");
+    expect(runner).toContain('const targetArgs = options.local ? ["--local"] : ["--linked", "--project-ref", target.projectRef];');
+    expect(validateTargetGate(parseArgs(["--execute", "--local"]), null)).toEqual({
+      environment: "local-validation", projectRef: "local",
+    });
+    expect(() => validateTargetGate(parseArgs(["--local"]), null)).toThrow(/requires --execute/i);
+  });
+
+  it("requires an allowed environment, backup confirmation, and operator approval", () => {
+    const ref = "abcdefghijklmnopqrst";
+    const base = ["--execute", `--project-ref=${ref}`, `--expected-project-ref=${ref}`];
+    expect(() => validateTargetGate(parseArgs([...base, "--environment=development"]), ref)).toThrow(/environment must be/i);
+    expect(() => validateTargetGate(parseArgs([...base, "--environment=staging"]), ref)).toThrow(/backup confirmation/i);
+    expect(() => validateTargetGate(parseArgs([...base, "--environment=staging", "--backup-confirmed"]), ref)).toThrow(/operator approval/i);
+  });
+
   it("has all 16 required meaningful case IDs", () => {
     expect(validateCaseManifest()).toBe(true);
     expect(CASES).toHaveLength(16);

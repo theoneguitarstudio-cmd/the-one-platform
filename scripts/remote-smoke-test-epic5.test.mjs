@@ -15,6 +15,15 @@ import {
 } from "./remote-smoke-test-epic5.mjs";
 
 describe("Epic5 remote smoke safety contract", () => {
+  it("keeps local targeting and pairs the remote project ref with --linked", async () => {
+    const runner = await readFile("scripts/remote-smoke-test-epic5.mjs", "utf8");
+    expect(runner).toContain('const targetArgs = options.local ? ["--local"] : ["--linked", "--project-ref", target.projectRef];');
+    expect(validateTargetGate(parseArgs(["--execute", "--local"]), null)).toEqual({
+      environment: "local-validation", projectRef: "local",
+    });
+    expect(() => validateTargetGate(parseArgs(["--local"]), null)).toThrow(/requires --execute/i);
+  });
+
   it("has all 15 required meaningful case IDs", () => {
     expect(validateCaseManifest()).toBe(true);
     expect(CASES).toHaveLength(15);

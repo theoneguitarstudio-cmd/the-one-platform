@@ -261,7 +261,7 @@ export async function main(argv = process.argv.slice(2)) {
       const target = validateTargetGate(options, linkedProjectRef);
       evidence.project_ref = target.projectRef;
       evidence.environment = target.environment;
-      const targetArgs = options.local ? ["--local"] : ["--project-ref", target.projectRef];
+      const targetArgs = options.local ? ["--local"] : ["--linked", "--project-ref", target.projectRef];
 
       const preflightRows = await query(preflightSql(), targetArgs);
       const preflight = preflightRows[0]?.preflight;
