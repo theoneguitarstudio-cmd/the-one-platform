@@ -139,7 +139,7 @@ async function query(sql, targetArgs) {
   return parseJsonRows(stdout);
 }
 
-function preflightSql() {
+export function preflightSql() {
   const required = [
     "public.create_checkout_order(text,integer,text)",
     "public.admin_confirm_cash_payment(uuid,text,text)",
@@ -154,6 +154,8 @@ function preflightSql() {
     "public.materialize_recurring_lesson_occurrence(uuid,date,uuid,text)",
   ];
   const signatures = required.map(sqlLiteral).join(",");
+  // Supabase's reviewed RLS event trigger pins pg_catalog. All application
+  // functions still require an empty path; this is not a general allowlist.
   return `with required(signature) as (select unnest(array[${signatures}]::text[])),
   targets(name) as (select unnest(array['entitlements','lesson_credit_ledger','lesson_credit_reservations','entitlement_revoke_operations','orders','order_items','payments','payment_submissions','order_fulfillment_events','order_item_fulfillment_snapshots']::text[])),
   mutating_private as (select p.oid from pg_proc p where p.pronamespace='private'::regnamespace and p.prosecdef and p.prosrc ~* '(insert[[:space:]]+into|update[[:space:]]+|delete[[:space:]]+from)')
@@ -164,7 +166,13 @@ function preflightSql() {
     'authenticated_raw_mutation_grants',(select count(*) from information_schema.role_table_grants g join targets t on t.name=g.table_name where g.table_schema='public' and g.grantee='authenticated' and g.privilege_type in('INSERT','UPDATE','DELETE')),
     'service_role_high_risk_raw_mutation_grants',(select count(*) from information_schema.role_table_grants g join targets t on t.name=g.table_name where g.table_schema='public' and g.grantee='service_role' and g.privilege_type in('INSERT','UPDATE','DELETE')),
     'private_helper_application_execute',(select count(*) from mutating_private where has_function_privilege('anon',oid,'EXECUTE') or has_function_privilege('authenticated',oid,'EXECUTE') or has_function_privilege('service_role',oid,'EXECUTE')),
-    'unsafe_security_definer_search_path',(select count(*) from pg_proc p where p.prosecdef and p.pronamespace in('public'::regnamespace,'private'::regnamespace) and not coalesce(p.proconfig,array[]::text[]) @> array['search_path=""']::text[])
+    'unsafe_security_definer_search_path',(select count(*) from pg_proc p where p.prosecdef and p.pronamespace in('public'::regnamespace,'private'::regnamespace) and not coalesce(p.proconfig,array[]::text[]) @> array['search_path=""']::text[]
+      and not coalesce((p.pronamespace='public'::regnamespace and p.proname='rls_auto_enable'
+        and p.pronargs=0 and p.prorettype='event_trigger'::regtype and p.proowner='postgres'::regrole
+        and p.proconfig=array['search_path=pg_catalog']::text[]
+        and exists(select 1 from pg_event_trigger e where e.evtfoid=p.oid
+          and e.evtname='ensure_rls' and e.evtevent='ddl_command_end' and e.evtenabled='O'
+          and e.evttags=array['CREATE TABLE','CREATE TABLE AS','SELECT INTO']::text[])),false))
   ) as preflight;`;
 }
 
