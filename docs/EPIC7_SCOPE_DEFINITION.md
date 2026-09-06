@@ -1,15 +1,15 @@
 # Epic 7 — Learning Map Core: Scope Definition and Approval Package
 
-Status: **PRODUCT DECISIONS APPROVED AND INCORPORATED — FINAL BASELINE REVIEW PENDING**.
+Status: **APPROVED PLANNING BASELINE ESTABLISHED; LOCAL A–E AUTHORIZED**.
 Governance review date: 2026-09-06, Asia/Taipei.
-Canonical synchronization: **COMPLETE IN WORKING TREE — final owner authorization pending**.
-Epic 7 implementation: **NOT STARTED / NOT AUTHORIZED**.
+Canonical synchronization: **COMMITTED AND PUSHED** in `588811d1d5617788b162f4e0a275d64d6a248dce`.
+Epic 7 implementation: **LOCAL A–E AUTHORIZED; REMOTE F NOT AUTHORIZED**.
 The four Product Owner decisions are approved; they are not open questions.
-Technical names and designs below remain planning proposals constrained by
-those decisions. Final review and a separate commit/push instruction are still
-required before recording an Approved Planning Baseline.
-No application code, migration, database operation, page, API, or component is
-created by this package. No commit or push is authorized by this package.
+Technical names below are proposals constrained by those decisions. The
+subsequent Product Owner LOCAL autonomous authorization and per-slice contracts
+are recorded in [Epic 7 Local Execution](EPIC7_LOCAL_EXECUTION.md). Historical
+review statements below describe preparation, not current authorization.
+Local A–E commits are authorized; remote operations and F require a new gate.
 
 ## 1. Baseline, authority, and consistency findings
 
@@ -166,6 +166,11 @@ resource: video is not mandatory. Important nodes retain explicit Learn,
 Practice, Apply and Verify guidance as instructional content, without running
 the future practice or verification workflows. All six hierarchy layers are
 mandatory in a released map; the number and labels of groups are course data.
+
+Product Owner clarification after autonomous authorization: **0..N Resources
+applies to draft/construction; frozen/publish-ready Nodes require 1..N Resources
+and at least one Learning Objective**. No fixed resource kinds or combination
+is required. This clarifies the existing rule, without expanding scope.
 
 Parent identity is release-scoped. Composite references bind every placement
 to the same course and publication. Node identities cannot appear twice in
@@ -685,7 +690,7 @@ These are internal slices, **not new top-level Epics and not active tasks**.
 | Epic7-E — Local closure and upgrade evidence | B–D | Populated upgrade, clean rebuild, relevant regressions, representative vertical slice with cross-Level and version samples, security review and docs | AC-10/11/12/15/16/17. Exit: local closure recorded without full Level 1–6 content, diagnostic/workspace or publishing requirements. |
 | Epic7-F — Separately authorized remote verification | E plus fresh operational approval | Reviewed remote plan/ValidateOnly, recovery evidence, deployment and smoke artifacts only when authorized | AC-13/14, exact target/SHA/parity and cleanup reconciliation. Exit: remote closure evidence and canonical documentation reconciled. No automatic production execution. |
 
-## 17. Approval disposition and next step
+## 17. Historical approval disposition before baseline commit
 
 **Product-decision incorporation: PASS.** All four decisions are recorded as
 approved and consistently reflected in the model, migration proposal, security,
@@ -709,7 +714,7 @@ P2 COMPLETE, Epic 5/6 REMOTE CLOSED, and Epic 7 implementation NOT STARTED.
 Production payment closure remains incomplete. No production operation,
 migration, code, page, API or component is part of this task.
 
-## 18. Canonical synchronization record — documentation only
+## 18. Historical canonical synchronization record — documentation only
 
 The Product Owner authorized limited synchronization after the prior
 recommendation report. Changes below are complete in the working tree, not

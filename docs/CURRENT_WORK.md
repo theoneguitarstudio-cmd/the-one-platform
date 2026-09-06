@@ -4,14 +4,14 @@ Read this file first in every new ChatGPT or Codex conversation.
 
 ## Current phase
 
-**Epic 7 — Learning Map Core: PLANNING**
+**Epic 7 — Learning Map Core: LOCAL AUTONOMOUS EXECUTION (A–E)**
 
-**Product Approval Complete → Approved Planning Baseline Preparation**.
-The four Product Owner decisions are **APPROVED** and incorporated in
-[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md). Canonical documentation
-has been synchronized for final review. The planning package is
-**READY FOR APPROVED BASELINE**, but no baseline commit/push is authorized yet.
-Epic 7 implementation is **NOT STARTED / NOT AUTHORIZED**.
+Approved Planning Baseline **ESTABLISHED** at
+`588811d1d5617788b162f4e0a275d64d6a248dce`. The Product Owner subsequently
+authorized autonomous LOCAL A → E with a gate after each slice. Work begins
+with A contracts, not runtime schema. See [execution contracts](EPIC7_LOCAL_EXECUTION.md)
+and [approved scope](EPIC7_SCOPE_DEFINITION.md). Epic 7-F and all remote
+deployment/migration/smoke/cleanup remain **NOT AUTHORIZED**.
 
 ## Completed P2 baseline
 
@@ -26,13 +26,11 @@ See [Project Status](PROJECT_STATUS.md) and
 
 ## Next canonical step
 
-**Canonical synchronization → final review → approved planning baseline
-commit / push**. Synchronization is complete in the documentation working
-tree; await Product Owner final authorization before commit/push, then verify
-clean/synced Git state. Product approval and a planning commit do not authorize
-implementation. Any later implementation has its own security review, tests
-and deployment gates under [Canonical Roadmap](CANONICAL_ROADMAP.md).
-Preserve Epic 7–Epic 13 numbering and accepted Product Decisions.
+Complete A technical contracts, then proceed B → C → D → E only after each
+local gate passes. Security/integrity/canonical warnings stop execution.
+Local commits are authorized; no push before E closure. Stop after E for the
+operator remote gate. Preserve [Canonical Roadmap](CANONICAL_ROADMAP.md)
+numbering and accepted Product Decisions.
 
 Production payment-provider webhook processing is **NOT COMPLETE**. It blocks
 full production payment closure, not this completed schema/smoke remote closure.

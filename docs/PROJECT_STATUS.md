@@ -18,7 +18,7 @@ accepted product rules are canonical in
 | Epic 4 | Commerce | **CLOSED** |
 | Epic 5 | Entitlement & Lesson Credit | **REMOTE CLOSED** |
 | Epic 6 | Scheduling & Booking | **REMOTE CLOSED** |
-| Epic 7 | Learning Map Core | **PLANNING — implementation NOT STARTED / NOT AUTHORIZED** |
+| Epic 7 | Learning Map Core | **LOCAL EXECUTION AUTHORIZED A–E; A contracts in progress; F NOT AUTHORIZED** |
 
 The verified production smoke baseline is branch `main`, with Git `HEAD` and
 `origin/main` at `899906b556b4dc282538920baec8cdfb0546f6df` (ahead/behind 0/0).
@@ -26,21 +26,21 @@ This documentation reconciliation follows that execution baseline.
 
 ## Epic 7 planning milestone
 
-Current phase: **Product Approval Complete → Approved Planning Baseline
-Preparation**. All four Product Owner decisions are **APPROVED** and recorded
+Current phase: **Approved Planning Baseline ESTABLISHED → LOCAL A–E EXECUTION**.
+All four Product Owner decisions are **APPROVED** and recorded
 in [Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md): additive legacy Stage /
 course Level separation, representative initial content, advisory prerequisites
 with separate access and Self Complete, and joined-course workspace boundaries.
 
-Scope package: **READY FOR APPROVED BASELINE**. Canonical synchronization is
-complete in the documentation working tree; final review and Product Owner
-authorization to commit/push remain pending. The preparation baseline is
-`main` at `82b1f25e6db3075c4d619c19440e4e94d20891c8`, distinct from the historical
-smoke SHA above. No new planning commit or implementation is claimed.
+Scope package: **APPROVED BASELINE ESTABLISHED** by pushed documentation commit
+`588811d1d5617788b162f4e0a275d64d6a248dce`, following the preparation SHA
+`82b1f25e6db3075c4d619c19440e4e94d20891c8`. Neither is the historical smoke SHA.
 
-Epic 7 implementation: **NOT STARTED / NOT AUTHORIZED**. Product approval,
-documentation readiness and a later planning commit are separate from
-implementation authorization. Epic7-A–F are internal slices, not new Epics.
+The subsequent Product Owner instruction authorizes autonomous LOCAL A–E,
+with per-slice checks and local commits; F remains NOT AUTHORIZED. A starts
+with technical contracts and no runtime schema. Actual results belong in
+[Epic 7 Local Execution](EPIC7_LOCAL_EXECUTION.md), not inferred from approval.
+Epic7-A–F are internal slices, not new Epics.
 
 ## Remote closure state
 
@@ -70,11 +70,9 @@ remote migration preflight → remote deployment → Epic 5 production smoke →
 Epic 6 production smoke → closure documentation. Both Epics satisfy the
 canonical schema/smoke criteria for **REMOTE CLOSED**.
 
-Next: **Product Owner final review/authorization → commit the approved Epic 7
-planning documentation baseline → push origin/main → verify clean/synced Git**.
-Implementation remains NOT AUTHORIZED under
-[Canonical Roadmap](CANONICAL_ROADMAP.md). No Epic numbering or accepted Product
-Decision changes are implied by this planning milestone.
+Next: **A contracts → gated LOCAL B–E → STOP for operator review** under
+[Canonical Roadmap](CANONICAL_ROADMAP.md). No automatic remote operation or
+Epic 8–13 implementation is authorized.
 
 Non-blocking operational follow-up: retain the external backups and smoke
 artifacts, maintain restore drills, and revalidate logical recovery when data
