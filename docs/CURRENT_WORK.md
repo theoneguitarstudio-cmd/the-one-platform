@@ -28,6 +28,16 @@ See [Project Status](PROJECT_STATUS.md) and
 
 ## Next canonical step
 
+Post-preservation update (2026-09-07 Asia/Taipei): the original F tools/evidence
+were saved locally at `c61cdb6c757499b875fc9e9f41657f8b2c1a4ef1`, not pushed.
+The tested application/migration candidate remains `d5f98434106797afc65c59953aa3bc61ba26ecb4`.
+Use `node scripts/epic7-preserved-validation.mjs --validate-only` for fixed-content
+offline verification after preservation; prerequisites and limitations are in
+[the appended verification record](EPIC7_F_LOCAL_TOOLING_EVIDENCE.md).
+Recovery drill versus service recovery and per-branch coverage/retention proposals
+are now explicit in the linked existing documents; all remain NOT APPROVED.
+The following uncommitted wording describes the original preparation snapshot.
+
 STOP for review of the uncommitted F local tools, [37-case coverage](EPIC7_F_CASE_COVERAGE.md)
 and [recovery authorization package](EPIC7_RECOVERY_AUTHORIZATION_PACKAGE.md).
 All 34 migration files remain unchanged. Previous F read-only evidence confirms remote 29,

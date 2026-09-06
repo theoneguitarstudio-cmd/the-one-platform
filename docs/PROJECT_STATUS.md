@@ -62,6 +62,14 @@ Epic7-A–F are internal slices, not new Epics.
 
 ## Epic7-F local readiness preparation
 
+Post-preservation note (2026-09-07 Asia/Taipei): F tooling/evidence was saved locally
+in `c61cdb6c757499b875fc9e9f41657f8b2c1a4ef1`; historical test candidate stays d5f9843.
+Fixed preserved-content verification is separate from the original HEAD guard;
+it grants no execution authority. Recovery service/drill distinctions and phased
+coverage/retention terms are proposals, not accepted closure conditions.
+Earlier A–E Turbopack failure and push-ready statements are historical; later F
+isolated builds passed, while hosting/push safety remains unverified/unapproved.
+
 Current F local preparation is recorded separately in [tooling evidence](EPIC7_F_LOCAL_TOOLING_EVIDENCE.md),
 [coverage](EPIC7_F_CASE_COVERAGE.md), and [recovery package](EPIC7_RECOVERY_AUTHORIZATION_PACKAGE.md).
 It includes offline ValidateOnly, local target protections, synthetic rehearsal and pinned-tool builds;

@@ -141,3 +141,84 @@ P04/P05/P06/R04 LOCAL PASS 不取代正式 authority 缺席的 REMOTE BLOCKED。
 shipped deny-only scope 與正向 coverage 的處理；沒有已核准 defer contract，不降低驗收、不要求先做完整 Epic8。
 Epic7 A–E LOCAL CLOSED，Epic5/6 REMOTE CLOSED，payment webhook NOT COMPLETE；沒有新增未來 scope blocker。
 本輪不 stage/commit/push、不改 34 migrations/product schema/application/RLS/grants source、無正式操作。
+
+## 保存後固定內容驗證與契約收斂（2026-09-07 Asia/Taipei）
+
+以上為原本機準備時點的證據，未重寫其「未提交」狀態或舊results。原候選d5f9843的application/migrations
+與受測工具已於 `c61cdb6c757499b875fc9e9f41657f8b2c1a4ef1` 本機保存，未push；本節工作開始為main、
+clean、相對本機origin/main 588811d為6/0。原入口因HEAD不是d5而拒絕是可重現限制，不能靠改candidate字串解決。
+原工具沒有同時驗application完整內容與全部tool hashes的接續CLI；直接呼叫validate({head:...})只是測試注入，
+不是合法版本证明。因此保留9個工具與舊manifest bytes不變，另增兩個專用檔（不是第二套DB/授權框架）：
+[驗證入口](../scripts/epic7-preserved-validation.mjs) 與 [局部測試](../scripts/epic7-preserved-validation.test.mjs)。
+獨立檔的必要性是不能修改舊受測runner/manifest而冒稱其舊hash仍有效；新入口只證明固定保存內容等價。
+
+### 四個版本身份與驗證界線
+
+1. 原application/migration candidate：`d5f98434106797afc65c59953aa3bc61ba26ecb4`。
+2. 原受測工具：舊manifest的9個SHA-256，保存前最後case manifest只補evidence/status，已另跑offline/safety。
+3. 保存commit：`c61cdb6c757499b875fc9e9f41657f8b2c1a4ef1`，其唯一parent固定為d5；原17檔diff無app/migration。
+4. 本輪驗證器：新檔bytes由本節SHA-256與提交後ignored receipt綁定，不把它說成當時SQL/build用的工具。
+
+新入口從固定c61 Git commit/tree/blob鏈讀取，逐object驗SHA-1/type/size，並驗固定parent/candidate object。
+比較當前269個已保存非docs/非.env檔的Git內容；只對Git正常文字CRLF→LF，binary不改。
+原9工具/34 migrations再按保存的舊manifest逐一比對**raw SHA-256**，不接受重算的manifest。
+docs可追加新契約，但舊manifest固定、machine cases固定、原37IDs仍由舊validator驗；受保護source/scripts/tests/
+public/migrations出現未列新增檔也拒絕。僅兩個本輪reviewed驗證檔是明列新增例外。
+不接受candidate/HEAD override、任意ancestor或--yes。不是忽略SHA：以固定object鏈與實際完整受保護內容
+替代不適用於保存commit的HEAD相等式；在相同內容的後續文件commit可驗，不代表新HEAD已做舊SQL/build。
+通過全部內容檢查後才import已比對的舊runner，向其測試介面提供已證明的candidate，executionAllowed永遠false。
+這是本機content verification，**不授權local rehearsal/production execution**；舊執行入口的HEAD guard維持不變。
+
+新驗證器本身是reviewed code信任起點，不能以自行回報hash證明自身未遭改寫；執行前以此已reviewed SHA或
+保存commit的Git blob核對新驗證器/測試。不把任意修改的新驗證器列入可接受組合，也不內嵌自身最終commit SHA。
+目前source SHA-256：`f0394a2b0732a2de5e41aeaf57e73ca6ff4f53c6cb8d4fc28ef4732e6f82c74f`；
+test SHA-256：`d03bbfb6ae07ba5a63bb0a0bc7a73abcb7563c823e8f05fc6424987bcca7ac56`。
+
+### 可重現命令與offline object cache
+
+工作目錄 `C:/Projects/the-one-platform`；Node 24.19.0（本輪sandbox），未安裝或升級依賴。
+實際執行：`node scripts/epic7-preserved-validation.mjs --validate-only`；
+`node --test scripts/epic7-preserved-validation.test.mjs`；只lint兩個新檔。
+13/13 PASS：固定內容、偽candidate參數、production/yes、app/migration/tool/cases/manifest篡改、candidate object
+替換、缺object；真實CLI在既有network/process/.env tripwire下PASS，0 DB/SQL/network，executionAllowed=false。
+沒有重跑SQL/races/雙build；9舊工具、34SQL與app內容未變，沿用原限定範圍結果。新結果只覆蓋新驗證器。
+
+Git有packed objects；初版只讀loose object失敗（7/13），補offline已驗hash object cache後發現既有Git文字CRLF
+差異（12/13），改為上述Git文字比對加原raw hashes後13/13。這些是本輪驗證器修正，不是候選產品缺陷；
+沒有修改舊logs或用新hash掩蓋未測工具。CLI不啟動git、不fetch或unpack；缺object/cache則拒絕。
+cache只含固定Git中已提交的object bytes，不是正式DB資料；不提交Git。可在**本機已有兩個commit時**
+用以下唯讀Git命令建立；GIT_NO_LAZY_FETCH=1，未授權fetch，缺物件即失敗。它只準備cache，不是ValidateOnly：
+
+```powershell
+@'
+const fs=require('fs'),cp=require('child_process'),z=require('zlib'),crypto=require('crypto');
+const git=(...a)=>cp.execFileSync('git',['--no-replace-objects',...a],{env:{...process.env,GIT_NO_LAZY_FETCH:'1'},maxBuffer:16*1024*1024});
+const ids=new Map();
+for(const c of ['c61cdb6c757499b875fc9e9f41657f8b2c1a4ef1','d5f98434106797afc65c59953aa3bc61ba26ecb4']){
+ ids.set(c,'commit');ids.set(git('rev-parse',c+'^{tree}').toString().trim(),'tree');
+}
+for(const row of git('ls-tree','-r','-t','c61cdb6c757499b875fc9e9f41657f8b2c1a4ef1').toString().trim().split('\n')){
+ const[,type,id]=row.split(/\s+/);ids.set(id,type);
+}
+const bundle={};
+for(const[id,type]of ids){
+ const b=git('cat-file',type,id),raw=Buffer.concat([Buffer.from(type+' '+b.length+'\0'),b]);
+ if(crypto.createHash('sha1').update(raw).digest('hex')!==id)throw Error('hash');
+ bundle[id]=z.deflateSync(raw).toString('base64');
+}
+fs.mkdirSync('artifacts/remote-smoke/epic7-preserved-validation',{recursive:true});
+fs.writeFileSync('artifacts/remote-smoke/epic7-preserved-validation/objects.json',JSON.stringify(bundle));
+'@ | node
+```
+
+本機cache已建立381個verified objects；保存cache不是信任其內容，讀取時仍按固定Git物件鏈驗hash。
+本輪最終commit身份、Node、兩個新工具hash與ValidateOnly結果放同目錄post-commit.json，提交後產生，
+不將最終SHA回寫本文件、不amend。此receipt只是此次執行紀錄，不是production approval。
+
+### Canonical交接差異與待審內容
+
+CURRENT_WORK原「uncommitted」是保存前描述，已追加c61保存註記；PROJECT_STATUS保留A–E歷史Turbopack失敗，
+F後續兩種build PASS見本文件，不回寫成A–E當時通過。Local Execution的push-ready YES也是舊機械準備判斷，
+不可覆蓋後續hosting未查明與PUSH NOT AUTHORIZED。P2的早期next Epic7文字是歷史，不倒退目前A–E/F進度。
+新[coverage條款](EPIC7_F_CASE_COVERAGE.md)與[兩條復原路徑](EPIC7_RECOVERY_AUTHORIZATION_PACKAGE.md)
+均NOT APPROVED；保留Epic5/6 REMOTE CLOSED、Epic7 REMOTE CLOSED NO及payment webhook NOT COMPLETE。

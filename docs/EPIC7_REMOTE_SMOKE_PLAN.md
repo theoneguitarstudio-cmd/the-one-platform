@@ -5,6 +5,8 @@
 本文件不授權 production migration、fixture、smoke、cleanup 或 restore。
 後續 [本機 tooling](EPIC7_F_LOCAL_TOOLING_EVIDENCE.md) 與 [37-case coverage](EPIC7_F_CASE_COVERAGE.md)
 已完成離線 ValidateOnly／isolated rehearsal；沒有 production writer。以下 NOT RUN 指正式案例。
+保存後追加：[分支驗收與C類預算草案](EPIC7_F_CASE_COVERAGE.md) 保留原37案，分開拒絕／成功分支、
+學生開放前補驗責任、資料保留與隔離替代；均NOT APPROVED，不修改此處原始要求或REMOTE NOT RUN。
 依 [Scope](EPIC7_SCOPE_DEFINITION.md)、[Local Execution](EPIC7_LOCAL_EXECUTION.md)、
 [Security](SECURITY.md) 與 [recovery runbook](REMOTE_BACKUP_RECOVERY_RUNBOOK.md) 設計。
 

@@ -2,6 +2,8 @@
 
 前輪稽核：**COMPLETE WITH WARN / EVIDENCE GAPS**。正式執行：**NOT READY / NOT AUTHORIZED**。
 後續本機工具、演練、版本重現與恢復準備見 [本機工具證據](EPIC7_F_LOCAL_TOOLING_EVIDENCE.md)。
+保存後版本驗證及復原/驗收契約收斂已追加至同一evidence、coverage與recovery package；沒有新遠端查詢。
+本頁舊BR時間快照與「缺ValidateOnly」描述是原稽核時點，現行本機工具已完成，正式executor仍未交付。
 下列數值保留前輪的查證時間，不冒稱本輪重新查閱遠端。
 查證日期：2026-09-06；時間基準為 UTC，彙整快照 `2026-09-06T13:34:25Z`。
 這是本輪唯讀及靜態稽核紀錄，不是部署、backup、smoke 或 cleanup 授權。

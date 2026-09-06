@@ -57,3 +57,73 @@
 - G03 的 corrupted graph guard 是既有 local-only corruption regression，不能搬到 production；正式僅 catalog binding + 正常 freeze 路徑。
 - H/C/V 複合目的由 structure/content/closure 三套共同支持，不以單一 source 連結宣稱每個排列組合都被窮舉。S03 亦由 progress role-loss/inactive tests 支持；S02 補新 runtime role denials。
 - 實際 source 類別與逐案 sequence/trigger/transaction/lock/API 風險宣告在 [machine manifest](../scripts/epic7-readiness-cases.json)。
+
+## 保存後驗收草案（NOT APPROVED；不改37案原要求）
+
+歷史版本：application/migrations d5f9843；上述最終local run及工具manifest原bytes保存於c61cdb6。
+本節只有分支分析/待審條款，所有REMOTE仍NOT RUN；原表LOCAL PASS不是混合案例每一正式分支已驗證。
+正式拒絕分支目前也沒有新執行證據。case ID的R前綴代表race案例，不等於資料處置R（rollback-only）；
+R01–R04的跨session fixture屬C（committed）。
+
+| 案例/分支 | 原要求及正式仍應驗證 | 本機證據/版本 | 合法前置與目前阻礙 | 提案處理/實際結果/approval |
+| --- | --- | --- | --- | --- |
+| P04 denial | 無course-use authority時get/set拒絕、activity/request零寫入；不可冒稱opened成功 | d5 + preserved tools progress regression拒絕分支 | G0、reviewed actors/harness；目前G0未成立 | 第一期正式查拒絕與零影響，與P01共享證據需註明；REMOTE NOT RUN / NOT APPROVED |
+| P04 success | opened/resume/revisit/self-complete set/clear；opening不自動complete、advisory非強制 | 同版本synthetic authority + authenticated Student RPC；LOCAL PASS | 真實approved authority；候選false，成功分支BLOCKED | 第二期在真實authority接通且學生開放前補驗；現在NOT RUN / NOT APPROVED |
+| P05 denial | 無authority／失去資格須拒絕、不泄漏/改寫他人資料；不能以早期deny證明下游scope validator | local progress ownership/eligibility fixtures；LOCAL PASS | G0；正式可驗early deny，但合法success上下文缺 | 第一期只報已到達拒絕；REMOTE NOT RUN / NOT APPROVED |
+| P05 authorized scope/history | 兩Student、兩Course、V1/V2與Node/resource隔離；資格喪失history保留 | 同版本synthetic正向與version isolation；LOCAL PASS | approved eligible→lost lifecycle及history fixture，未具備 | 第二期補跨subject/course/version、V1不重綁、lost-history；NOT RUN / NOT APPROVED |
+| P06 denial | deny-only操作不得產生formal-domain rows；不是成功self-complete後的語意證明 | local denied writes及formal domain checks | G0；早期deny不能到達all-completed狀態 | 第一期可記零formal影響；REMOTE NOT RUN / NOT APPROVED |
+| P06 completed semantics | all Nodes self-complete後仍無VERIFIED/mastery/assessment/certificate/legacy Stage completion | local authorized fixture全部Nodes完成後assertions；LOCAL PASS | P04 success與完整Node fixture，未具備 | 第二期必驗formal counts/digests不變；NOT RUN / NOT APPROVED |
+| R04 denied concurrent calls | 同時denied get/set不能繞過authority、不能留下activity/receipt | 既有local負向與race是分開證據；未聲稱專門remote denied-race已跑 | G0 + reviewed multi-session harness；尚需工程實作此分支 | 第一期提案，不能替代正向race；REMOTE NOT RUN / NOT APPROVED |
+| R04 successful races | 首次競爭寫入、correction後old retry、跨Node同key；receipt/revision/no overwrite | d5 progress-concurrency三情境LOCAL PASS，local stub才可到達 | 真實authority + C retained manifest；皆未核准 | 第二期學生開放前補驗全部三情境；NOT RUN / NOT APPROVED |
+
+分期條款草案：Phase 1僅可接受明確列出的shipped deny-only正式結果與local-only成功分支證據作為
+「有限範圍驗證紀錄」，不自動滿足完整Epic7 REMOTE CLOSED。原scope未授權此替代；若reviewer要用它
+支持結案，須另審最小修訂：逐列原AC/缺失分支、證據接受範圍、補驗責任與禁止學生開放的release gate。
+本文件不覆蓋scope或先行核准修訂；未接受則完整closure維持pending。
+Phase 2觸發：任何真實course-use authority整合，或準備向學生開放get/set activity，以較早者為準。
+Codex/工程負責上述P04成功、P05隔離及lost-history、P06語意、R04三race與相關拒絕回歸；
+產品/驗收負責人批准coverage，release owner驗證全部指定artifact及residue後才可開放。具名負責人待填。
+這不授權Epic8 implementation，也不取消其獨立scope/權限審查。
+
+## C類fixture與保留條款草案（NOT APPROVED）
+
+R01 shared draft、R02 freeze retry、R03 freeze/edit、R04 activity races都需要已提交、跨session可見的
+基礎fixture；獨立連線不能讀另一transaction未提交資料。各race的成功transaction也會commit。
+下面是**一次完整四案run的待審總上限**，不是已存在正式資料數量、不是執行授權或已實作的enforced budget。
+executor須在寫入前展開逐表預算與expected delta；不能符合上限就先改提案送審，不自動加量。
+
+| 表/種類 | 一次run提議上限 | 依賴/保留 |
+| --- | ---: | --- |
+| auth.users / profiles / user_roles | 12 / 12 / 24 | 合成actors；按實際approved角色最小化；不得刪actor造成audit/FK破壞 |
+| system_courses / learning_maps / curriculum_publications | 2 / 2 / 4 | 每課程map、V1/V2，不當作課程發佈授權 |
+| curriculum_stages / learning_modules / learning_nodes | 4 / 6 / 8 | stable identities，version references保存 |
+| curriculum_stage_versions / learning_module_versions / learning_node_versions | 8 / 12 / 16 | frozen placements不可承諾刪除 |
+| learning_resources / learning_resource_versions / learning_node_resources | 10 / 20 / 40 | descriptor不呼叫外部provider，無真媒體/secret |
+| learning_objectives / learning_objective_versions / learning_objective_skills | 8 / 16 / 16 | 每frozen Node至少Objective/Resource；不固定媒體組合 |
+| learning_skills / content_contributors / learning_author_credits | 4 / 4 / 16 | shared語意/署名，不授予權限 |
+| learning_capabilities / learning_node_capability_attachments / learning_node_prerequisites | 8 / 16 / 16 | metadata/DAG；不能產生workflow或eligibility |
+| learning_mutation_receipts / audit_logs | 64 / 64 | 只計本run新增；exact retry不增加；append-only evidence保留 |
+| learning_self_activity / learning_activity_requests | 16 / 32 | R04真實authority前置；owner/version/request identity不可混用 |
+| 其他舊域資料 | 0新增/0變更 | baseline seeds不計新增；任何未列寫入先STOP，不借用業務真資料 |
+
+工程須用UUID隨機分配器產生未執行run manifest：run-id、每個actor/course/map/publication/node/resource/
+request UUID、表/角色/用途/版本、case歸屬、expected counts/digests、上限、保留分類；查collision只可在另授權
+唯讀前置階段，collision則重送manifest而非覆寫。owner核准manifest hash/retention/期限/存取者後才能創建。
+目前正式UUID/run-id未分配，沒有正式fixture已存在的宣稱。
+
+待選方案A：正式保留C資料。須明確接受stable/frozen/audit/receipts及actor依賴長期存在；無公共cleanup RPC，
+不能承諾測後全刪；到期要合法產品/政策處置，不能owner SQL刪audit。未核准永久保留不是預設可執行方案。
+待選方案B：C案例只在已核准隔離環境演練。保留LOCAL/ISOLATED證據，production concurrency coverage明示缺口；
+需acceptance reviewer批准最小替代契約，不能以隔離PASS冒稱REMOTE PASS。兩方案均未選定/未核准。
+Unexpected residue一律FAIL/STOP，獨立session核對全部manifest表及legacy digests，記expected immutable/
+operational/unexpected；不立即DELETE/repair，不停RLS/trigger、不reset sequence。sequence/WAL/API等影響
+另列，不假設rollback全消失；真實資料處置也不可借用已核准synthetic container disposal。
+
+## 正式executor工程責任（尚未交付，不只差簽名）
+
+須交付固定target/candidate及已部署34/latest檢查、當次BR與時間窗驗證、approved case/retention manifest
+hash核對、最小actor fixture及role context、transaction sentinel/savepoint、bounded statement/lock/session
+timeout、任何error停止後續依賴、rollback失敗不輸出PASS、連線關閉、獨立residue reconciliation、
+case/UTC/session/SQLSTATE/digest/retained inventory artifacts、redaction與fail-closed regression。
+新增budget/UUID/collision/retention方案須可被工具驗證，不能只靠文書。此工作將來需另授權，
+本輪保留production固定拒絕，未新增writer；舊37IDs/原AC/所有REMOTE NOT RUN不變。
