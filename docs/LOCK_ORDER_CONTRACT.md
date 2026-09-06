@@ -7,6 +7,14 @@ explains its resource vocabulary, branch-aware graph, and review rules.
 
 ## Scope and vocabulary
 
+Epic 7 local foundation adds `learning_create_course`, `learning_create_draft`
+and `learning_put_structure` to the explicit inventory (103 total). They are
+single Course/Map aggregate operations followed only by terminal audit append.
+Creation uses a Course advisory identity or Map row lock; structure edits lock
+the draft version before placements. No existing Commerce/Entitlement/
+Scheduling resource is acquired. Private invoker helpers execute only within
+these authorized owner RPCs and have no application EXECUTE grants.
+
 The contract inventories every mutation-capable `SECURITY DEFINER` function in
 the `public` and `private` schemas. A function is either managed by the lock
 graph or explicitly exempt because it is a single-aggregate/catalog mutation or

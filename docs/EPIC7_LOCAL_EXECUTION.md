@@ -153,7 +153,7 @@ rollback disables new use, not deletion of frozen content/learner history.
 | Slice | Status | Evidence |
 | --- | --- | --- |
 | A | PASS | Contracts/security/legacy review PASS; 192/192 application tests; ESLint PASS; diff check PASS; 45 relative links valid; only four authorized documentation files changed; migration tests N/A (no DDL) |
-| B | NOT STARTED | Depends on A PASS |
+| B | PASS | Two additive migrations; 23 structure/security and 29 lock assertions; 192 application tests; ESLint/diff PASS; PostgreSQL function lint zero errors; 13 baseline table snapshots unchanged after populated 29 → 31 upgrade |
 | C | NOT STARTED | Depends on B PASS |
 | D | NOT STARTED | Depends on C PASS |
 | E | NOT STARTED | Depends on D PASS |
