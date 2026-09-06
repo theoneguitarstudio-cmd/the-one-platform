@@ -1,6 +1,9 @@
 # SYSTEM ARCHITECTURE
 
-## Epic 6 — Scheduling & Booking Core (implemented locally)
+## Epic 6 — Scheduling & Booking Core (REMOTE CLOSED)
+
+P2 remote closure is complete; see [Project Status](PROJECT_STATUS.md) for
+historical deployment, recovery and smoke evidence.
 
 One-on-one teaching is a first-class domain beside LMS membership. Scheduling
 owns availability, booking behavior, recurring-series semantics, exceptions,
@@ -60,6 +63,9 @@ independent of Teacher teaching status.
 
 **Implementation status:** documentation only. These are future
 modular-monolith boundaries, not deployed tables, APIs, workers, or migrations.
+The four Epic 7 product decisions are approved in
+[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md); implementation remains
+**NOT STARTED / NOT AUTHORIZED**.
 
 Membership and System Course are separate concepts. A Membership Catalog links
 approved System Courses to plans through inclusion/access policy and
@@ -70,7 +76,7 @@ Roadmap 2.0 is the first flagship course, not a singleton platform assumption.
 | --- | --- | --- |
 | System Course | Course identity, objectives, authorship, curriculum/Map association | Billing plan, access authority, settlement |
 | Learning Map | Course-scoped maps, stages/levels, modules, nodes, standards, practice requirements, provider-neutral resources | Billing, review decisions, certificates |
-| Learning Progress | Student activity and node state | Subscription lifecycle or reviewer authorization |
+| Learning Progress | Private personal activity and explicit Self Complete foundation in Epic 7 | Enrollment, subscription lifecycle, formal verified/assessed outcomes or reviewer authorization |
 | Assignments & Evidence | Submission instructions, evidence, private assets | Public content delivery/certificates |
 | Reviews & Verification | Assignment, rubric feedback, human decision | Role assignment or plan billing |
 | Assessment & Achievement | Assessment and immutable completion/certificate records | Active membership state |
@@ -83,15 +89,52 @@ Commerce is not entitlement; entitlement is not achievement; achievement is
 not a subscription row. A subscription affects future capability access, never
 the survival of verified history.
 
+Epic 7 uses the generic Course → Learning Map → Stage/Level → Module → Node →
+Resource hierarchy. The existing five-stage `learning_map_stages` catalog and
+its Teacher/Trial references stay intact. New course-scoped Stage/Level IDs
+are distinct; Guitar Roadmap uses Level 1–6, other courses their own structure.
+Only explicit future mapping/policy may relate them; no 1:1 identity binding
+or inherited Teacher authority is implied.
+
+Epic 7's representative content slice verifies multiple Modules/Nodes,
+multi-Resource links, objectives/skills, advisory prerequisites, ordering and
+versions. It does not require all six Levels' formal content. Immutable
+version snapshots and minimal internal/Admin inspection are foundations, not
+an Epic 13 Creator approval or production publishing system.
+
 ### Resource-provider boundary
 
 `learning_resources` will abstract video, article, PDF, diagram, tab,
-chord-chart, audio, backing/practice track, download, assignment, external
-link, and future interactive-tool resources. Video provider may be YouTube,
-VdoCipher, Cloudflare Stream, Mux, internal, or another provider. YouTube can
-be free and carries no entitlement requirement. VdoCipher is only a premium
-provider: a short-lived playback token comes from a server-side entitlement
-check and never from the browser.
+chord-chart, audio, backing/practice track, download, external link, and
+self-check/instructional material. Each Node has a variable ordered set of
+Resources, not a single video or fixed horizontal columns. Future submission,
+async review, verification and assessment use optional capability attachment
+points; they are not Resource delivery or workflow records.
+
+Video providers may include YouTube, VdoCipher, Cloudflare Stream, Mux or
+internal services. Provider identity is not access authority. Epic 8 decides
+resource/capability use through Membership Plan + Inclusion/Access Policy +
+Entitlement; no PDF = Plus or Review = Pro constant exists. A deliberately
+free resource may be available under that policy. Protected playback tokens
+are issued server-side after authorization, never from browser claims.
+
+### Progress, access and workspace boundaries
+
+Advisory prerequisites do not prevent skipping ahead when target access allows.
+Prerequisite != Access/Entitlement != formal Verification/Assessment. Personal
+Self Complete neither certifies mastery nor creates formal Level completion,
+verification, assessment pass or achievement. Formal outcomes remain Epic 10/11.
+
+Course/Node support for review is content metadata; Student eligibility is
+Epic 8 authority; actual upload, assignment, feedback and resubmission is
+Epic 10 execution. Epic 7 exposes stable structure/resource/version IDs and
+capability attachment points without implementing these engines.
+
+Epic 9's personal workspace/map requires formal course joining/use eligibility.
+A recommendation or suggested starting Level grants neither enrollment nor
+certification; no unjoined Course gets a 0%/Level-progress personal roadmap.
+Diagnosis/recommendation journeys remain future interface notes, not assigned
+new Epics or Epic 7 blockers. No production Student Workspace is part of Epic 7.
 
 ### Human verification and multi-teacher review
 
@@ -100,8 +143,11 @@ go to the current Teacher, a pool, a stage specialist, or manual Admin
 assignment, based on
 authorized stage capability and eventually language/workload/expertise rules.
 No automatic dispatch is introduced here. Existing
-`teacher_stage_capabilities` is the future base for `teach`, `review`,
-`assess`, `mentor`, and `content_author`. AI may assist preparation or
+`teacher_stage_capabilities` retains its legacy Stage 1–5 scope. Future `teach`,
+`review`, `assess`, `mentor`, and `content_author` authority needs explicit
+course/stage capability policy; legacy assignments do not automatically apply
+to new Levels. Content authorship is neither access nor revenue authority.
+AI may assist preparation or
 recommendations, but no AI can formally verify, assess, or certify.
 
 Status: Draft

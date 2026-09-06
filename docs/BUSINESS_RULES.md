@@ -39,20 +39,43 @@
 
 ## Learning Verification & Membership architecture proposal
 
-**Status:** future policy direction only. No LMS or subscription behavior is
-implemented by this documentation update.
+**Status:** Epic 7 product rules below are synchronized with the four approved
+decisions in [Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md); later-epic
+policies remain future scope. Implementation is **NOT STARTED / NOT AUTHORIZED**.
+No LMS or subscription behavior is implemented by this documentation update.
 
 ### Learning and verification
 
-- The curriculum hierarchy is map → stage → module → node → resources →
-  practice → evidence → verification. Stage 1–5 remain the approved canonical
-  progression.
+- The structural hierarchy is System Course → Learning Map → Stage/Level →
+  Module → Node → Resource. Existing Stage 1–5 is the preserved legacy
+  Teacher/Trial classification; new stages/levels are course-scoped. Guitar
+  Roadmap uses Level 1–6; other courses choose their structure. No identity
+  equality or implicit 1:1 mapping is allowed; future mapping is explicit policy.
+- Epic 7 content is a representative production-like vertical slice exercising
+  multiple Modules/Nodes, multi-Resource Nodes, objectives, Skill Mapping,
+  prerequisites, ordering and versioning. Full Level 1–6 content is not required
+  for closure. Internal inspection/version foundations are not a Creator CMS
+  or production publishing workflow; those operations belong to Epic 13.
 - Nodes declare objectives, prerequisites, practice requirements (for example
   tempo/BPM, repetitions, duration, or required artifact), verification method,
   pass criteria, and standard version.
+- A Node is not one video: learning/practice videos, guidance, PDF, audio,
+  backing tracks and self-check instructions form a variable resource set.
+  Submission/async review/verification/assessment may be supported as optional
+  capability attachments; no fixed set is mandatory for every Node.
+- Prerequisites are advisory, not hard progression blocks. Students may skip
+  ahead when the target content's own access permits. Prerequisite != Content
+  Access, Entitlement, Verification or Assessment.
+- Students may explicitly record Self Complete as personal progress; watching
+  is not automatic completion. Self Complete != Verified != Mastered !=
+  Assessment Passed != Certificate Earned. No formal Stage completion results
+  from self-completing all Nodes. Formal Verification is Epic 10; formal
+  Assessment/Achievement is Epic 11.
 - `VIEWED` and `PRACTICED` represent learner activity. `SUBMITTED` begins an
   evidence workflow; `UNDER_REVIEW` is assigned review; `REVISION_REQUIRED`
   returns actionable feedback; only `VERIFIED` is a demonstrated outcome.
+  These evidence/review states belong to Epic 10, not the Epic 7 self-progress
+  foundation or a single overloaded completion field.
 - Teacher review includes a decision, text/video feedback, rubric result,
   issue tags, next-practice instruction, reviewer, reviewed time, rubric
   version, and learning-standard version. A Teacher cannot verify work outside
@@ -76,7 +99,11 @@ implemented by this documentation update.
 - Free supports basic-map/free-resource/progress use; Plus supports full
   structured self-study and premium tools/resources; Pro adds human review,
   verified progress, assessment/certificate access, and finite review capacity.
-  Exact plan matrix remains PRD work.
+  These are policy directions; the exact matrix belongs to Epic 8, not Epic 7.
+  Membership Plan + Membership Inclusion / Access Policy + Entitlement decides
+  each resource/capability's access. No Resource is permanently Plus and no
+  human Review is permanently Pro by type or author. Content Author != Access
+  Authority != Revenue Owner; course-supported capability is not Student eligibility.
 - One-on-one lesson access is independent from membership. Commerce payment
   success creates an outbox event; fulfillment later grants entitlement
   idempotently. Payment/order state alone is never access or achievement.
@@ -88,6 +115,21 @@ implemented by this documentation update.
   future assessment access according to policy. It never erases learning
   progress, submitted evidence, feedback, verification, completion, or
   certificates.
+
+### Workspace and asynchronous review boundaries
+
+- Formal course joining/use eligibility is required before a Course appears
+  as the Student's personal Learning Map. Unjoined courses must not show 0%
+  progress, Level progress or a personal roadmap. Recommendation != enrollment;
+  a suggested starting Level is not Level completion or formal verification.
+- Homepage guidance → staged diagnosis → Course/start recommendation → plan
+  → joining → personal Learning Map is a future product journey. Diagnosis and
+  recommendation workflows are unassigned future interfaces, not new Epics or
+  Epic 7 blockers. Epic 8 owns access; Epic 9 owns Student Workspace/UI.
+- Whether a Node supports async review is content structure; whether a Student
+  may use it is Epic 8 policy; upload → Teacher review → Feedback →
+  Revision/Resubmission → any Verification is Epic 10 workflow. Epic 7 retains
+  stable references/attachment points and implements none of those workflows.
 
 ### AI and escalation
 

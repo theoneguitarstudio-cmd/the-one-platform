@@ -36,7 +36,9 @@ owns the amount and Scheduling must never hard-code the difference.
 
 ## Architecture Update — Learning Verification LMS & Membership
 
-**Status:** Architecture proposal only. This update creates no Epic 5 code,
+**Status:** planning only; Epic 7 product approvals are incorporated in
+[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md). Implementation remains
+**NOT STARTED / NOT AUTHORIZED**. This synchronization creates no code,
 migration, schema, remote database change, or production LMS behavior.
 
 ### Product direction
@@ -52,14 +54,34 @@ Membership itself or the platform's only possible System Course. Membership
 may include multiple approved System Courses through plan, inclusion/access
 policy, and Entitlement.
 
-The canonical five stages are: (1) 0 to 1 basic accompaniment, (2) technique
-and accompaniment refinement, (3) theory and fretboard, (4) transcription and
-transformation, and (5) arrangement and composition.
+The existing five-stage `learning_map_stages` classification is retained:
+(1) 0 to 1 basic accompaniment, (2) technique and accompaniment refinement,
+(3) theory and fretboard, (4) transcription and transformation, and
+(5) arrangement and composition. These are legacy Teacher/Trial references,
+not the identities of new System Course Levels. New Stage/Level structures
+are course-scoped; the flagship uses Level 1–6 and preserves the six outcomes
+in [Guitar Roadmap principles](guitar-roadmap/README.md). Other System Courses
+may use different structures/names. Integration is additive; any legacy
+relationship requires explicit mapping/policy, never identity equality.
 
 A Learning Node is the smallest structured unit. It will have title, objective,
 prerequisites, stage/module/order, resources, practice requirements,
 verification method, pass criteria, and learning-standard version. Viewing is
 activity, not proof of demonstrated skill.
+
+Epic 7 initial content is a representative production-like vertical slice
+covering the hierarchy, multiple Modules/Nodes, multi-Resource Nodes,
+objectives, Skill Mapping, prerequisites, ordering and versioning. A complete
+representative Level plus a next-Level sample can test cross-Level structure;
+full formal Level 1–6 content entry is not a closure blocker.
+
+A Node is not one video. It may have variable teaching/practice videos,
+how-to-learn/practice guidance, PDFs, audio, backing tracks or self-check
+instructions, plus optional future submission/review/verification/assessment
+capabilities. No fixed resource count or mandatory identical fields apply.
+Learning prerequisites are advisory: Students may skip ahead when the target
+content's own access policy permits. Prerequisite is neither Content Access,
+Entitlement, Verification nor Assessment.
 
 ### Product ladder (proposed)
 
@@ -73,14 +95,50 @@ Free, Plus, and Pro are membership tiers, **not** Auth roles. A Teacher may
 also be a Student. One-on-one lessons remain independent lesson
 entitlements/credits.
 
+These are product directions, not a fixed resource-to-tier matrix. Epic 8
+owns access through Membership Plan + Membership Inclusion / Access Policy +
+Entitlement. The flagship may offer main free learning content across Nodes;
+other resources/capabilities remain independently configurable, including
+standalone grants. Epic 7 supplies stable IDs and attachment points, not
+PDF = Plus, Review = Pro, or provider-based access rules.
+
 ### Durable learner outcome
 
-Proposed node states are `VIEWED`, `PRACTICED`, `SUBMITTED`, `UNDER_REVIEW`,
-`REVISION_REQUIRED`, and `VERIFIED`. Only verified work can complete a stage or
-qualify a learner for assessment/certification. Membership expiry or
+Students may explicitly record **Self Complete** as personal learning/usage
+state. Viewing does not automatically complete a Node. Self Complete is not
+Verified, Mastered, Assessment Passed, Certificate Earned or formal Stage/Level
+completion, even when every Node is self-completed. Epic 7 provides this basic
+progress foundation; it does not implement a production progress UI.
+
+`VIEWED`/`PRACTICED` describe activity; `SUBMITTED`, `UNDER_REVIEW`,
+`REVISION_REQUIRED`, and `VERIFIED` belong to later evidence/review workflows,
+not one Epic 7 completion enum. Formal Verification belongs to Epic 10;
+formal Assessment/Achievement belongs to Epic 11. Only appropriately verified
+work can satisfy formal stage/assessment prerequisites. Membership expiry or
 cancellation removes future access according to entitlement policy but must not
 erase submissions, feedback, verified nodes, completions, certificates, or
 audit history.
+
+### Workspace and workflow boundaries
+
+The personal Learning Map appears only after formal course joining/confirmed
+use eligibility. An unjoined course must not appear as 0% progress, Level
+progress or a personal roadmap. Recommendation is not enrollment; a suggested
+starting Level is not completion or formal verification. Epic 8 owns course
+access and Epic 9 owns the Student Workspace/personal map.
+
+The future journey is promotion/pain-point guidance → staged diagnosis →
+recommended System Course and starting point → recommendation plan → joining
+→ personal Learning Map → Practice / Review / Verification / Assessment.
+Full diagnosis and recommendation workflows remain future interface/product
+notes without a newly assigned Epic or an Epic 7 closure dependency.
+
+Node support for async review is content capability; a Student's eligibility
+is Epic 8 policy; upload → Teacher review → Feedback → Revision/Resubmission
+→ any Verification is Epic 10 workflow. Epic 7 implements none of that workflow.
+Its only planned surface is minimal internal/Admin structure inspection.
+Immutable version foundations do not include the Epic 13 Creator CMS,
+Draft → Review → Publish or production publishing system.
 
 ### Pending formal-product decisions
 
@@ -153,6 +211,6 @@ To be completed from the approved formal PRD.
 The implemented Commerce Core covers Product → Order → Order Item → Payment →
 `order.paid` outbox. It supports manual bank-transfer review and cash confirmation
 without a live gateway. Epic 4 itself does not grant entitlements or credits;
-Epic 5's local closure candidate now implements Lesson Package fulfillment and
+Epic 5 is REMOTE CLOSED and implements Lesson Package fulfillment and
 Lesson Credits. Subscriptions, refunds, invoices, earnings, and LMS entitlement
 remain future PRD work.

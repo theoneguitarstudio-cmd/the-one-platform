@@ -35,11 +35,16 @@ then Entitlement, Reservation, Booking, optional occurrence, and Lesson.
 
 No migration is created by this documentation update. The following names are
 proposed future records, to be versioned only in an approved delivery epic.
+Epic 7 product decisions are approved in
+[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md); implementation is
+**NOT STARTED / NOT AUTHORIZED**. The table spans multiple future Epics and
+must not be treated as one Epic 7 migration checklist.
 
 | Domain | Proposed records | Responsibility |
 | --- | --- | --- |
-| Content | `learning_maps`, map-stage links, `learning_modules`, `learning_nodes`, `learning_resources`, `practice_requirements` | Versioned curriculum and provider-neutral resources |
-| Progress | `student_node_progress` | `VIEWED` → `PRACTICED` → `SUBMITTED` → `UNDER_REVIEW` / `REVISION_REQUIRED` / `VERIFIED` |
+| Content / Epic 7 foundation | System Course identities, `learning_maps`, course-scoped Stage/Level identities, `learning_modules`, `learning_nodes`, `learning_resources`, objectives, skills and prerequisite links | Generic versioned hierarchy, variable Resource links, attribution and future capability attachment points; practice guidance is content, not a practice workflow |
+| Personal progress / Epic 7 foundation | `student_learning_activity` (candidate name) | Owner-bound activity, resume/revisit and explicit Self Complete against a stable Node/version; no formal outcomes or enrollment |
+| Verified progress / Epic 10 | `student_node_progress` (historical proposed name for later formal-state modeling) | Human-authorized verification linked to evidence/review and frozen standards; separate from personal Self Complete |
 | Evidence | `assignments`, `submissions`, `submission_assets` | Practice instructions and private learner evidence |
 | Review | `submission_reviews`, `review_feedback`, `review_rubric_results` | Authorized human decisions, feedback, tags, next practice, reviewer and version snapshots |
 | Standards | `learning_standard_versions`, `rubrics`, `rubric_versions` | Criteria governance and historical reproducibility |
@@ -49,15 +54,44 @@ proposed future records, to be versioned only in an approved delivery epic.
 | Quota | `review_quota_allocations`, `review_quota_ledger` | Allocated, reserved, consumed, restored, expired, manually adjusted review capacity |
 
 Existing `learning_map_stages` and `teacher_stage_capabilities` remain the
-canonical Stage 1–5/capability base. Future map/version linkage must not
-silently redefine them.
+legacy Stage 1–5/capability base. Preserve `student_profiles.current_stage`,
+`lesson_records.stage_number`, `assessments.primary_stage` and Teacher capability
+references. Do not drop, destructively rename, replace, widen or silently
+redefine that catalog as new System Course Levels.
+
+New Stage/Level identities belong to a System Course. Guitar Roadmap uses
+Level 1–6; other System Courses may have different counts/names. Architecture
+is additive, not a clean slate. A future legacy relationship requires explicit
+mapping/policy, never a 1:1 identity equality or automatic capability transfer.
+Trial placement/assessment data must not become a node-progress backfill.
+
+Epic 7 validates representative production-like content, including multiple
+Modules/Nodes, multi-Resource links, objectives, Skill Mapping, advisory
+prerequisites, ordering and version samples. Full Level 1–6 content entry is
+not a closure blocker. Immutable content snapshots preserve old progress and
+future rubric references; their existence does not implement production publishing.
+
+Keep Content Author != Access Authority != Revenue Owner. Multiple contributors
+can be attributed to Resources without granting edit/access rights or payouts.
+Stable Course/Node/Resource/version IDs and capability attachment points express
+what content supports. Epic 8 separately decides Student eligibility; Epic 10
+owns actual submission/review execution and Epic 11 formal assessment/results.
+No attachment metadata stores a grant, review queue, reviewer or outcome.
 
 ### Relationships and invariants
 
 - A Node has objective, prerequisites, ordered stage/module placement,
   resources, requirements, verification/pass criteria, and standard version.
+- Resource counts/kinds are variable, not one video or fixed horizontal fields.
+  Learning prerequisites are advisory and independent of Content Access,
+  Entitlement, Verification and Assessment. Target access is Epic 8 policy,
+  not author identity, resource kind, prerequisite completion or a hard-coded tier.
+- Self Complete records personal usage only. It cannot create VERIFIED,
+  mastery, formal Stage completion, Assessment Passed or Certificate Earned.
+  `SUBMITTED`/`UNDER_REVIEW`/`REVISION_REQUIRED` belong to Epic 10 workflow;
+  they are not required Epic 7 progress states.
 - Only an authorized human verification can set `student_node_progress` to
-  `VERIFIED`; viewing or practice alone cannot complete a stage.
+  `VERIFIED`; viewing, practice or Self Complete cannot formally complete a stage.
 - A submission snapshots its assignment/standard context. Reviews retain
   reviewer, time, `pass`/`revision_required`/`resubmit` decision, feedback,
   rubric result, rubric version, and standard version.
@@ -68,6 +102,10 @@ silently redefine them.
 - Subscription states may be `active`, `trialing`, `past_due`,
   `cancel_at_period_end`, `cancelled`, `expired`, or `paused`. Entitlements are
   independently time-bounded; progress/achievement are not tied to them.
+- Course joining/use eligibility precedes personal Learning Map exposure in
+  the future Epic 9 workspace. Recommendation != enrollment, and suggested
+  starting Level != passed Level. Do not precreate 0%/Level progress for unjoined
+  courses; personal progress is not an enrollment or authorization record.
 - A future idempotent fulfillment consumer turns `order.paid` into entitlement.
   Review use is an allocation/ledger transaction, not a mutable remaining-count
   field.
@@ -140,7 +178,7 @@ display name data from `profiles` and allowed teacher presentation data from
 
 - `specialties`: platform-defined catalog, seeded conflict-safely.
 - `teacher_specialties`: normalized many-to-many assignment.
-- `learning_map_stages`: canonical seeded Stage 1–5 catalog.
+- `learning_map_stages`: preserved legacy seeded Stage 1–5 catalog.
 - `teacher_stage_capabilities`: admin-controlled teacher-to-stage assignment
   with `allowed` or `certified` status.
 
@@ -160,7 +198,7 @@ creates the tables, policies, triggers, and deterministic catalog seeds.
 ## Epic 3 implemented model
 
 `student_profiles` owns learning goals, preferred delivery mode/location,
-onboarding state, and an optional current Learning Map Stage. Student learning
+onboarding state, and an optional current legacy Learning Map Stage. Student learning
 data remains separate from the private account `profiles` table.
 
 `student_teacher_relationships` is the durable teaching relationship and does

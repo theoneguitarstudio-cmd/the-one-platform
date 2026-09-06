@@ -4,7 +4,13 @@ Canonical Epic 7+ numbering and approved scope now live in
 [CANONICAL_ROADMAP.md](CANONICAL_ROADMAP.md). The LMS sequence below is retained
 as historical architecture decomposition and does not override that roadmap.
 
-## Epic 6 — Scheduling & Booking Core (local closure candidate)
+Current state is owned by [PROJECT_STATUS.md](PROJECT_STATUS.md): P2 COMPLETE,
+Epic 5/6 REMOTE CLOSED. Epic 7 is PLANNING; four product decisions are approved
+in [EPIC7_SCOPE_DEFINITION.md](EPIC7_SCOPE_DEFINITION.md), with final planning
+baseline review pending. Implementation is NOT STARTED / NOT AUTHORIZED.
+The historical LMS A–E decomposition below is not the current Epic 7 scope.
+
+## Epic 6 — Scheduling & Booking Core (REMOTE CLOSED)
 
 After **Epic 5 — Entitlement Core & Lesson Credits**, Epic 6 implements Teacher
 availability, Flexible Booking, recurring
@@ -12,8 +18,9 @@ Fixed Lesson series, fixed-slot priority, booking/credit reservation and
 consumption integration, cancellation, reschedule, series exceptions, schedule
 collision, timezone/DST handling, and audited Admin overrides. It reuses Epic
 3's Lesson and collision foundation rather than replacing it. Local migration,
-pgTAP, multi-session concurrency, application UI/actions, and security review
-must pass before remote migration review.
+pgTAP, multi-session concurrency, application UI/actions, security review and
+remote closure gates have passed as recorded in PROJECT_STATUS. Future changes
+still need their own verification and approval.
 
 LMS implementation remains a parallel core product line after this foundation;
 the roadmap must not treat Fixed/Flexible one-on-one delivery as an LMS
@@ -70,11 +77,13 @@ To be completed from the approved formal PRD.
 - Teacher capability, self-edit, and minimum Admin management foundations
 - Versioned migration, RLS/grants, pgTAP coverage, and local contract tests
 
-## Not started / later scope
+## Historical Epic 2 exclusions
 
 Matching, reviews, ratings calculation, teacher applications, WordPress
 migration, complete booking, external payment-provider integrations, earnings,
-and recurring scheduling remain out of scope.
+and recurring scheduling were outside Epic 2. Booking and recurring scheduling
+were subsequently delivered in Epic 6; this historical list is not current
+platform status or an Epic 7 blocker list.
 
 ## Implemented: Epic 3 — Student–Teacher Trial Flow
 
@@ -95,7 +104,7 @@ and recurring scheduling remain out of scope.
 - Cancellation, expiry, refund/tax/discount reservations, provider interface,
   secure webhook boundary, minimal Product/Student/Admin routes, and tests
 
-## Implemented locally: Epic 5 — Entitlement Core & Lesson Credits
+## REMOTE CLOSED: Epic 5 — Entitlement Core & Lesson Credits
 
 - Purchase-time Lesson Package fulfillment snapshots
 - Item-granular, idempotent paid-order fulfillment into Entitlements
@@ -106,7 +115,7 @@ and recurring scheduling remain out of scope.
 - Versioned migration, RLS/grant contracts, pgTAP, unit/contract, and true
   independent-session concurrency validation
 
-This status means local implementation and validation only. Remote migration
-push, background fulfillment scheduling, refund automation,
+P2 remote deployment and smoke verification are complete. Background
+fulfillment scheduling, refund automation,
 membership/subscription, review quota, LMS access, and achievement remain
 pending their own approval and review.

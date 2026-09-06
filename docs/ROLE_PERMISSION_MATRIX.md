@@ -22,6 +22,10 @@ DTO RPCs. Fixed-series creation is Teacher/Admin only.
 
 **Status:** planned authorization model only; no role, policy, grant, or table
 is changed by this document update.
+Epic 7 product approvals are synchronized from
+[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md); implementation remains
+**NOT STARTED / NOT AUTHORIZED**. Later review/assessment rows below belong
+to Epic 10/11, not Epic 7 permissions already implemented.
 
 `student`, `teacher`, `admin`, and `super_admin` remain the Auth roles. Free,
 Plus, and Pro are membership tiers expressed through plans, subscriptions,
@@ -32,6 +36,7 @@ never authority.
 | Capability | Student | Teacher | Admin / Super Admin |
 | --- | --- | --- | --- |
 | Read learning records | Own only | Assigned review minimum only | Audited server path |
+| Record basic Self Progress / Self Complete | Own eligible course/Node/version via constrained operation | Only own learner progress when also Student and eligible | No impersonated self-completion or formal-result shortcut |
 | Submit evidence | Own eligible assignment | Only if also Student | Support path only |
 | Review / verify node | No | Assigned work plus stage `review` | Audited exception path |
 | Assess stage | No | Assigned work plus stage `assess` | Audited exception path |
@@ -39,10 +44,37 @@ never authority.
 | Premium resources / review quota | Entitlement-aware own use | Entitlement-aware learner use | Management path |
 | Change entitlement/quota | No | No | Audited privileged path |
 
-The future stage-scoped vocabulary is `teach`, `review`, `assess`, `mentor`,
-and `content_author`. It extends existing `teacher_stage_capabilities`, not
+The future course/stage-scoped vocabulary is `teach`, `review`, `assess`,
+`mentor`, and `content_author`. Existing `teacher_stage_capabilities` keeps its
+legacy Stage 1–5 scope. Any relation to new course-scoped Levels requires
+explicit mapping/capability policy, not automatic authority transfer or
 client-controlled role state. Every protected action rechecks account status,
-assignment/ownership, and capability on server/database boundaries.
+assignment/ownership and capability on server/database boundaries.
+
+### Epic 7 foundation restrictions (requirements, not implemented grants)
+
+- Students can record their own personal Self Complete after trusted course-use
+  authorization. They cannot change another Student's progress, write VERIFIED,
+  mastery, Assessment Passed, formal Stage completion or certificates. Self
+  Complete cannot satisfy those formal outcomes; viewing does not auto-complete.
+- Teachers have no raw DML authority over Student formal outcomes. Actual
+  verification/assessment needs assigned, authorized, audited Epic 10/11
+  transitions. A Teacher role or legacy capability alone is insufficient.
+- Creator is an attribution concept here, not a new Auth role. Authorship grants
+  no Student access authority, private-progress access, revenue ownership or
+  right to change immutable versions. New content requires a new version;
+  Creator CMS and production publishing workflows remain Epic 13.
+- Node support for review is content metadata; eligibility is Epic 8 policy;
+  execution is Epic 10. No membership tier, Resource kind or author alone
+  authorizes a capability. Prerequisites are advisory, not access checks.
+- `service_role` is not general business authority. No raw content/progress
+  DML grants or bypass of actor/scope checks are justified by its use. Retain
+  server reauthorization, database enforcement and audited privileged paths.
+- Epic 7 has only minimal internal/Admin structure inspection, no public
+  learning surface or Student Workspace. Future personal maps require joined/
+  eligible courses; recommendations create neither enrollment nor 0% progress.
+  Missing future access authority fails closed. No RLS or RPC is implemented
+  by this synchronization.
 
 Status: Draft
 
