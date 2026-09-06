@@ -153,8 +153,8 @@ rollback disables new use, not deletion of frozen content/learner history.
 | Slice | Status | Evidence |
 | --- | --- | --- |
 | A | PASS | Contracts/security/legacy review PASS; 192/192 application tests; ESLint PASS; diff check PASS; 45 relative links valid; only four authorized documentation files changed; migration tests N/A (no DDL) |
-| B | PASS | Two additive migrations; 23 structure/security and 29 lock assertions; 192 application tests; ESLint/diff PASS; PostgreSQL function lint zero errors; 13 baseline table snapshots unchanged after populated 29 → 31 upgrade |
-| C | NOT STARTED | Depends on B PASS |
+| B | WARN (format only) | Correctness/security PASS: two additive migrations; 23 structure/security and 29 lock assertions; 192 application tests; ESLint PASS; PostgreSQL function lint zero errors; 13 baseline table snapshots unchanged after populated 29 → 31 upgrade. The staged check found two whitespace-only lines in the new 002 migration after the initial unstaged check; no SQL behavior changes. Applied file is retained; this non-blocking formatting warning does not authorize editing the original 29 migrations. |
+| C | PASS | 122 content/isolation/grant assertions, 23 structure and 29 lock assertions; three independent-session races (inverse graph edges, freeze retry and freeze/edit) PASS. Text-only Nodes freeze; V1 survives V2; attribution grants no authority; ESLint and current diff check PASS. Additive local upgrade 31 → 32. |
 | D | NOT STARTED | Depends on C PASS |
 | E | NOT STARTED | Depends on D PASS |
 | F | NOT AUTHORIZED | Explicit operator gate required |

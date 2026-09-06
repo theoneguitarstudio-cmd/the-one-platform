@@ -8,7 +8,8 @@ explains its resource vocabulary, branch-aware graph, and review rules.
 ## Scope and vocabulary
 
 Epic 7 local foundation adds `learning_create_course`, `learning_create_draft`
-and `learning_put_structure` to the explicit inventory (103 total). They are
+and `learning_put_structure`, then C's `learning_put_content` and
+`learning_freeze_version`, to the explicit inventory (105 total). They are
 single Course/Map aggregate operations followed only by terminal audit append.
 Creation uses a Course advisory identity or Map row lock; structure edits lock
 the draft version before placements. No existing Commerce/Entitlement/

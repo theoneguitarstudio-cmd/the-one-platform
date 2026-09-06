@@ -3,7 +3,10 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
 export const container = 'supabase_db_the-one-platform';
-export const database = 'epic7_local_20260906';
+export const database = process.env.EPIC7_LOCAL_DATABASE ?? 'epic7_local_20260906';
+if (!['epic7_local_20260906','epic7_clean_20260906','epic7_race_20260906'].includes(database)) {
+  throw new Error('Only named disposable local databases are permitted');
+}
 export const root = fileURLToPath(new URL('../', import.meta.url));
 export function docker(args, input) {
   return execFileSync('docker', args, { input, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
