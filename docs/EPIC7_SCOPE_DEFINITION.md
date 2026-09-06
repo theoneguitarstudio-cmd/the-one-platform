@@ -3,7 +3,7 @@
 Status: **APPROVED PLANNING BASELINE ESTABLISHED; LOCAL A–E AUTHORIZED**.
 Governance review date: 2026-09-06, Asia/Taipei.
 Canonical synchronization: **COMMITTED AND PUSHED** in `588811d1d5617788b162f4e0a275d64d6a248dce`.
-Epic 7 implementation: **LOCAL A–E AUTHORIZED; REMOTE F NOT AUTHORIZED**.
+Epic 7 implementation: **LOCAL A–E COMPLETE / LOCAL CLOSED; REMOTE F NOT AUTHORIZED**.
 The four Product Owner decisions are approved; they are not open questions.
 Technical names below are proposals constrained by those decisions. The
 subsequent Product Owner LOCAL autonomous authorization and per-slice contracts
@@ -11,15 +11,17 @@ are recorded in [Epic 7 Local Execution](EPIC7_LOCAL_EXECUTION.md). Historical
 review statements below describe preparation, not current authorization.
 Local A–E commits are authorized; remote operations and F require a new gate.
 
-## 1. Baseline, authority, and consistency findings
+## 1. Historical planning baseline, authority, and consistency findings
 
 The incorporation and synchronization preflights reconfirmed `main`, with HEAD and local `origin/main` both
 `82b1f25e6db3075c4d619c19440e4e94d20891c8`, ahead/behind `0/0`, and a clean
 tracked tree. The only working-tree entry at the start of synchronization was
 `?? docs/EPIC7_SCOPE_DEFINITION.md`, the prior uncommitted planning document;
 the entire working tree was therefore not clean. The earlier initial planning
-audit had a clean tree before this document was created. There are still 29
-local migration files. No remote database or fresh remote Git query was made.
+audit had a clean tree before this document was created. At that planning gate
+there were 29 migration files. Local A–E subsequently added five migrations;
+see execution evidence for the 34-file local chain. No remote database or
+fresh remote Git query was made during the planning review.
 
 Git history shows `82b1f25` is the eight-document P2 closure commit. Both local
 production smoke artifacts were found, and their SHA-256 hashes match
@@ -649,12 +651,11 @@ feedback/revision/resubmission/verification belongs to Epic 10; complete Creator
 operations and production publishing belong to Epic 13. No upload, review,
 enrollment, recommendation or publishing workflow is authorized by this record.
 
-**Open Product Owner decisions among these four: NONE.** Final governance review
-of the incorporated document and approval to record its Git baseline remain
-pending, separate from the already approved product choices. Technical design
-details will be reviewed in a separately authorized implementation task, without
-reopening these choices. Prices, quotas, revenue formulas and future workflows
-remain out of scope, not new approval blockers.
+**Open Product Owner decisions among these four: NONE.** The planning baseline
+is established and subsequently authorized local A–E work is complete.
+Resource cardinality clarification is incorporated in the execution contract.
+Prices, quotas, revenue formulas and future workflows remain out of scope,
+not new approval blockers. F still requires separate operator authorization.
 
 ## 15. Risk register
 
@@ -677,9 +678,11 @@ existing production incident.
 | Scope creep into practice/CMS/diagnosis/verification | MEDIUM | Approved E7-PO-02/04 depth and inspection-only surface; later workflows excluded; no complete curriculum/diagnostic/workspace/publishing blocker. |
 | Supporting-document status or vocabulary drift | LOW | Prior discrepancies resolved in this synchronization; preserve historical context and use CURRENT_WORK/PROJECT_STATUS plus these approved scope boundaries in future updates. |
 
-## 16. Proposed implementation slices under Epic 7
+## 16. Approved implementation slices under Epic 7
 
-These are internal slices, **not new top-level Epics and not active tasks**.
+These are internal slices, **not new top-level Epics**. This table preserves
+the approved dependency/exit design; actual A–E results are in local execution
+evidence. A–E are complete locally; F is NOT STARTED / NOT AUTHORIZED.
 
 | Slice | Objective / dependencies | Deliverables after approval | Tests / exit criteria |
 | --- | --- | --- | --- |

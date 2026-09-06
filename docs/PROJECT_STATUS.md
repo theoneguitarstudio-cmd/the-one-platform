@@ -1,6 +1,6 @@
 # Project Status
 
-Status date: 2026-09-06 (planning synchronization; P2 evidence remains dated 2026-09-05)
+Status date: 2026-09-06 (Epic7 local closure; P2 remote evidence remains dated 2026-09-05)
 
 This file is the canonical engineering-status record for The One 2.0. Product
 sequencing is canonical in [CANONICAL_ROADMAP.md](CANONICAL_ROADMAP.md), and
@@ -18,15 +18,15 @@ accepted product rules are canonical in
 | Epic 4 | Commerce | **CLOSED** |
 | Epic 5 | Entitlement & Lesson Credit | **REMOTE CLOSED** |
 | Epic 6 | Scheduling & Booking | **REMOTE CLOSED** |
-| Epic 7 | Learning Map Core | **LOCAL EXECUTION AUTHORIZED A–E; A contracts in progress; F NOT AUTHORIZED** |
+| Epic 7 | Learning Map Core | **LOCAL CLOSED A–E; non-blocking warnings recorded; F NOT STARTED / NOT AUTHORIZED** |
 
 The verified production smoke baseline is branch `main`, with Git `HEAD` and
 `origin/main` at `899906b556b4dc282538920baec8cdfb0546f6df` (ahead/behind 0/0).
 This documentation reconciliation follows that execution baseline.
 
-## Epic 7 planning milestone
+## Epic 7 baseline and local closure
 
-Current phase: **Approved Planning Baseline ESTABLISHED → LOCAL A–E EXECUTION**.
+Current phase: **Approved Planning Baseline ESTABLISHED → LOCAL A–E COMPLETE → STOP**.
 All four Product Owner decisions are **APPROVED** and recorded
 in [Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md): additive legacy Stage /
 course Level separation, representative initial content, advisory prerequisites
@@ -37,12 +37,30 @@ Scope package: **APPROVED BASELINE ESTABLISHED** by pushed documentation commit
 `82b1f25e6db3075c4d619c19440e4e94d20891c8`. Neither is the historical smoke SHA.
 
 The subsequent Product Owner instruction authorizes autonomous LOCAL A–E,
-with per-slice checks and local commits; F remains NOT AUTHORIZED. A starts
-with technical contracts and no runtime schema. Actual results belong in
-[Epic 7 Local Execution](EPIC7_LOCAL_EXECUTION.md), not inferred from approval.
+with per-slice checks and local commits; F remains NOT AUTHORIZED. A contracts,
+B hierarchy, C immutable content, D owner activity/internal inspection and E
+local validation are complete. Actual evidence is recorded in
+[Epic 7 Local Execution](EPIC7_LOCAL_EXECUTION.md).
 Epic7-A–F are internal slices, not new Epics.
 
-## Remote closure state
+- Five additive migrations; local test/repository chain **34**, latest
+  `20260906000500`; original 29 migration files unchanged. No remote migration.
+- **219 application tests**, **1,480 assertions in 39 SQL suites**, **237 further
+  Epic7 SQL assertions**, and **six independent-session race scenarios** PASS.
+- All 24 new tables deny raw application access. All 20 new functions pass
+  owner/search-path/grant review; function and trigger lint reports zero errors.
+- Clean rebuild and populated 29 → 34 upgrade PASS; all 13 populated legacy /
+  Commerce / Entitlement / Scheduling table snapshots remain identical.
+- ESLint/typecheck PASS; `next build --webpack` PASS. Default Turbopack could
+  not spawn a worker on this host (OS error 5).
+- Current/staged diff checks PASS. The new applied migration 002 retains two
+  whitespace-only lines under the no-applied-migration-edit rule.
+- Shipped learner authority denies use until Epic8 policy exists. Positive
+  progress tests use synthetic isolated authority fixtures only.
+- No Student Workspace, Creator CMS, formal verification/assessment, enrollment
+  engine, new UI or route. Local commits are not pushed. Epic7 is not REMOTE CLOSED.
+
+## Historical P2 remote closure state — not a fresh Epic7 preflight
 
 - **P2 Remote Closure: COMPLETE — 2026-09-05**.
 - Remote Deployment: **PASS**, target `ygxeihtcolpiulupieeq`.
@@ -70,7 +88,7 @@ remote migration preflight → remote deployment → Epic 5 production smoke →
 Epic 6 production smoke → closure documentation. Both Epics satisfy the
 canonical schema/smoke criteria for **REMOTE CLOSED**.
 
-Next: **A contracts → gated LOCAL B–E → STOP for operator review** under
+Next: **STOP for operator review → separately authorized Epic7-F preparation** under
 [Canonical Roadmap](CANONICAL_ROADMAP.md). No automatic remote operation or
 Epic 8–13 implementation is authorized.
 

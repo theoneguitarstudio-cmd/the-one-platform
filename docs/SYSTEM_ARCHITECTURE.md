@@ -61,11 +61,11 @@ independent of Teacher teaching status.
 
 ## Architecture Update — Learning Verification LMS (proposed)
 
-**Implementation status:** documentation only. These are future
-modular-monolith boundaries, not deployed tables, APIs, workers, or migrations.
-The four Epic 7 product decisions are approved in
-[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md); implementation remains
-**NOT STARTED / NOT AUTHORIZED**.
+**Implementation status:** Epic7 content/version/self-activity foundations are
+LOCAL CLOSED; other boundaries below remain future architecture. The four
+decisions are approved in [Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md).
+[Local execution evidence](EPIC7_LOCAL_EXECUTION.md) identifies actual migrations,
+RPCs and server-only inspection. No remote deployment or F authorization exists.
 
 Membership and System Course are separate concepts. A Membership Catalog links
 approved System Courses to plans through inclusion/access policy and

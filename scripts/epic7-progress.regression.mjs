@@ -69,6 +69,15 @@ test('D personal activity, deny-only authority and minimal inspection (PostgreSQ
  delete from public.user_roles where user_id='${studentA}' and role='student';
  ${as(studentA)}${denied(write(40,4,829,{opened:true}),'removed Student role is rechecked')}
  reset role;insert into public.user_roles(user_id,role) values('${studentA}','student');
+ set local role authenticated;select set_config('request.jwt.claim.sub','${admin}',true);
+ select public.learning_create_course('${id(840)}','progress-other','Other course','${id(841)}','main');
+ select public.learning_create_draft('${id(841)}','${id(842)}');
+ select public.learning_put_structure('${id(842)}',0,'${id(843)}',${json({levels:[{id:id(844),slug:'level',position:1,title:'Level'}],modules:[{id:id(845),slug:'module',stage_id:id(844),position:1,title:'Module'}],nodes:[{id:id(846),slug:'node',module_id:id(845),position:1,title:'Node'}]})});
+ select public.learning_put_content('${id(842)}',1,'${id(847)}',${json({resources:[{id:id(848),slug:'guide',revision_id:id(849),kind:'text',title:'Guide',content:'Synthetic practice'}],links:[{id:id(850),node_id:id(846),resource_revision_id:id(849),position:1,purpose:'learn'}],objectives:[{id:id(851),node_id:id(846),objective:'Demonstrate skill'}]})});
+ select public.learning_freeze_version('${id(842)}',2,'${id(852)}');
+ ${as(studentA)}${denied(write(846,0,853,{opened:true},id(842)),'Course A eligibility does not authorize Course B')}
+ ${denied(write(40,0,854,{opened:true},id(842)),'foreign course/version Node rejected')}
+ reset role;
  update public.profiles set account_status='suspended' where user_id='${studentA}';
  ${as(studentA)}${denied(write(40,4,831,{opened:true}),'suspended Student cannot mutate')}
  reset role;update public.profiles set account_status='active' where user_id='${studentA}';
@@ -91,7 +100,11 @@ test('D personal activity, deny-only authority and minimal inspection (PostgreSQ
  for(const fn of ['learning_course_use_authorized(uuid,uuid,uuid,uuid)','learning_require_use(uuid,uuid)','learning_request(uuid,integer,uuid,text,jsonb)','learning_finish_request(uuid,uuid,text,jsonb)']){
   for(const role of ['anon','authenticated','service_role'])q+=`select ok(not has_function_privilege('${role}','private.${fn}','EXECUTE'),'${role} cannot invoke private ${fn}');`;
  }
- q+=`select * from finish();rollback;`;
+ q+=`create or replace function private.learning_course_use_authorized(p_actor uuid,p_course uuid,p_version uuid,p_node uuid)
+ returns boolean language sql stable set search_path='' as $$ select false; $$;
+ ${as(studentB)}${denied(`select public.learning_get_own_activity('${version}','${id(40)}')`,'access-lost fixture cannot read previous personal state')}
+ reset role;select is((select count(*) from public.learning_self_activity where subject_id='${studentB}'),1::bigint,'access loss retains prior history');
+ select * from finish();rollback;`;
  const output=sql(q);assert.doesNotMatch(output,/^not ok|Looks like you failed/m,output);
  assert.equal(sql(`select private.learning_course_use_authorized('${studentA}','${course}','${version}','${id(40)}')`).trim(),'f','fixture policy rolled back to shipped false');
  console.log(`D: ${(output.match(/^ok /gm)||[]).length} PostgreSQL assertions PASS; production boundary remains false`);

@@ -36,10 +36,11 @@ owns the amount and Scheduling must never hard-code the difference.
 
 ## Architecture Update — Learning Verification LMS & Membership
 
-**Status:** planning only; Epic 7 product approvals are incorporated in
-[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md). Implementation remains
-**NOT STARTED / NOT AUTHORIZED**. This synchronization creates no code,
-migration, schema, remote database change, or production LMS behavior.
+**Status:** Epic7 A–E are LOCAL CLOSED under the approved
+[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md). See
+[local execution evidence](EPIC7_LOCAL_EXECUTION.md) for implemented foundations.
+Later-epic features below remain future scope. No remote LMS deployment or
+production publishing/learning workspace is claimed; F is NOT AUTHORIZED.
 
 ### Product direction
 

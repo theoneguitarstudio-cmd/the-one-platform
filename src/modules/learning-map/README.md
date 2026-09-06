@@ -2,8 +2,8 @@
 
 ## Status
 
-Epic 7 A–D have local implementation and isolated PostgreSQL test evidence;
-E local closure is in progress. Nothing has been deployed remotely.
+Epic7 A–E are LOCAL CLOSED with isolated PostgreSQL and application evidence.
+Nothing has been deployed remotely; non-blocking host/format warnings are recorded.
 The four product approvals are incorporated in
 [Epic 7 Scope Definition](../../../docs/EPIC7_SCOPE_DEFINITION.md).
 Epic 7 A–E are **LOCAL IMPLEMENTATION AUTHORIZED**; F remains **NOT AUTHORIZED**.

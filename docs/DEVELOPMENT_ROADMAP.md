@@ -5,9 +5,10 @@ Canonical Epic 7+ numbering and approved scope now live in
 as historical architecture decomposition and does not override that roadmap.
 
 Current state is owned by [PROJECT_STATUS.md](PROJECT_STATUS.md): P2 COMPLETE,
-Epic 5/6 REMOTE CLOSED. Epic 7 is PLANNING; four product decisions are approved
-in [EPIC7_SCOPE_DEFINITION.md](EPIC7_SCOPE_DEFINITION.md), with final planning
-baseline review pending. Implementation is NOT STARTED / NOT AUTHORIZED.
+Epic 5/6 REMOTE CLOSED. Epic7 planning baseline is established and local A–E
+execution is complete; see [EPIC7_LOCAL_EXECUTION.md](EPIC7_LOCAL_EXECUTION.md).
+Epic7-F is NOT AUTHORIZED; STOP for operator review. Four product decisions
+in [EPIC7_SCOPE_DEFINITION.md](EPIC7_SCOPE_DEFINITION.md) remain approved.
 The historical LMS A–E decomposition below is not the current Epic 7 scope.
 
 ## Epic 6 — Scheduling & Booking Core (REMOTE CLOSED)

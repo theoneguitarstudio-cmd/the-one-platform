@@ -1,5 +1,27 @@
 # SECURITY
 
+## Epic7 local foundation — remote deployment not authorized
+
+Local A–E security evidence is in [Epic7 Local Execution](EPIC7_LOCAL_EXECUTION.md).
+All 24 new tables enable RLS and deny raw application reads/writes, including
+service_role. New functions are postgres-owned with empty search_path; private
+helpers have no application EXECUTE. Active Admin/Super Admin construction
+and minimal inspection use constrained RPCs. Authorship grants no authority.
+
+Frozen versions and referenced content/metadata are immutable. Draft locks
+serialize edits/DAG checks/freeze; a full graph check also runs on freeze.
+Self activity derives the subject from the authenticated identity, validates
+exact frozen version/Node/Resource references and uses subject locks, revision
+tokens and payload-bound request receipts. It cannot write formal outcomes.
+Server-only entry points reauthorize and validate narrow inputs/DTOs.
+
+The shipped private course-use authority returns false. Positive joined/eligible
+contexts exist only in isolated synthetic local tests, with policy restoration
+verified afterward. No production enrollment or Membership engine is added.
+Inspection excludes provider locators, linked Auth identities and learner data.
+Remote deployment/smoke/cleanup, Epic8–13 workflows and public learning UI
+remain unauthorized; production payment webhook remains NOT COMPLETE.
+
 ## P2 remote closure verification
 
 Remote Deployment and Epic 5/Epic 6 production smoke are **PASS** as of

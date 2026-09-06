@@ -31,19 +31,18 @@ steal an existing binding. Credit writes lock Entitlement then Reservation;
 cross-domain mutations first take deterministic Student/Teacher schedule locks,
 then Entitlement, Reservation, Booking, optional occurrence, and Lesson.
 
-## Learning Verification architecture proposal (not implemented)
+## Learning foundation and future verification architecture
 
-No migration is created by this documentation update. The following names are
-proposed future records, to be versioned only in an approved delivery epic.
-Epic 7 product decisions are approved in
-[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md); implementation is
-**NOT STARTED / NOT AUTHORIZED**. The table spans multiple future Epics and
-must not be treated as one Epic 7 migration checklist.
+Epic7 foundation is LOCAL CLOSED; exact objects and five additive migrations
+are listed in [local execution evidence](EPIC7_LOCAL_EXECUTION.md).
+Product decisions remain those in [approved scope](EPIC7_SCOPE_DEFINITION.md).
+This table also spans future Epics and is not one Epic7 migration checklist.
+No remote deployment or verification/assessment implementation is claimed.
 
 | Domain | Proposed records | Responsibility |
 | --- | --- | --- |
 | Content / Epic 7 foundation | System Course identities, `learning_maps`, course-scoped Stage/Level identities, `learning_modules`, `learning_nodes`, `learning_resources`, objectives, skills and prerequisite links | Generic versioned hierarchy, variable Resource links, attribution and future capability attachment points; practice guidance is content, not a practice workflow |
-| Personal progress / Epic 7 foundation | `student_learning_activity` (candidate name) | Owner-bound activity, resume/revisit and explicit Self Complete against a stable Node/version; no formal outcomes or enrollment |
+| Personal progress / Epic 7 foundation | `learning_self_activity`, `learning_activity_requests` | Owner-bound activity and explicit Self Complete against a frozen Node/version; no formal outcomes or enrollment; shipped authority denies use until reviewed Epic8 policy exists |
 | Verified progress / Epic 10 | `student_node_progress` (historical proposed name for later formal-state modeling) | Human-authorized verification linked to evidence/review and frozen standards; separate from personal Self Complete |
 | Evidence | `assignments`, `submissions`, `submission_assets` | Practice instructions and private learner evidence |
 | Review | `submission_reviews`, `review_feedback`, `review_rubric_results` | Authorized human decisions, feedback, tags, next practice, reviewer and version snapshots |

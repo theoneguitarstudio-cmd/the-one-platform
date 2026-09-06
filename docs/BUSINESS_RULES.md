@@ -41,7 +41,13 @@
 
 **Status:** Epic 7 product rules below are synchronized with the four approved
 decisions in [Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md); later-epic
-policies remain future scope. Implementation is **NOT STARTED / NOT AUTHORIZED**.
+policies remain future scope. Epic7 A–E are **LOCAL CLOSED**;
+[local evidence](EPIC7_LOCAL_EXECUTION.md) records actual behavior. F is NOT AUTHORIZED.
+
+Draft/construction Nodes allow 0..N Resources. Complete frozen versions require
+every Node to have at least one Objective and one Resource, with arbitrary
+1..N Resource kinds/counts; text alone qualifies. This is the Product Owner's
+scope clarification, not a mandatory video/PDF/audio bundle.
 No LMS or subscription behavior is implemented by this documentation update.
 
 ### Learning and verification

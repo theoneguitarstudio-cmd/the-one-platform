@@ -20,12 +20,10 @@ DTO RPCs. Fixed-series creation is Teacher/Admin only.
 
 ## Learning Verification & Membership architecture proposal
 
-**Status:** planned authorization model only; no role, policy, grant, or table
-is changed by this document update.
-Epic 7 product approvals are synchronized from
-[Epic 7 Scope Definition](EPIC7_SCOPE_DEFINITION.md); implementation remains
-**NOT STARTED / NOT AUTHORIZED**. Later review/assessment rows below belong
-to Epic 10/11, not Epic 7 permissions already implemented.
+**Status:** Epic7 foundation authorization is implemented and verified locally;
+see [local evidence](EPIC7_LOCAL_EXECUTION.md) and
+[approved scope](EPIC7_SCOPE_DEFINITION.md). F is NOT AUTHORIZED. Later
+review/assessment rows remain Epic10/11 proposals, not implemented grants.
 
 `student`, `teacher`, `admin`, and `super_admin` remain the Auth roles. Free,
 Plus, and Pro are membership tiers expressed through plans, subscriptions,
@@ -51,7 +49,7 @@ explicit mapping/capability policy, not automatic authority transfer or
 client-controlled role state. Every protected action rechecks account status,
 assignment/ownership and capability on server/database boundaries.
 
-### Epic 7 foundation restrictions (requirements, not implemented grants)
+### Epic 7 foundation restrictions (locally implemented)
 
 - Students can record their own personal Self Complete after trusted course-use
   authorization. They cannot change another Student's progress, write VERIFIED,
@@ -73,8 +71,11 @@ assignment/ownership and capability on server/database boundaries.
 - Epic 7 has only minimal internal/Admin structure inspection, no public
   learning surface or Student Workspace. Future personal maps require joined/
   eligible courses; recommendations create neither enrollment nor 0% progress.
-  Missing future access authority fails closed. No RLS or RPC is implemented
-  by this synchronization.
+  Missing future access authority fails closed. New tables have RLS and deny
+  raw application reads/writes, including service_role. Active Admin/Super
+  Admin inspection and owner-activity RPCs independently check the database actor.
+  The shipped private course-use helper returns false; only isolated local
+  test fixtures supply positive eligibility. No new Auth role was created.
 
 Status: Draft
 

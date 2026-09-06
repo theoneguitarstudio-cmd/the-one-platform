@@ -4,7 +4,7 @@ import { fileURLToPath } from 'node:url';
 
 export const container = 'supabase_db_the-one-platform';
 export const database = process.env.EPIC7_LOCAL_DATABASE ?? 'epic7_local_20260906';
-if (!['epic7_local_20260906','epic7_clean_20260906','epic7_race_20260906'].includes(database)) {
+if (!['epic7_local_20260906','epic7_clean_20260906','epic7_race_20260906','epic7_upgrade_20260906'].includes(database)) {
   throw new Error('Only named disposable local databases are permitted');
 }
 export const root = fileURLToPath(new URL('../', import.meta.url));
@@ -27,6 +27,11 @@ export function session(query) {
     child.on('close', code => { clearTimeout(timer); resolve({ code, output }); });
     child.stdin.end(query);
   });
+}
+function testSource(file, stack = []) {
+  if (!/^[\w.-]+\.sql$/.test(file) || stack.includes(file)) throw new Error('Invalid/circular SQL fixture include');
+  return readFileSync(new URL(`../supabase/tests/database/${file}`, import.meta.url),'utf8')
+    .replace(/^\\ir\s+([\w.-]+\.sql)\s*$/gm, (_, included) => testSource(included, [...stack,file]));
 }
 export function applyThrough(last) {
   const files = readdirSync(new URL('../supabase/migrations/', import.meta.url)).filter(x => x.endsWith('.sql')).sort();
@@ -63,10 +68,10 @@ if (process.argv[1] && fileURLToPath(import.meta.url) === fileURLToPath(new URL(
   else if (process.argv[2] === 'apply' && /^\d{14}$/.test(process.argv[3] ?? '')) applyThrough(process.argv[3]);
   else if (process.argv[2] === 'tests') {
     const names = process.argv.slice(3);
-    const files = names.length ? names : readdirSync(new URL('../supabase/tests/database/', import.meta.url)).filter(x=>x.endsWith('.sql')).sort();
+    const files = names.length ? names : readdirSync(new URL('../supabase/tests/database/', import.meta.url)).filter(x=>x.endsWith('.test.sql')).sort();
     for (const file of files) {
       if (!/^[\w.-]+\.sql$/.test(file)) throw new Error('Invalid test path');
-      const output=sql(readFileSync(new URL(`../supabase/tests/database/${file}`,import.meta.url),'utf8'));
+      const output=sql(testSource(file));
       if (/^not ok|Looks like you failed|No tests run/m.test(output)) throw new Error(`${file}\n${output}`);
       const count=(output.match(/^ok /gm)||[]).length;
       if (!count) throw new Error(`No TAP assertions: ${file}`);
