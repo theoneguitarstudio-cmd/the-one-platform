@@ -4,15 +4,16 @@ Read this file first in every new ChatGPT or Codex conversation.
 
 ## Current phase
 
-**Epic 7 — Learning Map Core: LOCAL CLOSED (A–E); STOP AT F OPERATOR GATE**
+**Epic 7 — Learning Map Core: LOCAL CLOSED (A–E); F LOCAL READINESS TOOLING COMPLETE; STOP BEFORE PRODUCTION**
 
 Approved Planning Baseline **ESTABLISHED** at
 `588811d1d5617788b162f4e0a275d64d6a248dce`. The Product Owner subsequently
 authorized autonomous LOCAL A → E with a gate after each slice. A–E are complete
 locally; non-blocking format/build-environment warnings are recorded in
 [execution contracts and closure evidence](EPIC7_LOCAL_EXECUTION.md)
-and [approved scope](EPIC7_SCOPE_DEFINITION.md). Epic 7-F and all remote
-deployment/migration/smoke/cleanup remain **NOT AUTHORIZED**.
+and [approved scope](EPIC7_SCOPE_DEFINITION.md). Subsequently authorized F local
+tooling/rehearsal is complete; see [current evidence](EPIC7_F_LOCAL_TOOLING_EVIDENCE.md).
+Push and all production backup/restore/deployment/migration/smoke/cleanup remain **NOT AUTHORIZED**.
 
 ## Completed P2 baseline
 
@@ -27,15 +28,16 @@ See [Project Status](PROJECT_STATUS.md) and
 
 ## Next canonical step
 
-STOP for Product Owner/operator review of Epic7-E local evidence and the five
-additive migrations. Local chain: 34; clean rebuild and populated 29 → 34
-upgrade PASS. Original 29 files and legacy Stage 1–5 remain unchanged.
-Last verified remote chain remains 29, latest `20260904001100`; it was not
-queried or changed in this task. Local commits have not been pushed.
-
-Next is separately authorized Epic7-F preparation: review Git/push permission,
-exact target/parity, fresh recovery evidence and an Epic7 smoke/cleanup plan
-before any remote operation. F remains NOT AUTHORIZED. Do not start Epic8–13.
+STOP for review of the uncommitted F local tools, [37-case coverage](EPIC7_F_CASE_COVERAGE.md)
+and [recovery authorization package](EPIC7_RECOVERY_AUTHORIZATION_PACKAGE.md).
+All 34 migration files remain unchanged. Previous F read-only evidence confirms remote 29,
+latest `20260904001100`; this local-tooling task did not query or modify production.
+User-provided GitHub screenshots confirm Vercel App installation for
+theoneguitarstudio-cmd and Repository access = All repositories. Actual hosting
+project/repository/branch linkage and main-push deployment behavior remain unverified.
+Do not request the same GitHub authorization page again. Local commits/tools have not been pushed.
+Next: review production coverage/retention, named recovery operator/encryption/RPO and
+exact backup/isolated-restore scope before any separate authorization. Do not start Epic8–13.
 Preserve [Canonical Roadmap](CANONICAL_ROADMAP.md) numbering and Product Decisions.
 
 Production payment-provider webhook processing is **NOT COMPLETE**. It blocks

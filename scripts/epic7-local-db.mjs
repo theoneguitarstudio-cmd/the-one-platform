@@ -2,21 +2,30 @@ import { execFileSync, spawn } from 'node:child_process';
 import { readFileSync, readdirSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
-export const container = 'supabase_db_the-one-platform';
-export const database = process.env.EPIC7_LOCAL_DATABASE ?? 'epic7_local_20260906';
+const awaitAdapter = process.env.EPIC7_F_TARGET_MANIFEST ? await import('./epic7-readiness-local.mjs') : null;
+const isolated = awaitAdapter?.guarded(process.env.EPIC7_F_TARGET_MANIFEST);
+export const container = isolated?.container ?? 'supabase_db_the-one-platform';
+export const database = isolated?.database ?? process.env.EPIC7_LOCAL_DATABASE ?? 'epic7_local_20260906';
 if (!['epic7_local_20260906','epic7_clean_20260906','epic7_race_20260906','epic7_upgrade_20260906'].includes(database)) {
   throw new Error('Only named disposable local databases are permitted');
 }
 export const root = fileURLToPath(new URL('../', import.meta.url));
 export function docker(args, input) {
+  if (isolated) {
+    if (args[0]!=='exec'||args[1]!==container||args[2]!=='pg_dump') throw new Error('Unexpected isolated bootstrap command');
+    const adapter=awaitAdapter;
+    return adapter.docker(['exec',container,'pg_dump','-h','/tmp',...args.slice(3)],input);
+  }
   return execFileSync('docker', args, { input, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
 }
 export function sql(query, db = database) {
+  if(isolated)return isolated.sql(query,db);
   if (![database, 'postgres'].includes(db)) throw new Error('Local database allowlist');
   return docker(['exec', '-i', container, 'psql', '-X', '-U', 'postgres', '-d', db,
     '-v', 'ON_ERROR_STOP=1', '-At'], query);
 }
 export function session(query) {
+  if(isolated)return isolated.session(query);
   return new Promise((resolve) => {
     const child = spawn('docker', ['exec', '-i', container, 'psql', '-X', '-U', 'postgres', '-d', database,
       '-v', 'ON_ERROR_STOP=1', '-At'], { stdio: ['pipe', 'pipe', 'pipe'] });
