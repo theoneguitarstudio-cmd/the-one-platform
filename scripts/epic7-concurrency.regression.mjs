@@ -1,3 +1,4 @@
+// Explicit node:test disposable-database race suite, not a Vitest unit suite.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {sql,session,database} from './epic7-local-db.mjs';

@@ -61,6 +61,7 @@ with inventory(function_name) as (
     'public.learning_put_structure',
     'public.learning_put_content',
     'public.learning_freeze_version',
+    'public.learning_set_activity',
     'private.attach_fixed_entitlement_cycle_core',
     'private.attach_fixed_entitlement_cycle_without_renewal_core',
     'private.bind_lesson_credit_reservation_booking_core',
@@ -184,6 +185,7 @@ classified as (
       'public.learning_put_structure',
       'public.learning_put_content',
       'public.learning_freeze_version',
+      'public.learning_set_activity',
       'private.handle_new_auth_user',
       'private.record_makeup_booking_operation',
       'private.record_makeup_right_operation',
@@ -365,8 +367,8 @@ begin
 end;
 $$;
 
-select is((select count(*)::integer from lock_discovered_mutators),105,'105 SECURITY DEFINER mutation-capable functions are discovered');
-select is((select count(*)::integer from lock_function_inventory),105,'all discovered mutators have an explicit inventory entry');
+select is((select count(*)::integer from lock_discovered_mutators),106,'106 SECURITY DEFINER mutation-capable functions are discovered');
+select is((select count(*)::integer from lock_function_inventory),106,'all discovered mutators have an explicit inventory entry');
 select is((select count(*)::integer from lock_discovered_mutators d left join lock_function_inventory i using(function_name) where i.function_name is null),0,'coverage guard has no missing mutating function');
 select is((select count(*)::integer from lock_function_inventory i left join lock_discovered_mutators d using(function_name) where d.function_name is null),0,'inventory has no stale function entry');
 select is((select count(*)::integer from (select function_name,count(*) actual from lock_discovered_mutators group by function_name) d join lock_function_inventory i using(function_name) where d.actual<>i.expected_overloads),0,'coverage guard detects unexpected overloads');

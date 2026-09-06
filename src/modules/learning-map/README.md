@@ -2,15 +2,23 @@
 
 ## Status
 
-Architecture boundary only. This module has no production LMS implementation,
-database table, migration, or client API yet.
+Epic 7 A–D have local implementation and isolated PostgreSQL test evidence;
+E local closure is in progress. Nothing has been deployed remotely.
 The four product approvals are incorporated in
 [Epic 7 Scope Definition](../../../docs/EPIC7_SCOPE_DEFINITION.md).
-Epic 7 implementation is **NOT STARTED / NOT AUTHORIZED**.
+Epic 7 A–E are **LOCAL IMPLEMENTATION AUTHORIZED**; F remains **NOT AUTHORIZED**.
+See [local execution evidence](../../../docs/EPIC7_LOCAL_EXECUTION.md).
 
-## Future responsibility
+`data.ts` provides server-only owner-activity and Admin structure inspection
+functions. There is no new route, page or component. Database RPCs recheck the
+active actor; tables deny raw application reads and writes. The shipped private
+course-use authority returns false until separately reviewed Epic 8 policy exists.
+Only isolated synthetic test fixtures temporarily supply positive authority.
+Inspection excludes resource locators, linked Auth identities and learner data.
 
-The module will own the platform curriculum hierarchy:
+## Responsibility and handoff
+
+The module owns the platform curriculum hierarchy:
 
 `System Course → Curriculum / Learning Map → Stage / Level → Module → Node → Resource`.
 

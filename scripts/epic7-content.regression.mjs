@@ -1,3 +1,4 @@
+// Explicit node:test local PostgreSQL suite; intentionally outside Vitest discovery.
 import assert from 'node:assert/strict';
 import test from 'node:test';
 import {sql} from './epic7-local-db.mjs';

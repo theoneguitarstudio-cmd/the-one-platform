@@ -9,12 +9,18 @@ explains its resource vocabulary, branch-aware graph, and review rules.
 
 Epic 7 local foundation adds `learning_create_course`, `learning_create_draft`
 and `learning_put_structure`, then C's `learning_put_content` and
-`learning_freeze_version`, to the explicit inventory (105 total). They are
+`learning_freeze_version`, and D's `learning_set_activity`, to the explicit inventory (106 total). Construction RPCs are
 single Course/Map aggregate operations followed only by terminal audit append.
 Creation uses a Course advisory identity or Map row lock; structure edits lock
 the draft version before placements. No existing Commerce/Entitlement/
 Scheduling resource is acquired. Private invoker helpers execute only within
 these authorized owner RPCs and have no application EXECUTE grants.
+
+Personal activity takes the Course shared availability lock, then a subject
+advisory lock, then the exact subject/version/Node row. Its request receipt is
+appended last in the same transaction. No reverse path acquires content or
+Commerce locks after the subject lock. The shipped course-use authority denies
+all calls; positive authority exists only in isolated local test fixtures.
 
 The contract inventories every mutation-capable `SECURITY DEFINER` function in
 the `public` and `private` schemas. A function is either managed by the lock
