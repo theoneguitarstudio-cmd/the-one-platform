@@ -1,5 +1,18 @@
 # Current Work
 
+## 2026-09-08 Backup / Recovery 執行準備（最新，未執行）
+
+起點main / 389c5485c77464943937ca4b08e3a7780e63d665，CLEAN；本輪只本機唯讀查證與文件。
+[工程計畫](EPIC7_BACKUP_RECOVERY_EXECUTION_PLAN.md)及[白話操作申請](EPIC7_BACKUP_RECOVERY_EXECUTION_REQUEST.md)已交付，申請PENDING OWNER APPROVAL。
+C/D空間足夠作候選；BitLocker status被Windows拒絕存取，加密UNKNOWN，舊backup ACL過寬，尚無合格位置。
+Docker真實資料層亦須加密，不能只保護dump檔。未改加密/ACL、未重新連production、未export/restore或建立container。
+三次dump需要可靠靜止窗口；提議最多15分鐘停寫，但實際hosting/入口控制UNKNOWN，未批准／未執行。
+1h以一致恢復點計算，非mtime；BR-1/3仍UNKNOWN、BR-2仍未通過。DB-only drill不能宣告整站恢復。
+目前不能無條件直接開跑；先補加密位置/保管、Docker落地與停寫入口事實，再核准一套backup＋隔離drill。
+不修改原工具／migration；不push/deploy/smoke/cleanup/Epic8。P04/P05/P06/R04 BLOCKED、Epic7 REMOTE CLOSED=NO。
+Epic5/6 REMOTE CLOSED、payment webhook NOT COMPLETE不變。下方內容保留歷史時點，本節是現行準備狀態。
+
+
 ## 2026-09-08 正式唯讀 Preflight（最新）
 
 OWNER 本輪已明確核准 Supabase 唯讀查證，已完成；不延伸至任何正式寫入。
