@@ -1,5 +1,16 @@
 # Current Work
 
+## 2026-09-08 備份位置／寫入入口盤點（現行，LOCAL ONLY）
+
+起點main / bc4f882b036794f038bc3f4e504d2fa119a06b9e，CLEAN。
+[本機盤點](EPIC7_BACKUP_STORAGE_WRITE_SOURCE_REVIEW.md)完成：Home登錄可讀；C/D加密、Docker落地仍UNKNOWN，舊backup ACL過寬，尚無合格位置。
+沒有證據證明正式app/真學生持續寫入，也不能由空表推論零writer。程式入口已分類，hosting仍UNKNOWN。
+停寫必要性UNKNOWN；撤回原15分鐘估計，先確認入口/控制/恢復方法才定時限。
+[最小唯讀申請](PRODUCTION_WRITE_ACTIVITY_READONLY_REQUEST.md)及[整套申請](EPIC7_BACKUP_RECOVERY_EXECUTION_REQUEST.md)皆PENDING OWNER APPROVAL，尚不能無缺件批准執行。
+1h CONDITIONAL；BR-1/3 UNKNOWN、BR-2未通過；Epic5/6 REMOTE CLOSED、payment webhook NOT COMPLETE、Epic7 REMOTE CLOSED=NO。
+本輪無正式連線、export/restore、加密/ACL/服務變更、push或Epic8；下方保留歷史時點。
+
+
 ## 2026-09-08 Backup / Recovery 執行準備（最新，未執行）
 
 起點main / 389c5485c77464943937ca4b08e3a7780e63d665，CLEAN；本輪只本機唯讀查證與文件。

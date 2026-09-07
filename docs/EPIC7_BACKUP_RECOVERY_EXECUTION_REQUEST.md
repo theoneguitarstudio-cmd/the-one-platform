@@ -16,7 +16,7 @@
 | 來源 | the-one-platform / ygxeihtcolpiulupieeq / ap-southeast-1；開始前重新核對 |
 | 會做什麼 | 先驗來源/加密/權限/輸入範圍，讀取backup，記時間與檔案指紋，隔離還原後逐表及權限比對 |
 | 會改正式DB嗎 | **NO**：不執行正式DDL/DML/repair或restore；export會使用正式DB讀取資源，不能保證零負載 |
-| 會停網站嗎 | **尚待確認**：建議最多15分鐘停止會寫資料的功能；可安全分離的唯讀頁面保留。無法安全分離就不能保證網站不中斷 |
+| 會停網站嗎 | **UNKNOWN**：依實際writer決定；全窗口可靠無writer可不額外停網站，有writer先核定控制/恢復方法才定時限，不沿用15分鐘猜測 |
 | 為何停寫 | 三次匯出不是同一快照；須確保整段資料不變，才能證明一致恢復點。實際控制方法未知時不開始 |
 | 產生什麼 | roles.sql、schema.sql、data-public.sql、核對後的managed prerequisites與source metadata、manifest/SHA256、還原/處置紀錄 |
 | 排除什麼 | 真實Auth資料、Storage檔案、平台秘密、網站/網域、完整migration statements；若這些是當前不可排除的DB依賴，在export前停止並另提scope |
@@ -33,12 +33,29 @@
 - 已證明由The One控制且加密的實際backup路徑：**未提供**。
 - Docker資料層及暫存的合格加密位置：**未證明**。
 - 此次operator/custodian（OWNER最終核准人已確定，不重問）：**待具名**。
-- 所有寫入入口的控制/恢復方法及允許的15分鐘時窗：**未確認**；不默認有Vercel網站或維護按鈕。
+- 所有實際寫入入口的控制/恢復方法、截止時間與取消門檻：**未確認**；不默認有Vercel網站或維護按鈕。
 - 保留7天/24h及後續處置提案：**待核准**。
 
-OWNER可先提供BitLocker「狀態」頁面或由管理員執行唯讀status的結果（不要開啟/傳送復原金鑰），
+OWNER先看Windows「設定 → 隱私權與安全性 → 裝置加密」的狀態（開啟/關閉/頁面不存在；不點金鑰、不改設定、不跑PowerShell），
 並指定要保管The One資料的位置。若磁碟未加密或ACL不合格，改設定仍需另外明確批准；本申請不自動包含這些變更。
 
 以上缺件補齊並經工程核對後，OWNER只需核准**這一套備份＋隔離還原驗證，含明列停寫窗口與保管條款**。
 只回覆「核准」不能將未知位置、未知維護操作或未審Auth資料範圍自動變成已批准。
 本輪不要求你貼帳密，不要求自行處理SQL，也不現在開始backup。
+
+## 一次批准的完整順序
+
+[儲存/入口盤點](EPIC7_BACKUP_STORAGE_WRITE_SOURCE_REVIEW.md)及[下一轮最小唯讀申請](PRODUCTION_WRITE_ACTIVITY_READONLY_REQUEST.md)列明尚缺事實。
+可無缺件一次核准執行：**NO**；申請設計已收斂，仍 **PENDING OWNER APPROVAL**。
+
+1. 重新確認source identity、catalog/history、export scope與必要managed prerequisites。
+2. 確認實際writer、在途交易及schema/role/Auth的一致性控制，可靠靜止才記Tquiet。控制方法必須事先具體核准，未知STOP。
+3. 核定OWNER控制的加密路徑、具名ACL、Docker/TEMP/log/swap落地與容量後，才建立新logical backup。
+4. 同窗口source metadata、manifest、每檔bytes/SHA256、真正recovery point及保管/期限完整保存；結束窗口並按核准方法恢復入口。
+5. 使用核對過既有image，在新無網路/無ports Docker target隔離restore，不以production為target。
+6. 獨立核對scope、摘要、FK、roles/extensions、有效ACL/RLS/history procedure；錯誤STOP，不忽略或以假資料补齊。
+7. 更新BR-1/2/3的實際evidence與缺口，不能將DB-only自動當全服務BR-3 PASS；1h以一致T而非mtime計。
+8. 關閉連線，只停止這次新container，保留受限evidence，STOP。無migration/deployment/remote smoke/production restore/cleanup。
+
+補齊具體位置、控制/恢復、時限、operator及retention後，OWNER可一次核准整套，不必逐條處理SQL。
+空泛核准不能填補未知事實；不授權改Windows/ACL或未審的正式write path。

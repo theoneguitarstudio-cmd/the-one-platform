@@ -83,13 +83,13 @@ CLI目前help沒有共同--snapshot選項；不能自行把三次dump標成同�
 這是「狀態在窗口不變」的證明，並非三個pg_dump共享snapshot。保守以T=Tquiet計齡。
 僅前後counts相等或當下pg_stat_activity沒writer，不足以證明整段無写入；還需具名操作人的入口/worker控制與觀測。
 
-提議預留**15分鐘停寫窗口**：目標10分鐘內完成export，另5分鐘核對/恢復入口；這是待核准上限，不是已量測SLA。
-需暫停註冊/Auth變動、Teacher/Trial管理、下單/付款確認、Entitlement/Scheduling操作、worker/排程/外部writer與手動DDL。
+最新[本機盤點](EPIC7_BACKUP_STORAGE_WRITE_SOURCE_REVIEW.md)取代原15分鐘估計：先確認真入口、控制/恢復方法及export規模，再定上限與取消門檻。
+若確認入口實際使用，需核定其停止/恢復：註冊/Auth變動、Teacher/Trial管理、下單/付款確認、Entitlement/Scheduling操作、worker/排程/外部writer與手動DDL。
 純讀頁面若與上述入口可安全分離可保留；登入也可能寫Auth session，不能保證「網站完全不受影響」。不得只停網頁而遺留其他writer。
 The One hosting、入口/worker、maintenance操作與rollback方法仍UNKNOWN，因此目前**無法承諾可實際停寫或不停網站**。
 OWNER未來須批准具體入口控制方法、開始/截止時間、影響、恢復程序。禁止以GRANT/REVOKE、改RLS或設DB全域read-only繞過未知入口。
 若證明尚未開放任何writer且能維持窗口，才可記「不用額外停網站寫入」；不從空表推導。
-到10分鐘未完成停止後續export；取消/關閉讀取、保留partial為FAILED，不自動重試。依預先核准的原入口恢復程序在15分鐘內退出窗口；未知恢復結果立即通知OWNER，不自動延長停寫。
+開始前必須填妥核准截止時間與取消門檻；到門檻停止export、關閉讀取、保留partial為FAILED，不自動重試。依核准原入口恢復程序退出；未知結果立即通知OWNER，不自行延長。
 還原drill在來源窗口關閉後進行，不把網站一直停到drill完成。建議先預留30分鐘drill觀察時間，但不承諾耗時；超時停止target工作並保存失敗狀態。
 
 未來migration gate要求 `0 <= migration開始UTC - T <= 3600秒`；每份實際apply前再核對，建議在T+45分鐘前開始以留餘裕。
@@ -148,7 +148,7 @@ clock未知/未來時間、scope缺漏、窗口不成立、drill失敗或>3600�
 | Auth | 真schema/data/providers/session/SMTP/redirect復原及驗證 | 上次users0不代表設定可恢復；不寄信，實際設定/還原程序UNKNOWN |
 | Storage | bucket/object與外部media備份、ACL/簽名讀取恢復 | 上次buckets/objects0；下次確認；不把DB-only稱檔案backup |
 | application | hosting account/project、目前/rollback release與相容性 | UNKNOWN；不查Vercel/GitHub、不推送試驗 |
-| domains / traffic | 真入口、停寫控制、DNS/CDN/維護與回復命令 | UNKNOWN；必須先界定才可核准15分鐘影響 |
+| domains / traffic | 真入口、停寫控制、DNS/CDN/維護與回復命令 | UNKNOWN；必須先界定入口/控制/恢復及時間影響 |
 | env / secrets | 核定secret store、custodian、restore/rotation及部署引用 | 值不入文件；目前保管/完整恢復UNKNOWN |
 | connection strings | source/target/TLS/pooler與舊writer隔離、重連驗證 | 不記值；目前全服務切換UNKNOWN |
 | extensions | exact版本/schema/owner與可離線建立相容套件 | 上輪catalog及本機image可沿用取材，下一輪核對實際來源 |
@@ -156,7 +156,7 @@ clock未知/未來時間、scope缺漏、窗口不成立、drill失敗或>3600�
 | reopen writes | parity/資料/security/連線及另核准Epic5/6 smoke、Auth/Storage/app驗證後OWNER簽核 | 正式事故流程未實測；本輪不啟動 |
 
 Realtime/Edge Functions/jobs若實際使用亦須納入，不從repo沒呼叫推導N/A。
-15分鐘backup窗口恢復入口與真正事故restore後重開是兩種程序；後者要求完整BR-3及事故核准，不能互相代替。
+核准backup窗口恢復入口與真正事故restore後重開是兩種程序；後者要求完整BR-3及事故核准，不能互相代替。
 
 ## 7. 可批准程度與本輪檢查
 
