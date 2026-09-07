@@ -1,5 +1,20 @@
 # Project Status
 
+## 2026-09-08 正式唯讀 Preflight（最新）
+
+OWNER 本輪已明確核准 Supabase 唯讀查證，已完成；不延伸至任何正式寫入。
+起點 main / 1829886a49f4436e966e55afed7f333175d290e8，working tree CLEAN。
+結果 WARN：The One name/ref/region匹配；remote29/local34，local-only5/remote-only0，latest remote20260904001100。
+Epic7的24表/20函式皆未部署，既有依賴及Epic5/6唯讀安全PASS，未發現已查範圍意外變更。
+正式authority未部署；P04/P05/P06/R04正向仍BLOCKED，不標37案通過。
+當前無列出的managed recovery point、PITR=false，最新已知logical檔約49.5h；1h保障未證明。
+BR-1/3 UNKNOWN，BR-2 FAIL；下一步B：準備正式Backup/Recovery供另次審閱，現在停止。
+完整結果、限制、時間與證據hash見[本次正式唯讀證據](EPIC7_PRODUCTION_READONLY_PREFLIGHT.md)。
+Epic7 REMOTE CLOSED=NO；Epic5/6 REMOTE CLOSED；payment webhook NOT COMPLETE；不開始Epic8。
+未export/restore/migrate/smoke/cleanup/push/deploy；無需OWNER重新登入。
+下方各輪紀錄保留歷史時點，其「唯讀尚未授權／尚未執行」不再是現行狀態。
+
+
 ## 2026-09-07 家用本機 PostgreSQL 執行更新（現行）
 
 本輪起點 main / 2eac1b9e8d69d0e3628120121f9a4f7058457325，家用新repo起點CLEAN。
