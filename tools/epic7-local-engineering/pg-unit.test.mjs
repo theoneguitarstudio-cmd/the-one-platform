@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {statements,directives} from './pg-legacy.mjs';
+import {literal,bind} from './pg-local.mjs';
+test('SQL splitter preserves dollar bodies and quoted semicolons',()=>{assert.equal(statements("do $$ begin perform ';'; end $$; select 'a;b';").length,2);});
+test('SQL splitter handles nested comments and doubled quotes',()=>{assert.equal(statements("/* outer /* ; */ end */ select 'can''t;'; -- ;\n select 2;").length,2);});
+test('incomplete SQL fails closed',()=>{for(const sql of ["select 'x",'do $$ begin','/* nested'])assert.throws(()=>statements(sql));});
+test('psql fixture include executes only selected branch',()=>{const sql='\\set included true\n\\if :{?included}\nselect 1;\n\\else\nselect 2;\n\\endif\n\\unset included';assert.equal(directives(sql),'select 1;');});
+test('psql unknown directives and unbalanced conditions STOP',()=>{for(const sql of ['\\connect production','\\! curl example.invalid','\\if :{?missing}\nselect 1;'])assert.throws(()=>directives(sql));});
+test('parameter literal does not escape its SQL value',()=>{assert.equal(literal("'; rollback; --"),"'''; rollback; --'");assert.equal(bind({text:'select $1::uuid[]',values:[[]]}),'select ARRAY[]::uuid[]');assert.throws(()=>bind({text:'select $2',values:['x']}));});

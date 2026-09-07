@@ -1,5 +1,17 @@
 # Epic7 owner / operator 決策
 
+## 2026-09-07 家用本機 PostgreSQL 執行更新（現行）
+
+本輪起點 main / 2eac1b9e8d69d0e3628120121f9a4f7058457325，家用新repo起點CLEAN。
+使用者本輪明確授權本機既有Docker image／新隔離container／合成SQL、race與recovery；此前Docker禁止僅在此本機範圍被取代。
+現有本機計畫33個case IDs PASS，P04/P05/P06/R04因真authority不存在保持BLOCKED；不是37個完整正向分支PASS。
+真PG session、timeout/rollback/斷線、R01–R03雙session、逐步fixture預算及獨立residue已實測；legacy 527斷言、故障13項、parser6項PASS。
+詳見[本機實測與剩餘界線](EPIC7_LOCAL_PG_EXECUTION_EVIDENCE.md)。本機分支的PASS不替代原AC、正式coverage或完整服務復原。
+下一步可提出owner核准正式唯讀Preflight的具體申請；尚未執行。正式transport不在本機工具中開放，後续須依實際target事實及另次批准審查。
+Epic7 REMOTE CLOSED=NO、37案REMOTE NOT RUN；coverage/有限結案仍未批准，Epic5/6 REMOTE CLOSED、payment webhook NOT COMPLETE不變。
+不push、不正式操作、不Epic8。下方各輪記錄保留歷史時點；本機Docker與工程進度以本節及新evidence為準。
+
+
 ## 2026-09-07 現行工程阻礙
 
 D1–D5維持已接受，無須重選；不構成正式操作授權。

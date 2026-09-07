@@ -1,0 +1,489 @@
+[
+  {
+    "name": "teacher_public_discovery_rls.test.sql",
+    "sourceHash": "81c2c6330a45e39ebe330640f881700a5145f3545f207f21ec85be7c303cdf90",
+    "peak": {
+      "auth.users": 3,
+      "public.profiles": 3,
+      "public.teacher_profiles": 2,
+      "public.teacher_public_profiles": 2,
+      "public.user_roles": 5
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 2,
+        "delta": {
+          "auth.users": 3,
+          "public.profiles": 3,
+          "public.user_roles": 3
+        }
+      },
+      {
+        "index": 3,
+        "delta": {
+          "auth.users": 3,
+          "public.profiles": 3,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 4,
+        "delta": {
+          "auth.users": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 27,
+        "delta": {}
+      }
+    ]
+  },
+  {
+    "name": "teacher_security_fix_rls.test.sql",
+    "sourceHash": "a4973f98be80635184b1b358ff7c4f0da15ed2dbbb1b645e66b52be2c95bcaad",
+    "peak": {
+      "auth.users": 2,
+      "public.profiles": 2,
+      "public.teacher_profiles": 2,
+      "public.teacher_public_profiles": 2,
+      "public.teacher_specialties": 1,
+      "public.user_roles": 4
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 2,
+        "delta": {
+          "auth.users": 2,
+          "public.profiles": 2,
+          "public.user_roles": 2
+        }
+      },
+      {
+        "index": 3,
+        "delta": {
+          "auth.users": 2,
+          "public.profiles": 2,
+          "public.user_roles": 4
+        }
+      },
+      {
+        "index": 4,
+        "delta": {
+          "auth.users": 2,
+          "public.profiles": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 4
+        }
+      },
+      {
+        "index": 27,
+        "delta": {
+          "auth.users": 2,
+          "public.profiles": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_specialties": 1,
+          "public.user_roles": 4
+        }
+      },
+      {
+        "index": 45,
+        "delta": {}
+      }
+    ]
+  },
+  {
+    "name": "student_teacher_trial_flow_rls.test.sql",
+    "sourceHash": "923340fecb01ae607b814b531ed6f3106062aa01704bba9cb847cecb3813693d",
+    "peak": {
+      "auth.users": 5,
+      "public.assessments": 1,
+      "public.lesson_records": 1,
+      "public.lessons": 1,
+      "public.profiles": 5,
+      "public.student_profiles": 2,
+      "public.student_teacher_relationships": 1,
+      "public.teacher_profiles": 2,
+      "public.teacher_public_profiles": 2,
+      "public.trial_orders": 3,
+      "public.user_roles": 8
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 4,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 6,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 7,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 8,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.student_profiles": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 20,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 1,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 28,
+        "delta": {
+          "auth.users": 5,
+          "public.lessons": 1,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 1,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 53,
+        "delta": {
+          "auth.users": 5,
+          "public.lessons": 1,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 61,
+        "delta": {
+          "auth.users": 5,
+          "public.lessons": 1,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 3,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 75,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 1,
+          "public.lesson_records": 1,
+          "public.lessons": 1,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 3,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 94,
+        "delta": {}
+      }
+    ]
+  },
+  {
+    "name": "trial_security_hardening.test.sql",
+    "sourceHash": "b9f395f2dac4fa9115da08f83c4475a5500aed88a855ac1a5b518866ec6145f9",
+    "peak": {
+      "auth.users": 5,
+      "public.assessments": 2,
+      "public.lesson_records": 2,
+      "public.lessons": 7,
+      "public.profiles": 5,
+      "public.student_profiles": 2,
+      "public.student_teacher_relationships": 3,
+      "public.teacher_profiles": 2,
+      "public.teacher_public_profiles": 2,
+      "public.trial_orders": 3,
+      "public.user_roles": 8
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 14,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 16,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 17,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 21,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.student_profiles": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 1,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 28,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 31,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 32,
+        "delta": {
+          "auth.users": 5,
+          "public.lessons": 3,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 35,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 1,
+          "public.lessons": 3,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 37,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 1,
+          "public.lesson_records": 1,
+          "public.lessons": 3,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 50,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 1,
+          "public.lesson_records": 1,
+          "public.lessons": 3,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 3,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 87,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 2,
+          "public.lesson_records": 2,
+          "public.lessons": 3,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 3,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 93,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 2,
+          "public.lesson_records": 2,
+          "public.lessons": 4,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 3,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 95,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 2,
+          "public.lesson_records": 2,
+          "public.lessons": 5,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 3,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 97,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 2,
+          "public.lesson_records": 2,
+          "public.lessons": 6,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 3,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 98,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 2,
+          "public.lesson_records": 2,
+          "public.lessons": 7,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 3,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 107,
+        "delta": {
+          "auth.users": 5,
+          "public.assessments": 2,
+          "public.lesson_records": 2,
+          "public.lessons": 7,
+          "public.profiles": 5,
+          "public.student_profiles": 2,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.trial_orders": 3,
+          "public.user_roles": 7
+        }
+      },
+      {
+        "index": 116,
+        "delta": {}
+      }
+    ]
+  }
+]

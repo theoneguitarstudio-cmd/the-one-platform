@@ -1,0 +1,19 @@
+{
+  "format": 1,
+  "scope": "LOCAL_SYNTHETIC_ONLY",
+  "baseline": "2eac1b9e8d69d0e3628120121f9a4f7058457325",
+  "files": {
+    "legacy-budget-L01.json": "4029deb968e1accb4cebcce890b4ff99151923f6c9957d3cffdf6e5926be5abe",
+    "legacy-budget-L02.json": "e5556b1853aaea68d0bc607f6ac931d4210f8a384f85a4286a02c12c0d648162",
+    "legacy-budget-L03.json": "458c2125dfa79d2052bd4b683714fef415f985d8bfd7836700411ede71a5b24c",
+    "legacy-budget-L04.json": "80045804b31a4975515fa30a5419bdd5381a73a3437ef0eeb23eb922395435b7",
+    "pg-cases.mjs": "500106ea0eaedf102ff24a4296f820b07b511001af1705fe78f612ad3c24304e",
+    "pg-failures.mjs": "d284a2246338b67e6c15c67ce320eda72b2a62af68cdc1448f0e9542d5727c45",
+    "pg-legacy.mjs": "4d11565cf6471d0d99c491e3f9bc1424be5235baf32aef98bc4a39814707e9be",
+    "pg-local.mjs": "9e98b48a57ab2d08ce4dfb9be66e7748292e68b919d0bb6c1e85c170bd0e9f40",
+    "pg-races.mjs": "7bc0166f61e3285f78b48478bc2bd8f7cc3501480f651e9ebf008f93b5ea7c2c",
+    "pg-recovery.mjs": "4ece055bf79fb7349958d656959d8d9360c7ca3778a397966a17bb62b9045d4f",
+    "pg-suite.mjs": "7280c46c3e4208501e74319bfd715f77abec41de81db28afaf905817ab684c92",
+    "pg-unit.test.mjs": "323c23c6140daea949bdcd5cddc4571506d16f7b481e3abbe42838be7e82f491"
+  }
+}

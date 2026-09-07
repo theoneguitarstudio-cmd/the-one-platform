@@ -1,0 +1,880 @@
+[
+  {
+    "name": "commerce_products_orders_payments.test.sql",
+    "sourceHash": "b833a3407244b839d99970d8cfb045b9d0946a4638a460e185ae13d492e958a7",
+    "peak": {
+      "auth.users": 4,
+      "public.audit_logs": 5,
+      "public.lesson_package_product_configs": 2,
+      "public.order_fulfillment_events": 2,
+      "public.order_item_fulfillment_snapshots": 7,
+      "public.order_items": 7,
+      "public.orders": 7,
+      "public.payment_submissions": 2,
+      "public.payments": 5,
+      "public.product_public_catalog": 2,
+      "public.products": 3,
+      "public.profiles": 4,
+      "public.teacher_profiles": 1,
+      "public.teacher_public_profiles": 1,
+      "public.user_roles": 6
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 4,
+        "delta": {
+          "auth.users": 4,
+          "public.profiles": 4,
+          "public.user_roles": 4
+        }
+      },
+      {
+        "index": 6,
+        "delta": {
+          "auth.users": 4,
+          "public.profiles": 4,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 7,
+        "delta": {
+          "auth.users": 4,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 8,
+        "delta": {
+          "auth.users": 4,
+          "public.product_public_catalog": 1,
+          "public.products": 2,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 9,
+        "delta": {
+          "auth.users": 4,
+          "public.product_public_catalog": 2,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 10,
+        "delta": {
+          "auth.users": 4,
+          "public.lesson_package_product_configs": 2,
+          "public.product_public_catalog": 2,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 19,
+        "delta": {
+          "auth.users": 4,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 1,
+          "public.product_public_catalog": 2,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 32,
+        "delta": {
+          "auth.users": 4,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 2,
+          "public.order_items": 2,
+          "public.orders": 2,
+          "public.product_public_catalog": 2,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 37,
+        "delta": {
+          "auth.users": 4,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 2,
+          "public.order_items": 2,
+          "public.orders": 2,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 42,
+        "delta": {
+          "auth.users": 4,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 2,
+          "public.order_items": 2,
+          "public.orders": 2,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 52,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 1,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 2,
+          "public.order_items": 2,
+          "public.orders": 2,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 55,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 1,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 2,
+          "public.order_items": 2,
+          "public.orders": 2,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 58,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 1,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 3,
+          "public.order_items": 3,
+          "public.orders": 3,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 66,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 1,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 3,
+          "public.order_items": 3,
+          "public.orders": 3,
+          "public.payment_submissions": 1,
+          "public.payments": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 80,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 2,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 3,
+          "public.order_items": 3,
+          "public.orders": 3,
+          "public.payment_submissions": 1,
+          "public.payments": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 98,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 2,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 4,
+          "public.order_items": 4,
+          "public.orders": 4,
+          "public.payment_submissions": 1,
+          "public.payments": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 103,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 4,
+          "public.order_items": 4,
+          "public.orders": 4,
+          "public.payment_submissions": 1,
+          "public.payments": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 108,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 5,
+          "public.order_items": 5,
+          "public.orders": 5,
+          "public.payment_submissions": 1,
+          "public.payments": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 110,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 5,
+          "public.order_items": 5,
+          "public.orders": 5,
+          "public.payment_submissions": 1,
+          "public.payments": 2,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 111,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 5,
+          "public.order_items": 5,
+          "public.orders": 5,
+          "public.payment_submissions": 1,
+          "public.payments": 3,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 119,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 6,
+          "public.order_items": 6,
+          "public.orders": 6,
+          "public.payment_submissions": 1,
+          "public.payments": 3,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 120,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 6,
+          "public.order_items": 6,
+          "public.orders": 6,
+          "public.payment_submissions": 2,
+          "public.payments": 4,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 124,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 4,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 6,
+          "public.order_items": 6,
+          "public.orders": 6,
+          "public.payment_submissions": 2,
+          "public.payments": 4,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 129,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 4,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 7,
+          "public.order_items": 7,
+          "public.orders": 7,
+          "public.payment_submissions": 2,
+          "public.payments": 4,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 133,
+        "delta": {
+          "auth.users": 4,
+          "public.audit_logs": 5,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 2,
+          "public.order_item_fulfillment_snapshots": 7,
+          "public.order_items": 7,
+          "public.orders": 7,
+          "public.payment_submissions": 2,
+          "public.payments": 5,
+          "public.product_public_catalog": 1,
+          "public.products": 3,
+          "public.profiles": 4,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 6
+        }
+      },
+      {
+        "index": 140,
+        "delta": {}
+      }
+    ]
+  },
+  {
+    "name": "commerce_security_hardening.test.sql",
+    "sourceHash": "846f891aa6d575e7eaa86feb506a85016ce5f2551aae514bab8ca7668e78469e",
+    "peak": {
+      "auth.users": 3,
+      "public.audit_logs": 3,
+      "public.lesson_package_product_configs": 2,
+      "public.order_fulfillment_events": 1,
+      "public.order_item_fulfillment_snapshots": 1,
+      "public.order_items": 1,
+      "public.orders": 4,
+      "public.payments": 3,
+      "public.product_public_catalog": 3,
+      "public.products": 4,
+      "public.profiles": 3,
+      "public.teacher_profiles": 1,
+      "public.teacher_public_profiles": 1,
+      "public.user_roles": 5
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 2,
+        "delta": {
+          "auth.users": 3,
+          "public.profiles": 3,
+          "public.user_roles": 3
+        }
+      },
+      {
+        "index": 4,
+        "delta": {
+          "auth.users": 3,
+          "public.profiles": 3,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 5,
+        "delta": {
+          "auth.users": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 6,
+        "delta": {
+          "auth.users": 3,
+          "public.product_public_catalog": 2,
+          "public.products": 2,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 7,
+        "delta": {
+          "auth.users": 3,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 8,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 17,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.product_public_catalog": 2,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 30,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 31,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.product_public_catalog": 2,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 36,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 37,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.product_public_catalog": 2,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 4
+        }
+      },
+      {
+        "index": 42,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 45,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 1,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 47,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 4,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 48,
+        "delta": {
+          "auth.users": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 4,
+          "public.payments": 3,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 51,
+        "delta": {
+          "auth.users": 3,
+          "public.audit_logs": 1,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 4,
+          "public.payments": 3,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 66,
+        "delta": {
+          "auth.users": 3,
+          "public.audit_logs": 2,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 4,
+          "public.payments": 3,
+          "public.product_public_catalog": 3,
+          "public.products": 3,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 69,
+        "delta": {
+          "auth.users": 3,
+          "public.audit_logs": 2,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 4,
+          "public.payments": 3,
+          "public.product_public_catalog": 3,
+          "public.products": 4,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 72,
+        "delta": {
+          "auth.users": 3,
+          "public.audit_logs": 3,
+          "public.lesson_package_product_configs": 2,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 4,
+          "public.payments": 3,
+          "public.product_public_catalog": 3,
+          "public.products": 4,
+          "public.profiles": 3,
+          "public.teacher_profiles": 1,
+          "public.teacher_public_profiles": 1,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 82,
+        "delta": {}
+      }
+    ]
+  },
+  {
+    "name": "commerce_service_role_authority.test.sql",
+    "sourceHash": "d207aeb7629061c67fc2673bc41f3cc04460122b4556f6568ba9439c06ccdddd",
+    "peak": {
+      "auth.users": 2,
+      "public.audit_logs": 2,
+      "public.entitlements": 1,
+      "public.lesson_credit_ledger": 1,
+      "public.lesson_package_product_configs": 1,
+      "public.order_fulfillment_events": 1,
+      "public.order_item_fulfillment_snapshots": 1,
+      "public.order_items": 1,
+      "public.orders": 1,
+      "public.payment_submissions": 1,
+      "public.payments": 1,
+      "public.product_public_catalog": 1,
+      "public.products": 1,
+      "public.profiles": 2,
+      "public.user_roles": 3
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 12,
+        "delta": {
+          "auth.users": 2,
+          "public.profiles": 2,
+          "public.user_roles": 2
+        }
+      },
+      {
+        "index": 13,
+        "delta": {
+          "auth.users": 2,
+          "public.profiles": 2,
+          "public.user_roles": 3
+        }
+      },
+      {
+        "index": 14,
+        "delta": {
+          "auth.users": 2,
+          "public.product_public_catalog": 1,
+          "public.products": 1,
+          "public.profiles": 2,
+          "public.user_roles": 3
+        }
+      },
+      {
+        "index": 15,
+        "delta": {
+          "auth.users": 2,
+          "public.lesson_package_product_configs": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 1,
+          "public.profiles": 2,
+          "public.user_roles": 3
+        }
+      },
+      {
+        "index": 19,
+        "delta": {
+          "auth.users": 2,
+          "public.lesson_package_product_configs": 1,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 1,
+          "public.profiles": 2,
+          "public.user_roles": 3
+        }
+      },
+      {
+        "index": 20,
+        "delta": {
+          "auth.users": 2,
+          "public.lesson_package_product_configs": 1,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 1,
+          "public.payment_submissions": 1,
+          "public.payments": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 1,
+          "public.profiles": 2,
+          "public.user_roles": 3
+        }
+      },
+      {
+        "index": 22,
+        "delta": {
+          "auth.users": 2,
+          "public.audit_logs": 1,
+          "public.lesson_package_product_configs": 1,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 1,
+          "public.payment_submissions": 1,
+          "public.payments": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 1,
+          "public.profiles": 2,
+          "public.user_roles": 3
+        }
+      },
+      {
+        "index": 27,
+        "delta": {
+          "auth.users": 2,
+          "public.audit_logs": 2,
+          "public.entitlements": 1,
+          "public.lesson_credit_ledger": 1,
+          "public.lesson_package_product_configs": 1,
+          "public.order_fulfillment_events": 1,
+          "public.order_item_fulfillment_snapshots": 1,
+          "public.order_items": 1,
+          "public.orders": 1,
+          "public.payment_submissions": 1,
+          "public.payments": 1,
+          "public.product_public_catalog": 1,
+          "public.products": 1,
+          "public.profiles": 2,
+          "public.user_roles": 3
+        }
+      },
+      {
+        "index": 32,
+        "delta": {}
+      }
+    ]
+  }
+]

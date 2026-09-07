@@ -1,0 +1,989 @@
+[
+  {
+    "name": "scheduling_booking_core.test.sql",
+    "sourceHash": "58b55124519deb5d7bab25be227d14dff3717002261b17e2d242bfb40586201c",
+    "peak": {
+      "auth.users": 5,
+      "public.audit_logs": 14,
+      "public.bookings": 2,
+      "public.entitlements": 5,
+      "public.lesson_credit_ledger": 8,
+      "public.lesson_credit_reservations": 2,
+      "public.lesson_records": 1,
+      "public.lessons": 2,
+      "public.profiles": 5,
+      "public.recurring_lesson_occurrences": 6,
+      "public.recurring_lesson_series": 1,
+      "public.recurring_lesson_series_exceptions": 1,
+      "public.student_teacher_relationships": 3,
+      "public.teacher_availability_exceptions": 1,
+      "public.teacher_availability_rules": 2,
+      "public.teacher_profiles": 2,
+      "public.teacher_public_profiles": 2,
+      "public.teacher_scheduling_settings": 2,
+      "public.user_roles": 8
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 4,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 6,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 7,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 8,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 9,
+        "delta": {
+          "auth.users": 5,
+          "public.entitlements": 5,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 10,
+        "delta": {
+          "auth.users": 5,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 4,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 14,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 1,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 4,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 1,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 15,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 4,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 1,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 17,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 3,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 4,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 18,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 4,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 4,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 30,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 5,
+          "public.bookings": 1,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 5,
+          "public.lesson_credit_reservations": 1,
+          "public.lessons": 1,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 52,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 6,
+          "public.bookings": 1,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 5,
+          "public.lesson_credit_reservations": 1,
+          "public.lessons": 1,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 63,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 7,
+          "public.bookings": 1,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 5,
+          "public.lesson_credit_reservations": 1,
+          "public.lessons": 1,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 73,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 8,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 6,
+          "public.lesson_credit_reservations": 2,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 80,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 9,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 6,
+          "public.lesson_credit_reservations": 2,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 86,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 10,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 6,
+          "public.lesson_credit_reservations": 2,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 87,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 11,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 6,
+          "public.lesson_credit_reservations": 2,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 93,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 12,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 6,
+          "public.lesson_credit_reservations": 2,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 99,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 12,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 7,
+          "public.lesson_credit_reservations": 2,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 102,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 13,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 8,
+          "public.lesson_credit_reservations": 2,
+          "public.lesson_records": 1,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 111,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 13,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 8,
+          "public.lesson_credit_reservations": 2,
+          "public.lesson_records": 1,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 7
+        }
+      },
+      {
+        "index": 117,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 13,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 8,
+          "public.lesson_credit_reservations": 2,
+          "public.lesson_records": 1,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 138,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 14,
+          "public.bookings": 2,
+          "public.entitlements": 5,
+          "public.lesson_credit_ledger": 8,
+          "public.lesson_credit_reservations": 2,
+          "public.lesson_records": 1,
+          "public.lessons": 2,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 6,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_exceptions": 1,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 168,
+        "delta": {}
+      }
+    ]
+  },
+  {
+    "name": "makeup_booking_lifecycle.test.sql",
+    "sourceHash": "61883e28d051599c021534b634e00f02300117df36074e3057d146d5d37285b2",
+    "peak": {
+      "auth.users": 5,
+      "public.audit_logs": 21,
+      "public.bookings": 4,
+      "public.entitlements": 2,
+      "public.lesson_credit_ledger": 2,
+      "public.lesson_records": 1,
+      "public.lessons": 14,
+      "public.makeup_right_operations": 7,
+      "public.makeup_rights": 8,
+      "public.profiles": 5,
+      "public.recurring_lesson_occurrences": 4,
+      "public.recurring_lesson_series": 1,
+      "public.recurring_lesson_series_exceptions": 1,
+      "public.student_teacher_relationships": 3,
+      "public.teacher_availability_rules": 2,
+      "public.teacher_profiles": 2,
+      "public.teacher_public_profiles": 2,
+      "public.teacher_scheduling_settings": 2,
+      "public.user_roles": 8
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 4,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.user_roles": 5
+        }
+      },
+      {
+        "index": 5,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 6,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 7,
+        "delta": {
+          "auth.users": 5,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 8,
+        "delta": {
+          "auth.users": 5,
+          "public.entitlements": 2,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 9,
+        "delta": {
+          "auth.users": 5,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 13,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 1,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 1,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 14,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 2,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 1,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 16,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 3,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 1,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 17,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 4,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 19,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 4,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 8,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 20,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 4,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 8,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 24,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 6,
+          "public.bookings": 1,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 9,
+          "public.makeup_right_operations": 1,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 40,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 7,
+          "public.bookings": 1,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 9,
+          "public.makeup_right_operations": 1,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 49,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 8,
+          "public.bookings": 1,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 9,
+          "public.makeup_right_operations": 1,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 53,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 10,
+          "public.bookings": 2,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 10,
+          "public.makeup_right_operations": 2,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 56,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 10,
+          "public.bookings": 2,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 12,
+          "public.makeup_right_operations": 2,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 64,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 12,
+          "public.bookings": 3,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 13,
+          "public.makeup_right_operations": 3,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 69,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 14,
+          "public.bookings": 3,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 13,
+          "public.makeup_right_operations": 4,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 75,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 16,
+          "public.bookings": 4,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 14,
+          "public.makeup_right_operations": 5,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 80,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 18,
+          "public.bookings": 4,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 14,
+          "public.makeup_right_operations": 6,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 86,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 19,
+          "public.bookings": 4,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lessons": 14,
+          "public.makeup_right_operations": 6,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 93,
+        "delta": {
+          "auth.users": 5,
+          "public.audit_logs": 21,
+          "public.bookings": 4,
+          "public.entitlements": 2,
+          "public.lesson_credit_ledger": 2,
+          "public.lesson_records": 1,
+          "public.lessons": 14,
+          "public.makeup_right_operations": 7,
+          "public.makeup_rights": 8,
+          "public.profiles": 5,
+          "public.recurring_lesson_occurrences": 4,
+          "public.recurring_lesson_series": 1,
+          "public.recurring_lesson_series_exceptions": 1,
+          "public.student_teacher_relationships": 3,
+          "public.teacher_availability_rules": 2,
+          "public.teacher_profiles": 2,
+          "public.teacher_public_profiles": 2,
+          "public.teacher_scheduling_settings": 2,
+          "public.user_roles": 8
+        }
+      },
+      {
+        "index": 101,
+        "delta": {}
+      }
+    ]
+  },
+  {
+    "name": "schedule_locking_contract.test.sql",
+    "sourceHash": "768acc11329cff8118e37317859ddca750f71c6d0b77802764872122463ee1b5",
+    "peak": {
+      "auth.users": 2,
+      "public.lessons": 5,
+      "public.profiles": 2,
+      "public.student_teacher_relationships": 1,
+      "public.user_roles": 2
+    },
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      },
+      {
+        "index": 10,
+        "delta": {
+          "auth.users": 2,
+          "public.profiles": 2,
+          "public.user_roles": 2
+        }
+      },
+      {
+        "index": 11,
+        "delta": {
+          "auth.users": 2,
+          "public.profiles": 2,
+          "public.student_teacher_relationships": 1,
+          "public.user_roles": 2
+        }
+      },
+      {
+        "index": 12,
+        "delta": {
+          "auth.users": 2,
+          "public.lessons": 2,
+          "public.profiles": 2,
+          "public.student_teacher_relationships": 1,
+          "public.user_roles": 2
+        }
+      },
+      {
+        "index": 13,
+        "delta": {
+          "auth.users": 2,
+          "public.lessons": 3,
+          "public.profiles": 2,
+          "public.student_teacher_relationships": 1,
+          "public.user_roles": 2
+        }
+      },
+      {
+        "index": 14,
+        "delta": {
+          "auth.users": 2,
+          "public.lessons": 4,
+          "public.profiles": 2,
+          "public.student_teacher_relationships": 1,
+          "public.user_roles": 2
+        }
+      },
+      {
+        "index": 15,
+        "delta": {
+          "auth.users": 2,
+          "public.lessons": 5,
+          "public.profiles": 2,
+          "public.student_teacher_relationships": 1,
+          "public.user_roles": 2
+        }
+      },
+      {
+        "index": 17,
+        "delta": {}
+      }
+    ]
+  },
+  {
+    "name": "fixed_renewal_lifecycle_contract.test.sql",
+    "sourceHash": "d72f060f92f3086bd45557af51a41060cff06e1be6de34d81d26578c9e06d10a",
+    "peak": {},
+    "trace": [
+      {
+        "index": 0,
+        "delta": {}
+      }
+    ]
+  }
+]

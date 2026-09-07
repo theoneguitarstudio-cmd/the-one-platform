@@ -1,5 +1,12 @@
 # Epic7 Remote Smoke Plan — 設計階段，全部 NOT RUN
 
+## 2026-09-07 本機執行追加
+
+真PG本機接線與33個可執行計畫分支已PASS；P04/P05/P06/R04保持BLOCKED，原37案正式NOT RUN不變。
+詳見[家用本機證據](EPIC7_LOCAL_PG_EXECUTION_EVIDENCE.md)。原AC不刪減；coverage/有限結案未批准。
+本機使用者授權不包含正式preflight或remote smoke，不能把下方正式G0改為成立。
+
+
 ## 2026-09-07 owner 決策更新（現行；非正式操作授權）
 
 本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。
