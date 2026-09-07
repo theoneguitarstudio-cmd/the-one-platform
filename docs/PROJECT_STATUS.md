@@ -1,5 +1,21 @@
 # Project Status
 
+## 2026-09-08 OWNER 核定 GitHub 開發同步流程
+
+GitHub theoneguitarstudio-cmd/the-one-platform 為程式碼與版本歷史的主要遠端保存位置。
+日常開發：preview-test → GitHub → 公司／家用電腦接續；ZIP 僅保留離線備援用途，不再是正常同步流程。
+main 保留正式穩定基線；本次只批准 preview-test 同步，不批准 push main、merge 到 main、Vercel deployment 或正式資料庫操作。
+Production 需要另次明確核准的 main／部署流程；分支同步不包含 backup、restore、migration 或 remote smoke。
+origin 指向指定 GitHub repository；既有 handoff 保留本機 bundle 身分，不能冒稱 GitHub。
+跨電腦開始前先驗 remote/branch/HEAD/clean；有未提交變更或歷史分歧先停止，不用 force/reset/rebase 覆蓋。
+本次同步前 GitHub main=588811d1d5617788b162f4e0a275d64d6a248dce，是家用 fb989e27950fa8bc378659825cafcb5b067e950a 的已知祖先；preview-test 尚不存在。
+GitHub API 確認 repository 身分；可見 workflows/hooks/rulesets/check-runs 為空。這不是所有外部 App 設定的全面證明；不改 Vercel 設定或以部署試探。
+所有可達歷史613個blob掃描未發現秘密/正式dump，額外literal命中經審為測試字串與錯誤訊息；不推送ignored artifacts/cache/本機憑證。
+GitHub 不取代未追蹤 evidence/cache/工具的另行安全交接與環境準備；不用為同步而將其整包加入 Git。
+Epic7工程與正式操作 gate 不變，Epic5/6 REMOTE CLOSED、payment webhook NOT COMPLETE；不開始 Epic8。
+本節記錄核定流程與push前證據，成功與遠端SHA仍須push後另行查證，不能把文件本身當成功證據。
+
+
 ## 2026-09-08 備份位置／寫入入口盤點（現行，LOCAL ONLY）
 
 起點main / bc4f882b036794f038bc3f4e504d2fa119a06b9e，CLEAN。
