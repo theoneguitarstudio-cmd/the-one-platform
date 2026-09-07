@@ -1,5 +1,26 @@
 # Epic7-F Executor 工程審查包
 
+## 2026-09-07 現行：獨立讀取計畫與正式就緒審查
+
+本輪起點 `6f54f9727fe76e7ae701537573372072c0e72c33`（較49b7d23新），指定交接repo起點CLEAN。
+新增獨立殘留讀取計畫／結果驗證、37案預算審查與拒絕升級READY的離線檢查。
+**28項新測試PASS，ESLint PASS；正式DB connections / SQL / writes = 0。**
+原application/migration、package/lockfile、accepted roadmap與既有測試證據不變。
+
+**工程仍BLOCKER，Epic7 REMOTE CLOSED=NO；尚未到可執行Remote Preflight。**
+真正PG driver、逐案SQL與trigger預算驗證、R01–R03多連線、L01–L04精確舊域預算、
+實際rollback與獨立observer仍未完成。這些仍由Codex負責，不稱為只等正式核准。
+本機Docker兩個pipe均不可用；啟動既有Docker Desktop的動作被自動核准審查拒絕：
+先前禁止啟動Docker演練，本次要求不足以撤銷。沒有啟動或換方法繞過，未下載映像。
+下一步需明確允許本機引擎／純合成隔離測試範圍後，繼續上述工程；不需要正式帳密。
+
+完整新增審查：[EPIC7_REMOTE_EXECUTION_READY_REVIEW](EPIC7_REMOTE_EXECUTION_READY_REVIEW.md)。
+商業發行路徑：[EPIC7_TO_LAUNCH_PATH](EPIC7_TO_LAUNCH_PATH.md)，僅PROPOSAL，Epic7～13不重編。
+新證據：`artifacts/remote-smoke/epic7-local-engineering/review-71762026-e4b5-4227-88b5-a94fd20632f9/`。
+本輪未重跑原73安全測試、70 controller tests、ValidateOnly、全SQL或build；不push、不正式操作、不Epic8。
+
+以下保留各輪歷史紀錄；涉及「現在不用做任何事」或舊下一步者，以本節和新就緒審查為準。
+
 ## 2026-09-07 續作：離線 SQL 計畫與連線安全工程
 
 本次基線 `49b7d23c12f751476a251d8b91ac1930ab04e510`，在指定交接專案工作。
