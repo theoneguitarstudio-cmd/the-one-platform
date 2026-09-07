@@ -1,5 +1,16 @@
 # Epic7-F 37 案例覆蓋對照
 
+## 2026-09-07 新離線編譯證據（正式仍 NOT RUN）
+
+本輪 new compiler 對所有37 IDs產生plan，但**沒有執行37案SQL**：
+25個S/H/C/G/V/P拒絕範圍有參數化指令初版；R01–R03有鎖barrier schedule及winner保留數；
+P04/P05/P06/R04保持BLOCKED無正向指令；L01–L04只建立既有source/include bundle（新run預算與接線未完成）；
+L05提供獨立observer query builder與合成snapshot核對。
+全部 fullCaseProven=false，不能把編譯成功變成case/domain/REMOTE PASS。
+70項新離線測試及ESLint PASS，證據與剩餘本機PG阻礙見[工程審查包](EPIC7_EXECUTOR_ENGINEERING_REVIEW.md)。
+D4預設隔離、正向authority限制、acceptedDeferral=false與有限結案草案未批准皆不變。
+
+
 ## 2026-09-07 owner 決策更新（現行；非正式操作授權）
 
 本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。

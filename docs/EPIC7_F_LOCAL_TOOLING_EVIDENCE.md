@@ -1,5 +1,18 @@
 # Epic7-F Local Readiness Tooling Evidence
 
+## 2026-09-07 本次增量：離線compiler/controller（非舊測試重跑）
+
+基線49b7d23，Node24.19.0；新增 tools/epic7-local-engineering 七檔。
+70 targeted offline tests PASS / 0 FAIL，ESLint PASS；原73tests／policy7tests／ValidateOnly／SQL/build未重跑。
+新測試包含37個plan編譯檢查，並非37案實際資料庫執行。實際PG domain驗證NOT RUN。
+最終logs、verification、37plans、tool hashes：`artifacts/remote-smoke/epic7-local-engineering/compiled-0ad3ffdf-9db8-4383-820f-5782f724863e`。
+控制流程結果/獨立observer：`artifacts/remote-smoke/epic7-local-engineering/a63b66d2-c7be-4151-acd5-1d76b706d6e9`。
+失敗修正：race編譯作用域、include regex；另修正共享payload與driver模式字串可被冒用的入口，已加新回歸。
+本機Docker named-pipe API不存在（PIPE_NOT_FOUND）；PATH未找到psql/postgres，未啟動/下載/安裝。
+因此真正driver/SQL/transaction/race與legacy新預算未完成；詳細限度見[工程審查包](EPIC7_EXECUTOR_ENGINEERING_REVIEW.md)。
+正式DB connections=0、正式SQL=0、正式write=0；不push/deploy/backup/restore/cleanup/Epic8。
+
+
 2026-09-06：**本機工具準備完成；正式執行未授權；Epic7 REMOTE CLOSED = NO。**
 候選 application/migration SHA：`d5f98434106797afc65c59953aa3bc61ba26ecb4`。
 新工具是未提交版本，以 [tooling manifest](EPIC7_F_TOOLING_MANIFEST.json) 的 SHA-256 綁定。

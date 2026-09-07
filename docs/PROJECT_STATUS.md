@@ -1,5 +1,27 @@
 # Project Status
 
+## 2026-09-07 續作：離線 SQL 計畫與連線安全工程
+
+本次基線 `49b7d23c12f751476a251d8b91ac1930ab04e510`，在指定交接專案工作。
+新增 tools/epic7-local-engineering 七檔；**70 項新增離線測試 PASS、ESLint PASS**。
+沒有重跑原 73 safety tests、preserved ValidateOnly、完整 SQL suite 或 build。
+正式 DB connections / SQL / writes 全為 0；未 push、部署、啟動 Docker 或實作 Epic8。
+
+已完成 37 ID 的離線計畫整理、參數化 SQL 初版、28 表資料鍵／trigger 峰值／逐步數量核對、
+連線逾時／晚到取消／角色與連線漂移停止契約、獨立回滾／隔離保留核對及非秘密證據。
+**這是離線編譯與控制流程測試，不是 37 案 domain SQL 已執行或完整正式 executor。**
+原 application/migration candidate d5f9843、preserved c61、原四檔安全核心及所有歷史結果不變。
+
+本機限制已實查：`docker --host npipe:////./pipe/docker_engine version` 回覆 PIPE_NOT_FOUND；
+同端點 image inventory 也不可用。PATH 未找到 psql/postgres。未改 Docker context、未啟動引擎、
+未下載 image、未建立容器、未要求管理員權限或安裝依賴。
+下一步需先有可用且 scope 已確認的本機隔離 PostgreSQL，工程再完成真實 driver、
+rollback/lock/cancel、逐案 SQL 與 legacy 預算實測；不能把未完成接線寫成只等正式批准。
+若需操作者介入，只需先確認 Docker Desktop 本機引擎畫面與可用隔離環境，不需正式帳密或 Vercel 重查。
+
+完整說明見 [executor 工程審查包](EPIC7_EXECUTOR_ENGINEERING_REVIEW.md)。
+
+
 ## 2026-09-07 owner 決策更新（現行；非正式操作授權）
 
 本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。

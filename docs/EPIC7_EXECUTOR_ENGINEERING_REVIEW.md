@@ -1,5 +1,80 @@
 # Epic7-F Executor 工程審查包
 
+## 2026-09-07 續作：離線 SQL 計畫與連線安全工程
+
+本次基線 `49b7d23c12f751476a251d8b91ac1930ab04e510`，在指定交接專案工作。
+新增 tools/epic7-local-engineering 七檔；**70 項新增離線測試 PASS、ESLint PASS**。
+沒有重跑原 73 safety tests、preserved ValidateOnly、完整 SQL suite 或 build。
+正式 DB connections / SQL / writes 全為 0；未 push、部署、啟動 Docker 或實作 Epic8。
+
+已完成 37 ID 的離線計畫整理、參數化 SQL 初版、28 表資料鍵／trigger 峰值／逐步數量核對、
+連線逾時／晚到取消／角色與連線漂移停止契約、獨立回滾／隔離保留核對及非秘密證據。
+**這是離線編譯與控制流程測試，不是 37 案 domain SQL 已執行或完整正式 executor。**
+原 application/migration candidate d5f9843、preserved c61、原四檔安全核心及所有歷史結果不變。
+
+本機限制已實查：`docker --host npipe:////./pipe/docker_engine version` 回覆 PIPE_NOT_FOUND；
+同端點 image inventory 也不可用。PATH 未找到 psql/postgres。未改 Docker context、未啟動引擎、
+未下載 image、未建立容器、未要求管理員權限或安裝依賴。
+下一步需先有可用且 scope 已確認的本機隔離 PostgreSQL，工程再完成真實 driver、
+rollback/lock/cancel、逐案 SQL 與 legacy 預算實測；不能把未完成接線寫成只等正式批准。
+若需操作者介入，只需先確認 Docker Desktop 本機引擎畫面與可用隔離環境，不需正式帳密或 Vercel 重查。
+
+完整說明見 [executor 工程審查包](EPIC7_EXECUTOR_ENGINEERING_REVIEW.md)。
+
+### 本次交付的精確範圍
+
+| 元件 | 本輪交付 | 尚不能宣稱 |
+| --- | --- | --- |
+| schema.mjs | 固定候選、逐份 34 migration raw hashes 核對；從 source 收集 learning functions；28 表可觀測鍵定義 | 不是已部署內容證明；沒有替代原 preserved proof 或 live target attestation |
+| compile.mjs | 25 個 S/H/C/G/V/P 拒絕範圍 SQL 計畫；參數 snapshot 避免後續負向 case 改到前面 payload；權限/函式矩陣、階層、內容、完整性、V2差異、角色拒絕 | 尚未經 PG 執行；原 AC 所有排列及 schema/driver 結果型別仍須真 DB 核對，fullCaseProven 永遠 false |
+| R01–R03 | first-session lock barrier、兩 session 呼叫/預期結果的資料化 schedule，以及成功 winner/retry/loser 的預期保留數 | 尚無真多 session driver/barrier 證據；serial runner 固定拒絕這三案；不是 production C 許可 |
+| P04/P05/P06/R04 | BLOCKED_AUTHORITY，無正向 SQL；無 replacement、enrollment、policy/grant/progress 捷徑 | 原成功/授權後分支仍未驗證，不用早期拒絕填 PASS |
+| L01–L04 | 指定既有 legacy suite 與遞迴 include 的 raw source hashes，ISOLATED_ONLY | 不是新 per-run legacy fixture compiler；精確舊域預算/driver 接線仍未完成，不能把示例空 keys 說成0影響；serial runner 拒絕 |
+| observe.mjs / L05 | 28 表參數化範圍查詢、public/auth inventory及整表SHA-256摘要query builder；獨立 snapshot 驗证、rollback 0殘留及隔離C exact keys/counts/兩次獨立讀取一致性 | 真正 catalog/all-table/unscoped/sequence collector尚未接線，不宣稱已讀正式94表；C核對需要另外完整未觸及範圍摘要 |
+| session.mjs | begin/configure/savepoint、精確SQLSTATE/domain、row/value/DTO/逐checkpoint數量、timeout/cancel/late-connect close、rollback/close/observer錯誤保持FAIL | 真PG wire cancellation、ReadyForQuery/session role證明與實際transaction sentinel仍未驗證 |
+| test-double.mjs | 程式內 branded 且方法不可替換的封閉記憶體替身；拒絕任意driver，即使caller寫ISOLATED_TEST_DOUBLE | 替身依計畫回應，**只測controller，不驗證SQL/domain或實際資料庫副作用** |
+| evidence.mjs | plan/result/獨立observer/hash四檔，exclusive寫入、不覆蓋；37案compile bundle、tool hashes、大小/路徑及品牌綁定 | 無credentials/學生資料/raw driver errors；hash不是批准，Windows ACL還需實際環境驗證，不以mode 0600宣稱Windows已加密 |
+
+### 數量、鍵與失敗條件
+
+- 合成8個Auth身份，各自trigger產生profile與student role；另4個測試角色，使角色峰值12。
+  移除4個合成身份的student role後最終角色8；這些刪除**只在未執行的隔離fixture準備計畫中**，
+  不是事後清理稽核紀錄或正式角色。既有產品catalog同步trigger在新UUID無任何舊產品時才預期0影響，
+  開始前碰撞與獨立全範圍核對不可省略。
+- A為2 Levels / 3 Modules / 4 Nodes；B不同結構為1/1/1；V2重用stable identities但建立新resource revisions。
+  Course/Draft各新增一條audit；每個新structure/content/freeze請求新增一receipt、一audit。
+  相同請求重送用相同tuple去重；失敗/savepoint rollback不計新增；C winner才計新增，retry/loser不重複。
+- profiles使用unique user_id、user_roles使用unique(user_id,role)，不冒稱兩者是PK；
+  audit PK實際為DB產生的UUID，核對另記generated_id；預期tuple為actor/action/target/request_id。
+  其餘版本關聯使用真composite identity，activity/request在shipped false下為0。
+- 每個checkpoint保存預期數量與當時step index；controller讀取替身scopeCounts作比對，
+  缺表、多行、少行均STOP。真正資料庫讀取方法仍須接線並驗證，不能用預期數值替代actual查詢。
+- rollback模式要求全部run rows為0且整表/catalog/sequence摘要不變。
+  C隔離提案要求expected keys/counts完全符合、獨立第二次snapshot相同，未觸及範圍不變；
+  任何missing observer、unknown scope、殘留、cancel/rollback/close失敗保持FAIL，不DELETE/repair/reset sequence。
+- 新session模型sentinel是adapter所報temporary-row before/inside/outside狀態及獨立after值；
+  **本輪未產生真正PG sentinel實證**。原四檔核心的Course sentinel及其既有測試證據未改。
+
+### 驗證與本機 artifact
+
+- Node 24.19.0；70 PASS / 0 FAIL；ESLint exit 0。使用既有 offline tripwire，禁止network/process/env-file入口。
+- 初次編譯找到race變數作用域錯誤；後續source-include regex跳脫錯誤也已修正，沒有放寬路徑檢查。
+  另新增回歸測試抓住並固定payload共用變動，以及拒絕偽裝offline的driver注入。
+- 最終控制流程 evidence：`artifacts/remote-smoke/epic7-local-engineering/a63b66d2-c7be-4151-acd5-1d76b706d6e9`。
+- 最終37案計畫與逐檔工具hash、測試log、verification：
+  `artifacts/remote-smoke/epic7-local-engineering/compiled-0ad3ffdf-9db8-4383-820f-5782f724863e`。這些ignored artifacts僅含合成內容／摘要，沒有SQL執行紀錄冒充正式結果。
+- 歷史計數不改寫：原73項安全測試與先前7項policy tests沿用各自歷史紀錄，本輪新測試為70項。
+  Epic7 REMOTE CLOSED=NO；coverage contract仍PROPOSED/PENDING APPROVAL。
+
+### 下一步工程與真正阻礙
+
+先建立可驗證的獨立本機PG runtime（本輪未啟動全機Docker），再在新隔離目標完成：
+1. 從受信任內容／runtime attestation取得driver，實際SQL parameter/result映射、server timeout/cancel與session綁定。
+2. 執行本輪SQL初版並修正domain斷言、trigger-generated actual inventory；完成L01–L04精確本次預算。
+3. 真正rollback sentinel與獨立collector、R01–R03 lock-barrier多session、未知commit結果核對。
+這些仍是工程缺件，並非宣称「只欠正式操作者簽名」。目前不請求正式讀取／備份／部署／smoke授權。
+
+
 ## 2026-09-07 owner 決策更新（現行；非正式操作授權）
 
 本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。
