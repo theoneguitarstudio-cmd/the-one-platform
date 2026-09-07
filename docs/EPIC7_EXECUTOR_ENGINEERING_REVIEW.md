@@ -1,5 +1,63 @@
 # Epic7-F Executor 工程審查包
 
+## 2026-09-07 owner 決策更新（現行；非正式操作授權）
+
+本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。
+只從本次開始生效；下方舊提案、時間戳、candidate、測試結果及未授權紀錄保留歷史意義。
+完整現行原則見 [owner 決策](EPIC7_OWNER_DECISIONS.md)。
+
+- 最後核准人：使用者本人；Codex／受控工具可在未來受核准的具體範圍操作。此刻各項正式操作仍 NO。
+- 正式備份限 The One 自己控制的加密空間；任職公司的電腦／磁碟／儲存不是預設長期保存位置。
+- 可接受資料損失上限 **1 小時**，執行前盡量更近；未證明可滿足則 STOP，不自動買服務。
+- committed／immutable 測試資料預設只放已核准隔離環境；這是策略接受，不是任何一次建立／執行／處置的批准。
+- The One Vercel hosting identity **UNKNOWN**；目前連線僅見 together-stories。GitHub App All repositories 證據不必重查。
+
+37 案全部 **REMOTE NOT RUN**；Epic7 **REMOTE CLOSED=NO**。
+coverage 替代與有限結案契約仍 **PROPOSED / PENDING APPROVAL**，不隨隔離策略接受而自動通過。
+舊 73 safety tests、preserved ValidateOnly 與歷史 SQL/build 證據本輪不重跑。
+
+## 本次增量與下一步（政策已確認，工程仍有缺件）
+
+D1–D5 已接受，正式操作仍全部 NO。保留上輪四檔安全核心與 review manifest 原 bytes；
+本輪新增相鄰 [owner-policy](../tools/epic7-owner-policy.mjs) 及其針對性測試，
+不加入原 executor 封閉四檔目錄、不修改 preserved 白名單、不執行原 73 tests / ValidateOnly。
+此工具只是離線規劃檢查，沒有 transport、CLI 執行入口、credentials 或授權 token。
+其結果不能傳成原 executor 的可信 proof，不能將 caller metadata 視為正式觀察。
+原 manifest retention=PENDING / approval=NOT_APPROVED 仍正確：每次 run 的保管、期限與批准尚未存在，
+不因 D4 原則接受而改為已批准。
+
+A：本輪已完成 37 ID 分類、原 NOT RUN/未核准 deferral 一致性、1h recovery 條件與失敗邊界測試。
+下一輪工程優先按原 schema 交付逐案 fixture compiler/trigger 預算與 observer query 設計、
+PG session timeout/cancel/失聯狀態及可信 approval 綁定；可以先寫無連線設計與 mock，
+實際 driver/獨立 PG 多 session 驗證尚未完成。不是等待使用者逐條除錯。
+本輪不假稱此政策檢查補完了正式 executor，也不把純模擬升格為正式安全證明。
+
+B：未來需唯讀取得 Supabase exact name/ref/region、當前 migration IDs/catalog/roles、
+部署來源/受保護 hash 證據、可還原時點與 managed inventory，供實際 writer 綁定與恢復流程選型；
+Vercel account/team/project/repo/branch/auto-deploy/build 供版本及流量切換確認。
+目前連線只見 together-stories（使用者回報，非本輪再查），The One identity UNKNOWN；
+不重問 GitHub App Configure、不以 push 探測。本輪沒有上述唯讀授權，不發請求。
+
+C：backup/export、真實 restore、migration、deployment、remote smoke、
+正式 committed fixture 例外、cleanup 分別需要使用者對具體計畫核准，現在 NO。
+受控工具可以未來操作不等於自動批准；須記載 plan/target/candidate/case/manifest hash、
+時間窗、操作人、備份條件、預期留下資料與 STOP 處置。核准人固定為使用者，
+既有 runbook 的原地恢復第二位 operator 確認仍適用。
+
+### 本次增量驗證紀錄（2026-09-07）
+
+Node 24.19.0；只對新增 owner-policy 兩檔執行既有 offline tripwire 下的 Node test 與 ESLint。
+7 tests PASS / 0 FAIL；ESLint exit 0；git diff --check PASS。37 案檢查是讀原 JSON/文件核對 ID 和分類，沒有執行案例。
+原 executor 四檔／review manifest、preserved tools、application、package/lockfile、34 migrations 本輪未改。
+正式 DB connections=0、正式 SQL=0、正式 write=0；未連 Vercel/Supabase、未 backup/restore/deploy/cleanup。
+本次新增工具 raw SHA-256（供本機 diff 審查，不是簽核或原 preserved 證據）：
+
+- tools/epic7-owner-policy.mjs: `09f98642483c350d4171fc2f94d5e4cddbc548e3f44675b3471e80084baa5732`
+- tools/epic7-owner-policy.test.mjs: `e7a94a66aead2738f28ea144a1c2ace970de0c5c801688c347823e639170b37f`
+
+## 歷史紀錄：以下保留本次 owner 決策之前的時點
+
+
 狀態：**本機安全核心可供審查；無 production transport；正式 NOT RUN / NOT AUTHORIZED。**
 本輪起點 `0af06802dbeb2fcd614d33db3e64c441fe711be4`；application/migration candidate
 仍為 `d5f98434106797afc65c59953aa3bc61ba26ecb4`，保存點 c61cdb6 不变。

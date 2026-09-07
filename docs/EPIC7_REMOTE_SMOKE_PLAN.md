@@ -1,5 +1,27 @@
 # Epic7 Remote Smoke Plan — 設計階段，全部 NOT RUN
 
+## 2026-09-07 owner 決策更新（現行；非正式操作授權）
+
+本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。
+只從本次開始生效；下方舊提案、時間戳、candidate、測試結果及未授權紀錄保留歷史意義。
+完整現行原則見 [owner 決策](EPIC7_OWNER_DECISIONS.md)。
+
+- 最後核准人：使用者本人；Codex／受控工具可在未來受核准的具體範圍操作。此刻各項正式操作仍 NO。
+- 正式備份限 The One 自己控制的加密空間；任職公司的電腦／磁碟／儲存不是預設長期保存位置。
+- 可接受資料損失上限 **1 小時**，執行前盡量更近；未證明可滿足則 STOP，不自動買服務。
+- committed／immutable 測試資料預設只放已核准隔離環境；這是策略接受，不是任何一次建立／執行／處置的批准。
+- The One Vercel hosting identity **UNKNOWN**；目前連線僅見 together-stories。GitHub App All repositories 證據不必重查。
+
+37 案全部 **REMOTE NOT RUN**；Epic7 **REMOTE CLOSED=NO**。
+coverage 替代與有限結案契約仍 **PROPOSED / PENDING APPROVAL**，不隨隔離策略接受而自動通過。
+舊 73 safety tests、preserved ValidateOnly 與歷史 SQL/build 證據本輪不重跑。
+
+目前 D4 預設 C 類只在核准隔離環境；原 37 案與分支要求完整保留。現行逐案分類與有限驗收草案見 [coverage](EPIC7_F_CASE_COVERAGE.md)。
+所有正式操作 G0 尚未成立，拒絕分支不能冒稱正向通過。
+
+## 歷史紀錄：以下保留本次 owner 決策之前的時點
+
+
 候選：`d5f98434106797afc65c59953aa3bc61ba26ecb4`；規劃日期 2026-09-06。
 前置查證與 migration hashes 見 [readiness evidence](EPIC7_REMOTE_READINESS_EVIDENCE.md)。
 本文件不授權 production migration、fixture、smoke、cleanup 或 restore。

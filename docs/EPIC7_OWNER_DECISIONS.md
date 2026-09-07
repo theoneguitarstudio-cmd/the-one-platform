@@ -1,4 +1,53 @@
-# 使用者最後決策單
+# Epic7 owner / operator 決策
+
+## 2026-09-07 owner 決策更新（現行；非正式操作授權）
+
+本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。
+只從本次開始生效；下方舊提案、時間戳、candidate、測試結果及未授權紀錄保留歷史意義。
+完整現行原則見 [owner 決策](EPIC7_OWNER_DECISIONS.md)。
+
+- 最後核准人：使用者本人；Codex／受控工具可在未來受核准的具體範圍操作。此刻各項正式操作仍 NO。
+- 正式備份限 The One 自己控制的加密空間；任職公司的電腦／磁碟／儲存不是預設長期保存位置。
+- 可接受資料損失上限 **1 小時**，執行前盡量更近；未證明可滿足則 STOP，不自動買服務。
+- committed／immutable 測試資料預設只放已核准隔離環境；這是策略接受，不是任何一次建立／執行／處置的批准。
+- The One Vercel hosting identity **UNKNOWN**；目前連線僅見 together-stories。GitHub App All repositories 證據不必重查。
+
+37 案全部 **REMOTE NOT RUN**；Epic7 **REMOTE CLOSED=NO**。
+coverage 替代與有限結案契約仍 **PROPOSED / PENDING APPROVAL**，不隨隔離策略接受而自動通過。
+舊 73 safety tests、preserved ValidateOnly 與歷史 SQL/build 證據本輪不重跑。
+
+## 已接受的五項原則與尚未授權的界線
+
+| 決策 | 現行 ACCEPTED 原則 | 仍需具體證據／另次核准 |
+| --- | --- | --- |
+| D1 最終核准 | 使用者本人最後核准，技術工作可由 Codex／受控工具承擔 | 每次 exact target、scope、版本、時間窗、預期副作用、停止與復原方案；核准紀錄須來自使用者，不能由輸入 boolean 代替。既有原地恢復第二位 operator 確認規則仍保留 |
+| D2 備份 | The One 自控且加密；不把任職公司空間當預設長期備份 | 實際位置、加密與存取控制、保管者、保留期限及可用還原證據目前 UNKNOWN；工程查證，不索取對話中的密碼／key／正式 credential |
+| D3 損失上限 | 最多 3600 秒，不是故意容許損失一小時 | 使用可實際還原的一致 recovery point 計算，不能用下載／複製完成時間冒充；持續事故保障仍須證明持續更新與可恢復性 |
+| D4 測試保留 | 預設方案 B：committed／immutable 案在核准隔離環境 | 正式 C 資料預設 0；任何正式例外須逐次批准精確 manifest 與保留方式；隔離環境本身、執行與處置也未批准 |
+| D5 Hosting | 目前連線僅找到 together-stories；The One 未在該連線找到 | The One account/team/project/repo/branch/auto deployment/build 全部 UNKNOWN；這不證明它不存在或已部署 |
+
+## 現在的工作分類
+
+**A — Codex 本機工程：** 補純離線 policy/coverage/recovery 檢查、逐案 compiler 與 schema/trigger 預算設計、
+可信 collector 的輸入契約、PG transport/observer 接線設計與 mock failure 測試。
+原安全核心的目標／版本／sentinel／timeout／residue 模型已有 73 項證據，不因換政策重跑。
+本次先完成政策條件與 37 案一致性檢查；正式 driver/逐案 SQL 與真實 PG 驗證仍未交付，不說成只等使用者。
+
+**B — 未來外部唯讀：** exact Supabase identity/region/history/catalog、現有 backup/PITR 能力與最新可還原時點、
+The One 儲存所有權/加密/ACL/保管/保留、Auth/Storage/外部 jobs inventory、實際 hosting 連結與 build。
+目的見 recovery / engineering review；本輪不查正式服務。若需要登入才一次請使用者協助。
+
+**C — 仍 NO：** 正式 backup export、真實資料 restore drill、remote migration、application deployment、
+remote smoke、committed production fixture、cleanup。每一項獨立核准，不由政策接受推導授權。
+不 push、不建 Vercel project、不改設定、不買服務、不開始 Epic8。
+
+使用者現在不用做任何事。下一步仍有工程工作，不重問上述五項已決事項。
+
+## 歷史：96d206a 時尚未回答的決策單（已由本節取代）
+
+以下原文只留歷史：其中「公司備份空間」「兩方案待選」「1h 待確認」不再是現行建議。
+
+### 使用者最後決策單
 
 這張單是收集選擇，不是准許現在操作正式網站。
 工程已準備好本機安全控制與審查材料；正式連線、逐項測試接線與整站復原驗證仍由工程處理。

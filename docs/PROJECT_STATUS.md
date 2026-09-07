@@ -1,5 +1,27 @@
 # Project Status
 
+## 2026-09-07 owner 決策更新（現行；非正式操作授權）
+
+本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。
+只從本次開始生效；下方舊提案、時間戳、candidate、測試結果及未授權紀錄保留歷史意義。
+完整現行原則見 [owner 決策](EPIC7_OWNER_DECISIONS.md)。
+
+- 最後核准人：使用者本人；Codex／受控工具可在未來受核准的具體範圍操作。此刻各項正式操作仍 NO。
+- 正式備份限 The One 自己控制的加密空間；任職公司的電腦／磁碟／儲存不是預設長期保存位置。
+- 可接受資料損失上限 **1 小時**，執行前盡量更近；未證明可滿足則 STOP，不自動買服務。
+- committed／immutable 測試資料預設只放已核准隔離環境；這是策略接受，不是任何一次建立／執行／處置的批准。
+- The One Vercel hosting identity **UNKNOWN**；目前連線僅見 together-stories。GitHub App All repositories 證據不必重查。
+
+37 案全部 **REMOTE NOT RUN**；Epic7 **REMOTE CLOSED=NO**。
+coverage 替代與有限結案契約仍 **PROPOSED / PENDING APPROVAL**，不隨隔離策略接受而自動通過。
+舊 73 safety tests、preserved ValidateOnly 與歷史 SQL/build 證據本輪不重跑。
+
+本次僅增量本機政策檢查與文件：不改 application／migration／歷史 evidence。上輪安全核心仍在 96d206a，73 tests 不重跑。
+後續正式接線、可信取證、逐案 SQL 與全服務還原工程未完成；不能稱為只差批准。
+
+## 歷史紀錄：以下保留本次 owner 決策之前的時點
+
+
 Status date: 2026-09-06 (Epic7 local closure; P2 remote evidence remains dated 2026-09-05)
 
 This file is the canonical engineering-status record for The One 2.0. Product

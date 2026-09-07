@@ -1,5 +1,71 @@
 # Epic7-F 備份／復原驗證授權包（待核准，未執行）
 
+## 2026-09-07 owner 決策更新（現行；非正式操作授權）
+
+本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。
+只從本次開始生效；下方舊提案、時間戳、candidate、測試結果及未授權紀錄保留歷史意義。
+完整現行原則見 [owner 決策](EPIC7_OWNER_DECISIONS.md)。
+
+- 最後核准人：使用者本人；Codex／受控工具可在未來受核准的具體範圍操作。此刻各項正式操作仍 NO。
+- 正式備份限 The One 自己控制的加密空間；任職公司的電腦／磁碟／儲存不是預設長期保存位置。
+- 可接受資料損失上限 **1 小時**，執行前盡量更近；未證明可滿足則 STOP，不自動買服務。
+- committed／immutable 測試資料預設只放已核准隔離環境；這是策略接受，不是任何一次建立／執行／處置的批准。
+- The One Vercel hosting identity **UNKNOWN**；目前連線僅見 together-stories。GitHub App All repositories 證據不必重查。
+
+37 案全部 **REMOTE NOT RUN**；Epic7 **REMOTE CLOSED=NO**。
+coverage 替代與有限結案契約仍 **PROPOSED / PENDING APPROVAL**，不隨隔離策略接受而自動通過。
+舊 73 safety tests、preserved ValidateOnly 與歷史 SQL/build 證據本輪不重跑。
+
+## 本次按 D2 / D3 收斂的工程判定
+
+**目前能否證明最多損失一小時：UNKNOWN，因此正式 gate STOP。**
+這不是宣稱技術上做不到，而是現有 repository 沒有完整、當前、可還原的證據。
+2026-09-05 三檔不同時刻的 logical dumps 不能作今日 recovery point，
+也沒有 Auth、Storage bytes、migration history 與全服務切換的完整證明。
+下方原 `C:/TheOneBackups/...` 位置只是历史提案，**不再是公司電腦上的預設新備份位置**。
+既有 runbook BR-2 容許較嚴格 owner 上限，本案現在採 1h；不能套 24h 或自行用例外放寬。
+
+### 證明方式與不合格時的處理
+
+1. 在另行核准唯讀盤點後，建立包含與排除項目、資料相依、實際服務使用清單。
+2. 先證明 The One 控制保存空間，記錄非秘密的加密方式/狀態、授權角色、保管責任、保留/到期處置與金鑰取用程序。
+   金鑰值不入文件；先以無秘密合成檔驗證加解密與授權取用，正式備份仍需另次核准。
+3. 審查可維持一致的輸出方式。三次各自 dump 不當成共同快照；需可驗證 snapshot 或另批准停寫窗口。
+   並行合法寫入、Auth/Storage 與外部付款等相依無法對齊則 STOP。
+4. 在另批准的隔離還原驗證後，記錄真正可恢復的最舊一致資料時點 T、UTC 時計及取證時間 G；
+   須有 0 <= G−T <= 3600 秒，且各必要服務一致。不能用檔案 LastWrite、copy 完成或備份按鈕時間代替 T。
+   正式執行前重算，超時就 STOP；不自動 export 更新。
+5. 一次近時點備份只支持當次 gate，不能證明明天任何事故都符合 1h。
+   持續保障須證明最大排程間隔 + 輸出/可用延遲 + 監測/失敗窗口仍在上限內，
+   有失敗告警、可恢復時點檢測與停止風險操作的程序；不能把「每小時開始備份」等同最多損失一小時。
+6. DB drill 僅證明那組資料可載入；整站還要逐項通過下方服務清單、版本/安全/流量驗證，
+   記錄實際可恢復時間與損失窗口，使用者核准後才重開寫入。1h 是損失上限，不是承諾一小時修好網站。
+
+### 方案（均未啟用；不要求購買）
+
+| 方案 | 可用條件與證明 | 成本／限制 |
+| --- | --- | --- |
+| The One 已有加密外接儲存／自有備份空間 | 證明所有權、加密、ACL、可用容量、保管人、保留、還原可讀；接近操作時點的一致 logical set | 若已有合格設備可不新增支出；人工維護與離線可用性成本，現有設備是否存在 UNKNOWN；公司機器不得預設當永久或明文暫存 |
+| The One 已持有合格雲端空間 | 沿用既有付費額度與受限權限；傳输/落地加密、取用與完整還原實證 | 是否已有合格空間 UNKNOWN；額度、流量費與保留限制先確認，不能保證零費用 |
+| 現有方案已含可用 managed recovery / PITR | 核對 entitlement、實際啟用、最新可還原時間與保留、隔離恢復證據；仍補 Auth/Storage/網站相依 | 是否已包含 UNKNOWN；WAL-G 能力或歷史 PITR flag 不足以證明目前可用 |
+| 必要才評估新增儲存／PITR／較高方案 | 先證明上述現有方法不能穩定滿足 1h，再比較能力與完整事故恢復 | 有持續訂閱、儲存/流量與演練運算費可能；實際價格、資格與增額 UNKNOWN，未查價亦未購買 |
+
+### 本機已可檢查與尚缺的工程
+
+新增 [離線條件檢查](../tools/epic7-owner-policy.mjs) 驗證 1h 邊界、未來/無效時間、
+自控加密保存、保管/權限/保留/一致性/可還原條件、全服務 inventory 缺項；
+輸入都是合成 metadata，不讀 backup、不連線。
+即使 SIMULATED_REQUIREMENTS_MET，executionAllowed=false、brPass=false、
+continuousRecoveryProven=false；不是可信證據收集器或正式授權 gate。
+
+尚缺：將可信非秘密取證來源與當次計畫/manifest/approval 綁定、可用一致快照與 managed prerequisites 的
+可執行流程、實際服務相依與維護/停寫接線、隔離演練證明。工程須先完成設計與受影響的本機測試。
+下方 Database/Auth/Storage/application/domains/secrets/connections/extensions/history/reopening
+及 Realtime/Edge Functions 的 UNKNOWN 均保留；只有可信盤點證明沒使用才能標已確認不適用。
+
+## 歷史紀錄：以下保留本次 owner 決策之前的時點
+
+
 日期：2026-09-06。候選 `d5f98434106797afc65c59953aa3bc61ba26ecb4`。
 本文件只準備下一輪操作，**不代表 operator 同意、RPO 同意、backup export、真實資料 restore 或 migration 授權**。
 依 [canonical runbook](REMOTE_BACKUP_RECOVERY_RUNBOOK.md) 與

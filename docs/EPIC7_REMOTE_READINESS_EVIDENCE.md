@@ -1,5 +1,28 @@
 # Epic7-F Independent Preflight & Deployment Linkage Evidence
 
+## 2026-09-07 owner 決策更新（現行；非正式操作授權）
+
+本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。
+只從本次開始生效；下方舊提案、時間戳、candidate、測試結果及未授權紀錄保留歷史意義。
+完整現行原則見 [owner 決策](EPIC7_OWNER_DECISIONS.md)。
+
+- 最後核准人：使用者本人；Codex／受控工具可在未來受核准的具體範圍操作。此刻各項正式操作仍 NO。
+- 正式備份限 The One 自己控制的加密空間；任職公司的電腦／磁碟／儲存不是預設長期保存位置。
+- 可接受資料損失上限 **1 小時**，執行前盡量更近；未證明可滿足則 STOP，不自動買服務。
+- committed／immutable 測試資料預設只放已核准隔離環境；這是策略接受，不是任何一次建立／執行／處置的批准。
+- The One Vercel hosting identity **UNKNOWN**；目前連線僅見 together-stories。GitHub App All repositories 證據不必重查。
+
+37 案全部 **REMOTE NOT RUN**；Epic7 **REMOTE CLOSED=NO**。
+coverage 替代與有限結案契約仍 **PROPOSED / PENDING APPROVAL**，不隨隔離策略接受而自動通過。
+舊 73 safety tests、preserved ValidateOnly 與歷史 SQL/build 證據本輪不重跑。
+
+本次 hosting 來源是使用者提供的已連線範圍，不是新的平台查詢。將來若唯讀工具仍看不到 The One，
+才請帳號持有人一次開啟 The One 專案總覽、Settings 的 Git 與 Build 設定頁；不看秘密值、不儲存、不部署。
+沒有查到不代表 The One 不存在，現在不要求使用者再查畫面。
+
+## 歷史紀錄：以下保留本次 owner 決策之前的時點
+
+
 前輪稽核：**COMPLETE WITH WARN / EVIDENCE GAPS**。正式執行：**NOT READY / NOT AUTHORIZED**。
 後續本機工具、演練、版本重現與恢復準備見 [本機工具證據](EPIC7_F_LOCAL_TOOLING_EVIDENCE.md)。
 保存後版本驗證及復原/驗收契約收斂已追加至同一evidence、coverage與recovery package；沒有新遠端查詢。

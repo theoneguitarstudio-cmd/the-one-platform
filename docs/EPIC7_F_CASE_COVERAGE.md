@@ -1,5 +1,93 @@
 # Epic7-F 37 案例覆蓋對照
 
+## 2026-09-07 owner 決策更新（現行；非正式操作授權）
+
+本次依使用者明確指示記錄，起點為 `96d206a4cd413efe48c01ebed16f67f07489f266`。
+只從本次開始生效；下方舊提案、時間戳、candidate、測試結果及未授權紀錄保留歷史意義。
+完整現行原則見 [owner 決策](EPIC7_OWNER_DECISIONS.md)。
+
+- 最後核准人：使用者本人；Codex／受控工具可在未來受核准的具體範圍操作。此刻各項正式操作仍 NO。
+- 正式備份限 The One 自己控制的加密空間；任職公司的電腦／磁碟／儲存不是預設長期保存位置。
+- 可接受資料損失上限 **1 小時**，執行前盡量更近；未證明可滿足則 STOP，不自動買服務。
+- committed／immutable 測試資料預設只放已核准隔離環境；這是策略接受，不是任何一次建立／執行／處置的批准。
+- The One Vercel hosting identity **UNKNOWN**；目前連線僅見 together-stories。GitHub App All repositories 證據不必重查。
+
+37 案全部 **REMOTE NOT RUN**；Epic7 **REMOTE CLOSED=NO**。
+coverage 替代與有限結案契約仍 **PROPOSED / PENDING APPROVAL**，不隨隔離策略接受而自動通過。
+舊 73 safety tests、preserved ValidateOnly 與歷史 SQL/build 證據本輪不重跑。
+
+## D4 後的 37 案執行分類（現行策略；不是驗收通過）
+
+下表每案仍 REMOTE NOT RUN、approvedDeferral=false。PRODUCTION_PROPOSAL 只表示可提出計畫，
+不是保證現有 runner 可執行或已經安全：尚需 G0、完整角色/trigger/sequence/外部副作用檢查、
+最小 fixture、timeout、獨立 observer 與 rollback/residue 證據，任一不符 STOP。
+分類共有 30 個正式可提案、3 個隔離限定、4 個 authority blocked；R04 同時受隔離限定，
+沒有遺漏或新增第 38 案。
+
+| ID | 現行分類 | 可執行環境／前置 | 必须保留的正式缺口 |
+| --- | --- | --- | --- |
+| S01 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| S02 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| S03 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| S04 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| H01 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| H02 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| H03 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| H04 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| H05 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| C01 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| C02 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| C03 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| C04 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| C05 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| C06 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| C07 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| C08 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| G01 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| G02 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| G03 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| V01 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| V02 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| P01 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| P02 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | early deny 不涵蓋下游欄位驗證 |
+| P03 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| P04 | AUTHORITY_BLOCKED | 成功前置不存在；不可套假 authority | 原成功／授權後分支無 remote proof |
+| P05 | AUTHORITY_BLOCKED | 成功前置不存在；不可套假 authority | 原成功／授權後分支無 remote proof |
+| P06 | AUTHORITY_BLOCKED | 成功前置不存在；不可套假 authority | 原成功／授權後分支無 remote proof |
+| R01 | ISOLATED_ONLY | 僅核准隔離環境；正式例外未核准 | production concurrency 無 remote proof |
+| R02 | ISOLATED_ONLY | 僅核准隔離環境；正式例外未核准 | production concurrency 無 remote proof |
+| R03 | ISOLATED_ONLY | 僅核准隔離環境；正式例外未核准 | production concurrency 無 remote proof |
+| R04 | AUTHORITY_BLOCKED | 僅核准隔離環境；正式例外未核准 | 原成功／授權後分支無 remote proof |
+| L01 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| L02 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| L03 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| L04 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+| L05 | PRODUCTION_PROPOSAL | 日後 G0 + 審查通過才可唯讀／rollback | REMOTE NOT RUN；尚無本案正式證據 |
+
+P04/P05/P06 的 early denial 可以另核准後作附加證據，不能代替原案；
+P05 還缺授權上下文與 lost-eligibility/history，P06 缺成功 self-complete 後無正式成果證據。
+R04 原跨 session 案需要 C，連拒絕競爭提案也預設隔離；不得偷偷改成正式 C。
+未來真實 authority 接通後，先補 P04 全部開啟/重訪/完成與清除、P05 跨身份/課程/版本與失去資格、
+P06 完成語意、R04 三種競爭情境；相關正式執行仍需批准，R04 正式保留例外仍未存在。
+本輪不建 enrollment、不換 policy、不加 grant、不直接寫 progress、不實作 Epic8。
+
+### 最小驗收契約草案 — PROPOSED / PENDING APPROVAL
+
+1. 可以彙整日後經批准的 30 案實際正式 artifacts，加上具名環境/版本/工具的 R01–R03 隔離證據，
+   作「有限範圍驗證紀錄」；此刻全數正式 NOT RUN。
+2. 明列 R01–R03 正式 concurrency，以及 P04/P05/P06/R04 原授權後分支的 remote proof 缺口，
+   P02 下游 validator 另註未到達；不刪原 AC、不改 PASS、不自動接受 deferral。
+3. Codex/工程負責補驗實作與 artifacts；使用者本人批准任何改變接受範圍的具體修訂。
+   在此草案另行接受前，Epic7 REMOTE CLOSED=NO。
+4. 真實 authority 接通或向學生開放 activity 以前（取較早者）重新核對受影響案例。
+   仍缺必需 remote proof 則保持 release gate 關閉；不能以隔離策略作免測許可。
+5. D4 只選擇資料放置原則，不批准此契約、不批准隔離環境建立或測試、不批准正式保留例外。
+   原 A/B 比較留存如下為歷史；現行預設 B，A 僅另次具體例外。
+
+
+## 歷史紀錄：以下保留本次 owner 決策之前的時點
+
+
 候選 `d5f98434106797afc65c59953aa3bc61ba26ecb4`；本輪未提交工具，版本 hash 見 [manifest](EPIC7_F_TOOLING_MANIFEST.json)。
 
 案例 ID 與原 [smoke plan](EPIC7_REMOTE_SMOKE_PLAN.md) 一致，未刪除或重編。LOCAL PASS 指對應已實際執行的本機 suite/assertions 或 catalog 證據；不代表原計畫的 production harness 已執行。詳細前置／操作／證據／保留規則仍以原計畫逐案文字為準。
