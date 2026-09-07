@@ -186,3 +186,53 @@ owner可接受損失仍PENDING，年齡門檻不等於RPO同意；一致性窗�
 2. 備份放哪裡、誰能讀、誰保管解密能力、多久刪除？前述外部加密位置是提案，現有ACL不符合提案。
 3. 最多能損失多久資料？能否提供一致性窗口，如何停止相關寫入？工程先提供相依服務清單，owner決定損失與影響。
 4. 先核准隔離可還原性drill的exact inputs/target/disposal，或補現有P2完整record供重用？兩者皆不自動核准正式事故restore。
+
+## 公司本機工程準備：服務相依清單與復原順序
+
+本節僅來自repository靜態查閱，沒有讀正式.env、dump或正式服務。
+[executor工程審查包](EPIC7_EXECUTOR_ENGINEERING_REVIEW.md)的記憶體回滾模型不屬於任何restore證據。
+
+### A：DB logical drill 與 B：網站事故恢復
+
+A的交付門檻：已批准的完整輸入清單/檔案hash/一致性時間/加密保管，已審managed prerequisites，
+目的地與來源精確不同，按reviewed角色→schema→資料→history處理順序，零error、FK/安全/數量digest一致。
+原三檔沒有Auth資料、Storage bytes、migration history；private data涵蓋也未知。
+有缺項先停，不能補假users、忽略重複物件錯誤或停RLS/trigger去恢復。A只證明指定DB範圍。
+
+B還必須恢復登入、檔案、網站release、連線與流量，經安全/功能測試後才能重新接受寫入。
+以下表格是一份工程操作依賴與成功標準，不是現在可以照做的正式指令。
+
+| 部分 | repository能確認 | 正式現況/缺項 | 事故時需交付與驗證 |
+| --- | --- | --- | --- |
+| Database | migration定義public/private業務、RLS/grants、immutable history；歷史ref/name/region可作expected identity | 當前schema、row scope、recovery point、managed backup/PITR/plan=UNKNOWN | 具名事件負責人判斷forward-fix優先；必要restore須另外批准、核對輸入/目的地/時間與資料完整性 |
+| Auth | src/modules/auth/actions.ts、auth callback/confirm、src/lib/supabase、auth.users FK；登入/註冊/重設密碼等有程式路徑 | providers、SMTP、redirect allowlist、目前users、managed schema版本、Auth backup coverage=UNKNOWN | 登入服務和DB恢復點一致；真實Auth依賴不能假造；核對redirect/登入/登出/重設流程及權限，避免演練發信 |
+| Storage | 本輪src靜態搜尋未找到Storage SDK操作；SECURITY定義未來私人資源要求 | 真正bucket/objects/政策/外部媒體平台使用=UNKNOWN，未找到程式碼不等於沒用 | 清點有無資料及object backup；DB-only不恢復檔案。必要object/簽名讀取/權限另驗證 |
+| Application | package.json Next16.3.3，auth/teachers/trials/commerce/entitlements/scheduling Server Actions與payment webhook拒絕邊界 | 正式release ID、部署位置、rollback release、相容性=UNKNOWN | 固定compatible release；核對舊app是否理解新schema/enum/權限。UNKNOWN不得直接rollback app |
+| Domains/traffic | NEXT_PUBLIC_SITE_URL為環境名稱，repo沒有正式域名/traffic切換證據 | DNS/CDN/domain owner、網站URL、流量入口、maintenance能力=UNKNOWN | 工程補入口清單、切換/驗證/回退順序；owner批准停寫影響與重新開放。不能推測改DNS就足夠 |
+| Env/secrets | 僅從source知道NEXT_PUBLIC_SUPABASE_URL、NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY、NEXT_PUBLIC_SITE_URL、SUPABASE_SERVICE_ROLE_KEY、MANUAL_BANK_TRANSFER_INSTRUCTIONS | 正式值/保管位置/rotation責任=UNKNOWN；本輪未讀值 | approved secret store到正確runtime，對target/權限作非秘密核對；不得把value寫進文件/聊天或artifact |
+| Connection strings | server/browser Supabase client經env及server-only分界建立 | 真正DB host、pooler、TLS/session模式、連線切換清單=UNKNOWN | 對實際連線核對target/role/region證據，隔離舊writer與新destination，重新建立連線後驗證；不在文件保存URL/password |
+| Extensions | 20260831000400宣告extensions.btree_gist；其餘managed相依不能只由此推出 | 正式完整extension/role/helper inventory=UNKNOWN | source/destination name/schema/version/owner相容性及權限逐項核對；缺managed物件STOP |
+| Realtime / Edge Functions | 本輪src未找到.channel()/realtime/functions.invoke，repo無supabase/functions或config.toml | 是否有Dashboard建立的Function、publication、排程、webhook=UNKNOWN | 實際使用才納入inventory，核對程式版本、觸發來源、重複處理風險及停/重開順序；不能自行標N/A |
+| Migration history | 本機34檔固定manifest；歷史正式29/latest20260904001100 | 當前正式history=UNKNOWN；三檔備份未包含history | exact IDs+schema/deploy證據核對，缺資料不能任填34/29；restore target metadata重建需review，production repair另屬例外授權 |
+| Reopening writes | recovery runbook要求安全/連線/完整性及Epic5/6 smoke後簽核 | 尚無本次驗證或全服務drill=UNKNOWN | 具名owner看完全部證據批准，解除限制按下列順序分批；任何未知仍停在受限狀態 |
+
+靜態搜尋範圍為src及supabase受追蹤檔，不涵蓋平台端設定或使用者另有的系統；UNKNOWN不由舊P2附件補成PASS。
+
+### 工程可先確定的停寫/恢復相依順序（未啟動）
+
+1. 記錄事故時點、異常範圍與R0–R6分類，先保留證據；單純preflight失败不做restore。
+2. 在owner批准的事故措施下，先阻止相關寫入入口：auth註冊/修改/密碼路徑、Teacher/Trial管理，
+   Commerce付款確認/訂單、Entitlement操作、Scheduling訂位/取消/改期/完成，以及實際存在的外部jobs/API。
+   src/modules各actions.ts是已知入口，不是完整部署流量清單；還須盤點外部client/worker/Dashboard操作。
+   payment webhook目前拒絕，但不能藉此推論整個平台沒有其他入站寫入。
+3. 核對停止新請求並排空/取消active writer；保留Auth/外部回呼安全策略，不能只停網頁而留下worker。
+4. 優先評估forward-fix或經相容性證明的app rollback。必要資料復原才依runbook第二位operator批准，
+   選定首次異常之前且實際可恢復的時間/目的地，處理跨檔一致性與可接受損失。
+5. 按approved程序恢復DB及managed依賴/history；另恢復Auth/Storage/Functions/Realtime等實際必要服務。
+6. 設定正確secret引用/連線→部署compatible app至核准目的地→先在受限流量下驗證登入、資源讀取、安全、資料一致性及smoke。
+7. 確认無舊writer指錯目的地、無重播付款/訂位副作用、無未查明殘留，量測實際恢復時間與遺失窗口。
+8. owner簽核後才切正式traffic、按依賴重開write/API/jobs並監測；任一失敗停止後續步驟，重新分類，不能自動修資料。
+
+現有schema及source不足以交付「可直接按下就能恢復整站」的命令。
+補live inventory、managed Auth/history procedure、transport與全服務drill是工程工作；不能只寫等待operator。
+owner要決定的僅責任人、加密保管/可讀者、能接受的資料損失時間與測試保留位置。

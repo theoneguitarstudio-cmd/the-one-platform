@@ -28,6 +28,14 @@ See [Project Status](PROJECT_STATUS.md) and
 
 ## Next canonical step
 
+公司本機工程準備更新（2026-09-07）：[executor安全核心與審查包](EPIC7_EXECUTOR_ENGINEERING_REVIEW.md)
+已新增，僅記憶體合成安全流程，無production transport、無正式SQL。原preserved驗證器/候選/34 migrations不變。
+下一步是審閱新安全核心、coverage/retention提案與[白話決策單](EPIC7_OWNER_DECISIONS.md)，
+再按明確授權補live collector、逐案SQL compiler、PG/獨立observer接線與復原驗證；這些是剩餘工程，
+不是只有operator簽名。正式操作、Epic8、push/deploy仍未授權，Epic7 REMOTE CLOSED=NO。
+
+以下保存更新與舊STOP描述保留其歷史時點：
+
 Post-preservation update (2026-09-07 Asia/Taipei): the original F tools/evidence
 were saved locally at `c61cdb6c757499b875fc9e9f41657f8b2c1a4ef1`, not pushed.
 The tested application/migration candidate remains `d5f98434106797afc65c59953aa3bc61ba26ecb4`.

@@ -1,0 +1,143 @@
+# Epic7-F Executor 工程審查包
+
+狀態：**本機安全核心可供審查；無 production transport；正式 NOT RUN / NOT AUTHORIZED。**
+本輪起點 `0af06802dbeb2fcd614d33db3e64c441fe711be4`；application/migration candidate
+仍為 `d5f98434106797afc65c59953aa3bc61ba26ecb4`，保存點 c61cdb6 不变。
+這是安全控制流程與格式的工程交付，並非完成37案正式SQL runner，也不是操作批准。
+Epic5/6 REMOTE CLOSED、Epic7 A–E LOCAL CLOSED、Epic7 REMOTE CLOSED=NO、payment webhook NOT COMPLETE 均保持。
+
+## 實作與信任邊界
+
+- [contracts.mjs](../tools/epic7-executor/contracts.mjs)：固定目標、實際 preserved 驗證整合、run/版本/34 migration 與工具內容核對、合成 manifest 白名單及預算。
+- [simulate.mjs](../tools/epic7-executor/simulate.mjs)：封閉的記憶體 transaction 狀態機、deadline/cancellation、停止後限定 rollback/close/observer、非秘密 artifacts。
+- [reconcile.mjs](../tools/epic7-executor/reconcile.mjs)：與 writer 結果分離的前後快照核對；key、fingerprint、逐表數量、未列範圍、catalog、sequence、外部副作用。
+- [safety.test.mjs](../tools/epic7-executor/safety.test.mjs)：只測本輪新功能；錯誤目標/內容/權限/預算、交易、回滾、逾時、取消、殘留、secret、證據偽造等。
+- [review manifest](EPIC7_EXECUTOR_REVIEW_MANIFEST.json)：本輪四檔 raw SHA-256；審查時須從受信任的本機 commit/diff 取得。它是 review bytes identity，不是操作者簽名。
+
+新檔放 tools/epic7-executor，因原 preserved validator 對 scripts/tests 等目錄採封閉白名單。
+沒有改白名單、原驗證器、九份歷史工具、舊manifest、case JSON、application、34 migrations。
+新工具**不是**c61時的SQL/build受測工具，不能沿用那時的hash或宣稱其正式測試已通過。
+
+`proveLocalContent()` 先比對原驗證器固定 SHA-256，再直接呼叫其既有 verify()。
+固定c61→d5 Git object鏈、269受保護檔案與舊raw hashes仍由原工具驗證。
+整合測試只因新增executor要證明此路徑可用而執行，不重跑換機CLI或舊完整測試。
+產生不可由JSON/SHA/舊receipt偽造的程序內 proof；每次模擬再查實際檔案hash及未列新增檔。
+applicationHash 是保存內容的排序path→blob hash摘要，不是網站部署release證明。
+
+本輪工具及review manifest仍是待審code信任起點；自算hash不能證明自身未遭共同竄改。
+正式接線前，工程必須從經核准的commit建立唯讀固定工作副本、鎖定工具/manifest及依賴，
+並重新驗 preserved內容。不得接受caller自由填的SHA、核准boolean或事後重算manifest來消除漂移。
+
+## 目標及版本觀察契約
+
+唯一規劃目標：The One `the-one-platform` / `ygxeihtcolpiulupieeq` / `ap-southeast-1`。
+名稱、ref、region三者須精確相符。正式smoke要的是已部署**34份**且latest=`20260906000500`；
+歷史29份/latest20260904001100不是現況證明，也不是可跳過的差異。handoff/main只代表本機bundle。
+
+模擬輸入包含 source、runId、observedUTC、target、candidate、latest、完整migrations hash map、
+applicationHash、historicalToolHashes、executorHashes、authority。缺項、多項、過期、未来時間、
+錯run、錯target、任一版本/hash差異、非SHIPPED_FALSE一律STOP。
+五分鐘僅為合成attestation的新鮮度控制，不改BR-2/RPO政策，正式時間窗須另經工程審查。
+
+**合成輸入一律source=SYNTHETIC_ONLY。提供PRODUCTION也不能執行。**
+本輪沒有live collector：正式接線須由已核准且可驗證來源的control-plane讀取確認name/ref/region；
+另在實際SQL連線確認其綁定目標、DB/role/session、同時段migration history與catalog。
+不能把使用者填的JSON、URL含ref、`current_database()`或另一個連線的正確回報当成實際writer identity。
+遠端migration history未必包含檔案SHA：必須把exact IDs/names/catalog與已審deploy/source manifest連結，
+不能宣稱catalog直接提供了原SQL檔案hash。網站release及build artifact來源也須另證明，不能只看Git SHA字串。
+
+## 執行次序及停止行為
+
+1. 取得實際本機proof、核對當次工具與manifest；任何錯誤尚未建立writer。
+2. 核對當次attestation及案例分支，簽核/BR/時間窗的正式gate尚未接線，本輪永遠不可執行正式操作。
+3. 獨立reader取得開始前快照；run UUID/key已存在或無法觀察，停止，不覆寫。
+4. 開transaction；確認session/role及active狀態。合成角色只模擬authenticated，不等於真正DB角色測試。
+5. 在transaction寫入manifest內的一筆合成Course作sentinel，writer讀得到，另一durable讀取路徑讀不到。
+   此筆計入同一manifest/案例預算，不是額外未列資料。
+6. 只執行已列案例，逐步deadline、expected rows、transaction/session/role/SQLSTATE/domain核對。
+   拒絕分支模型記錄42501/course_use_denied，在savepoint處理後transaction仍有效；不實作或更換authority。
+7. R模式ROLLBACK；C提案僅在記憶體模擬COMMIT，逐key/fingerprint核對預期保留。不能稱為正式C授權。
+8. 關閉writer後新建observer身份與connection身份，從durable狀態讀取，不接收writer的PASS或after值。
+9. 任一錯誤保持FAIL，後續case不再開始。只允許已開始交易的失敗處理、關閉與獨立觀察；不自動重試case。
+
+每step bounded deadline；timeout先取消待執行工作，晚到動作不得再寫入。取消未確認仍FAIL。
+rollback失败即使close隱含放棄未提交內容、observer看到0，也**不能**變PASS。
+COMMIT成功但回覆丟失歸類UNKNOWN，獨立觀察保留實際結果，不用rollback口號掩蓋已提交資料。
+close失敗、observer失敗或不獨立、快照不全、相同counts但key/hash不同均STOP。
+
+模型能驗证這些控制分支；不能證明PG的wire cancel、backend pid、lock/session/statement timeout、
+失聯後真正rollback或交易隔離。正式transport須有伺服端timeout與cancel/termination確認，不能只有Promise.race。
+
+## Fixture manifest格式
+
+`exampleManifest()` 產生隨機UUID、無郵件/電話/登入資料的**示例身份清單**，不是可直接執行的SQL fixture。
+格式由validateManifest在runtime嚴格核對；不接受任意附加欄位、SQL、URL、credentials或row body。
+
+| 欄位 | 約束 |
+| --- | --- |
+| format / runId / candidate / target | 格式1、UUIDv4、固定候選、固定目標；不接受caller切換環境 |
+| approval / label | 永遠NOT_APPROVED；epic7-synthetic-<run UUID>，不得使用真實學生標籤 |
+| cases | 原37個ID的子集合，唯一、明確shipped/denial分支；未到達的成功分支不能冒稱PASS |
+| actors | 最多12；UUID、固定synthetic-UUID alias、role/state；不含真實身份或憑證 |
+| scopes | 最多2 Course/Map，各最多2版本、4 Nodes；獨立UUID，不與actor混用 |
+| tables | 28個明列表，必須齊全，未使用表也列rows=[]；超過任何固定提案上限即STOP |
+| rows | key(UUID陣列)、actor/course/map/version/node、caseId、label、fingerprint；不放row內容 |
+| ceiling / expectedRetained | 原草案逐表上限；R預期0，C提案等於本次精確列出的rows數，不能把上限當作已留下數量 |
+| retention | decision=PENDING、custodian/until=UNKNOWN、NO_DELETE_OR_REPAIR；不能把草案轉為已核准 |
+
+key是待SQL compiler綁定的合成身份tuple；有複合PK/非UUID audit主鍵的表，正式compiler須依實際schema
+轉成可驗證的PK或唯一request/actor/run predicate，並處理DB產生的audit identity。
+本輪沒有聲稱任意UUID tuple已是該表的合法PK，也沒有由fingerprint反推SQL。
+示例配置32筆identity摘要（6個Auth/6個profile，2Course/2Map/4publication/8Node/2receipt/2audit），
+不是完整hierarchy/resource/role rows；不能執行它冒稱37案fixture完成。
+正式逐案compiler仍須算入trigger產生的profile/role/audit/receipt、建構順序與所有FK，避免重複計帳。
+
+P04–P06/R04成功分支固定拒絕，activity/request兩表不得配置正向資料；R01–R04跨session必須C提案。
+原完整C草案上限見coverage，不代表這些數量已獲批准。R04成功用的activity預算保留在草案，當前不可使用。
+
+## 獨立殘留核對與證據
+
+observer格式包含run、獨立observer/connection UUID、UTC、writer已關閉、28表逐key/fingerprint，
+以及未列範圍/catalog/sequence摘要、外部副作用數。不同snapshot須來自不同reader identity。
+R模式逐表0；C模式逐key、fingerprint及exact count相同。缺表、重复key、身份碰撞、任何非預期新增、
+刪除、修改、未列範圍變更、sequence/catalog變更、外部副作用一律FAIL。
+
+正式observer還需要工程編譯actual catalog中的完整touched/legacy/auth inventory及run predicate；
+不能把模型的28表與一個unscopedDigest說成已完成正式94表查詢，也不能把全站其他合法寫入當成smoke殘留。
+正式執行前須使用核准一致性窗口或可證明分離的run scope，無法歸因就UNKNOWN/STOP。
+WAL/log/sequence/API不由ROLLBACK保證消失；sequence差異不得setval抹除。
+
+每次模擬保存於ignored `artifacts/remote-smoke/epic7-executor-preparation/<run UUID>/`：
+
+- result.json：時間、固定target/candidate、case IDs、manifest hash、內容/工具hash、before/after、steps/results、rollback/retention/residue、STOP codes、production=0。
+- observer.json：獨立reconciliation結果與snapshot hashes；未能取得observer為null，總結果保持FAIL/UNKNOWN。
+- fixture.json：僅經驗證的合成metadata；輸入不合規時null，不回顯惡意/秘密內容。
+- hashes.json：上述3檔SHA-256。輸出目錄已存在則拒絕，保留失敗紀錄，不覆蓋舊結果。
+
+只保存內部不可變且白名單驗證的結果。raw Error/SQL stdout/連線字串/學生資料不進artifact；
+使用受控STOP code。正式collector將來仍須審查redaction、限制檔案權限、截斷及fail-on-logging-error。
+
+## 本輪安全測試與合理停止點
+
+以明確Node 24.19.0執行新測試，避免不同shell的Node22路徑差異：
+
+```powershell
+node --import ./scripts/epic7-readiness-offline-tripwire.mjs --test --test-isolation=none tools/epic7-executor/safety.test.mjs
+node --import ./scripts/epic7-readiness-offline-tripwire.mjs node_modules/eslint/bin/eslint.js tools/epic7-executor/contracts.mjs tools/epic7-executor/reconcile.mjs tools/epic7-executor/simulate.mjs tools/epic7-executor/safety.test.mjs
+```
+
+只在本輪code改動後跑此新增測試，不跑完整SQL、並行演練、雙build、舊ValidateOnly CLI。
+新整合測試內呼叫原verify是驗證新executor無法跳過其安全入口，並非重做交接。
+正式DB connections=0、正式SQL=0、正式write=0。具體結果記於本輪新增工具evidence附錄及ignored本機log。
+
+**剩餘工程，不是假稱只等operator：**
+
+1. 受信任live identity/deployment/migration/catalog收集器與同一writer連線綁定；新工具review後的固定副本啟動器。
+2. 每案SQL/RPC compiler、真實actor/role/savepoint sentinel、合成schema PK/FK/trigger映射與精確預算。
+3. PG transport的server-side timeout/cancel/session close、獨立observer SQL、transaction rollback/residue真實驗證。
+4. C多連線race編排與同一manifest下不可變保留；本輪模型不是race測試。P04–P06/R04成功branch等真實authority再補，不能加stub。
+5. 將具名批准、當次BR/backup時間、核准case/retention清單與正式啟動器整合成不可由caller boolean偽造的授權gate。
+6. 依實際hosting與managed Auth/Storage等inventory補完並在另授權隔離環境驗證全服務復原。
+
+上述正式接線應在本包審查後另行進行；現在沒有任何production adapter或可傳URL的入口。
+本輪已完成在無正式連線/無真實資料/無核准C策略下可合理審查的安全核心与契約，未宣稱executor全面完成。

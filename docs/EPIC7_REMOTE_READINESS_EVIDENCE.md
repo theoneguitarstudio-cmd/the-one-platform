@@ -241,3 +241,18 @@ REMOTE SMOKE/CLEANUP=NO；BACKUP EXPORT/RESTORE=NO；STAGE/COMMIT=NO。
 Epic7 A–E 保持 LOCAL CLOSED，既有 WARN 不隱藏；F remote closure 尚未成立。
 Epic5/Epic6 REMOTE CLOSED；production payment-provider webhook **NOT COMPLETE**，不回升為 Epic5/6 blocker。
 未改 Product Decisions／Epic 編號、未開始 Epic8–13。完成本輪後 STOP，等待分項授權。
+
+## 本輪僅整理的hosting確認清單（未查詢／未操作）
+
+Vercel App安裝與All repositories證據保持成立，不要求再回GitHub Configure。
+下一次只需指認The One實際Vercel帳號/團隊及專案，從該專案設定頁提供非秘密資訊：
+
+- account/team、project名稱與project ID；若尚未建立，明確記「尚未建立」，不要建立來湊證據。
+- Git連到哪個owner/repository、production branch。
+- main推送是否自動建置/部署，以及是否存在額外ignore/build觸發規則。
+- root directory、framework、install/build/output overrides、Node版本。
+- 已有正式網址/目前deployment release（若存在），只記名稱/ID，不提供環境變數值。
+
+repository目前無對應hosting設定檔或已辨識的The One project，不能从本機推論實際值。
+若owner UI才看得到，可一次提供該專案的總覽、Git及建置設定畫面；不要展開Secrets，也不要按Save/Deploy。
+後續工程根據資訊核對連動與版本，不需使用者判讀技術風險。不push試探、不建project、不改設定。

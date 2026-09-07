@@ -76,6 +76,15 @@ It includes offline ValidateOnly, local target protections, synthetic rehearsal 
 it does not authorize push, production export/restore/migration/deployment/smoke/cleanup.
 All 34 migrations and application business logic remain unchanged. Epic7 is not REMOTE CLOSED.
 
+## 公司本機 executor 工程準備（2026-09-07）
+
+新增[可審查安全核心](EPIC7_EXECUTOR_ENGINEERING_REVIEW.md)：實際preserved內容整合、固定target/version、
+manifest預算、記憶體transaction sentinel、timeout/失敗停止、獨立殘留核對、白名單artifacts。
+本輪測試只證明新工具的合成控制流程，不能替代PostgreSQL/37案domain/production證據。
+原工具/migrations/application均未改；A–E及P2歷史結果不變。
+正式transport、逐案SQL/actor/PK compiler、可信live觀察與完整服務復原仍需工程交付及另行授權。
+coverage/保留草案未接受；[集中決策單](EPIC7_OWNER_DECISIONS.md)只問owner可決定的事項。
+
 ## Historical P2 remote closure state — not a fresh Epic7 preflight
 
 - **P2 Remote Closure: COMPLETE — 2026-09-05**.

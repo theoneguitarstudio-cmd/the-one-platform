@@ -127,3 +127,34 @@ timeout、任何error停止後續依賴、rollback失敗不輸出PASS、連線�
 case/UTC/session/SQLSTATE/digest/retained inventory artifacts、redaction與fail-closed regression。
 新增budget/UUID/collision/retention方案須可被工具驗證，不能只靠文書。此工作將來需另授權，
 本輪保留production固定拒絕，未新增writer；舊37IDs/原AC/所有REMOTE NOT RUN不變。
+
+## 本輪工程準備後的最小coverage提案（NOT APPROVED）
+
+新增[executor安全核心審查包](EPIC7_EXECUTOR_ENGINEERING_REVIEW.md)；未改上面37案與原驗收條件。
+下列「可驗證」都是**當G0及逐案前置另獲批准後**的技術可行範圍，本輪沒有合法正式執行窗口。
+
+| 分項 | 可以提出的正式驗證 | 尚不能證明的內容 |
+| --- | --- | --- |
+| A：目前shipped行為 | S/H/C/G/V的catalog、權限、建構、freeze、不變性與版本；P01/P02/P03及P04–P06的early denial/零progress寫入；L類仍需專用legacy fixture | G0、真實actor與原始SQL harness未完成；P02/5早期拒絕不能證明下游field/scope validator |
+| A：R04拒絕 | 核准後以獨立session同時呼叫，確認都被拒且沒有activity/receipt；需要工程交付真正multi-session harness | 不是R04首次成功寫入、correction retry、跨Node request race的替代 |
+| B：authority缺席 | P04成功操作、P05合法上下文跨學生/課程/版本及失去資格後history、P06全數自報完成後仍無正式成果、R04三種成功race，全部REMOTE BLOCKED | 只有既有synthetic local成功證據；本輪安全模擬也不新增這些domain成功證據 |
+| C：將來必補 | 在真實course-use authority接通或學生開放之前（取較早者），工程補P04/P05/P06/R04全部原成功分支、負向回歸及獨立殘留證據 | 不得以目前的拒絕證據標已完成，也不在本輪開始Epic8 |
+| D：結案提案 | 建議先保存「shipped範圍有限驗證」，Epic7 REMOTE CLOSED維持NO；若owner希望先有限結案，需正式superseding acceptance決定，列缺失分支、補驗負責人及學生開放前阻擋條件 | 本文件不代替owner選擇、不接受自動deferral；本輪沒有accepted方案 |
+
+### 保留方案A/B完整比較（兩者待選）
+
+| 問題 | A：正式保留明確的最小合成測試資料 | B：必須提交的案例只在核准隔離環境 |
+| --- | --- | --- |
+| 優點 | 能在真正正式環境驗證R01–R03等已具前置的跨session行為，證據更貼近正式環境 | 正式環境不新增C類長期測試資料，較容易避免學生資料與測試資料混淆 |
+| 風險 | identities/frozen/audit/receipts形成長期依賴；有鎖競爭、執行耗時、報表混入或誤用風險；不能承諾零影響 | 隔離PASS不能證明production concurrency配置/負載/managed差異；正式coverage缺口必須保留 |
+| 會留下什麼 | 最少的假身份/角色、Course/Map/版本/節點及其資源關聯、不可變操作收據/稽核紀錄；R04成功前不配置progress寫入 | 這些C類資料留在隔離環境，處置依該環境另核准政策；正式R類只做交易回滾 |
+| 大約多少 | 舊歷史run曾用6 Auth、6 profiles、9 roles、1 Course/Map、2版本、10 audit、7 mutation receipts；這不是未來預算。原完整草案最多12身份、2課程、4版本、8節點、各64 audit/receipt，其他關聯表見上方逐表表格；將來需精確manifest，不能默認用滿 | 正式C類=0；隔離端仍用同樣精確預算及稽核。R類正式預期新增保留0，但WAL/log/sequence不能承諾消失 |
+| 是否影響正式學生 | 不借真學生、不給測試身份真實會員資格、不發信/付款/媒体請求；正式可見性與報表隔離仍需工程證明，沒證據不得開跑 | C類不接觸正式學生；正式R類仍可能持鎖、耗時，需要核准時窗與timeout，不能保證完全無影響 |
+| 能否清除 | 回滾未提交R資料可以；已提交frozen/history/receipt/audit與依賴actor無公共cleanup入口，不可承諾到期全刪；政策變更須另外review，不能owner SQL刪除 | 只有本次核准且精確標識的隔離環境可依批准方案處置；不能把合成容器處置權擴張到真實備份或正式資料 |
+| 如何標識 | UUIDv4 run-ID、epic7-synthetic-<run>、逐身份/版本/request對照表，標籤只在schema允許欄位使用，不為測試加schema；audit靠request/actor映射 | 隔離環境身份、image/label及manifest，保持與正式target清楚分開；不能把隔離connection URL當正式 |
+| 如何稽核 | 核准manifest hash+時間、逐表exact keys/count/digest，獨立observer區分預期保留與意外殘留；禁止為歸零修資料 | 同樣保留隔離證據與正式R證據，清楚分開，明列production concurrency未覆蓋；不偽造REMOTE PASS |
+| 對結案影響 | A仍不能消除P04–P06/R04成功branch缺少真實authority的限制，也不能自動结案 | B還增加C類正式證據缺口；若接受替代須由owner/驗收者明確修改接受範圍，否則結案仍pending |
+
+新示例manifest的32筆是**格式示例**，不是正式保留建議數量，也不是完整37案fixture。
+工程會在策略與case範圍確定後算出精確rows/trigger效果與可見性影響，不要求使用者自行計算表格或寫SQL。
+兩方案沒有預選值或核准紀錄。本輪結果不構成下一次remote操作授權。

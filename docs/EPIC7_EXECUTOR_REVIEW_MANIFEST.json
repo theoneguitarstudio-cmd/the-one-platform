@@ -1,0 +1,11 @@
+{
+  "format": 1,
+  "candidate": "d5f98434106797afc65c59953aa3bc61ba26ecb4",
+  "status": "REVIEW_REQUIRED",
+  "files": {
+    "contracts.mjs": "5f6d27d4e1d55ec8c9496b60c875f1a8f534edf7f56f72c51ccc0df02b3017f2",
+    "reconcile.mjs": "8a9c417cc0a069a98b074b17aa9de315303b5d3c1899a1f0909fec2b7745c8c0",
+    "simulate.mjs": "904a14387a370920afb34f32aa7d08a6c8c8a19ac05dade4f2c3f2c6a9471710",
+    "safety.test.mjs": "49cbb52675dcd46532891434076d2352c1205431bdaa027f176f5933f53c3c83"
+  }
+}

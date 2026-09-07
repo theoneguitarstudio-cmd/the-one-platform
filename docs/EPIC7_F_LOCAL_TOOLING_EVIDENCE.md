@@ -222,3 +222,23 @@ F後續兩種build PASS見本文件，不回寫成A–E當時通過。Local Exec
 不可覆蓋後續hosting未查明與PUSH NOT AUTHORIZED。P2的早期next Epic7文字是歷史，不倒退目前A–E/F進度。
 新[coverage條款](EPIC7_F_CASE_COVERAGE.md)與[兩條復原路徑](EPIC7_RECOVERY_AUTHORIZATION_PACKAGE.md)
 均NOT APPROVED；保留Epic5/6 REMOTE CLOSED、Epic7 REMOTE CLOSED NO及payment webhook NOT COMPLETE。
+
+## 公司本機executor安全核心驗證（2026-09-07；非正式executor結案）
+
+本輪起點 `0af06802dbeb2fcd614d33db3e64c441fe711be4`，工作目錄為新獨立handoff專案。
+新增[工程審查包](EPIC7_EXECUTOR_ENGINEERING_REVIEW.md)、四份tools/epic7-executor工具及
+[review manifest](EPIC7_EXECUTOR_REVIEW_MANIFEST.json)。原驗證器、九歷史工具、candidate application與34 migrations未改。
+本輪在Node **24.19.0**、既有offline tripwire下只測新增安全功能：**73 tests / 73 PASS / 0 FAIL**；
+四份新檔ESLint exit0；新增CLI `--simulate` exit0，executionAllowed=false、正式connections/SQL/writes全部0。
+首次shell解析到Node22，因不支援test-isolation選項在測試啟動前拒絕；改明確Node24路徑，沒有降低檢查或改依賴。
+
+實際CLI合成run：`519417aa-96c3-47ed-89c7-58405223453c`。
+其ignored artifacts目錄為 `artifacts/remote-smoke/epic7-executor-preparation/<run>/`：
+result/fixture/observer/hashes及verification/summary.json、三份本機logs；summary包含UTC、版本及各log SHA-256。
+失敗控制案例保持FAIL證據；測試成功指「成功拒絕不安全狀態」，不把注入失敗改報成正式smoke PASS。
+新verify整合只為證明新增executor必經原preserved內容比對；沒有重跑換機ValidateOnly CLI、舊完整SQL、race或雙build。
+
+模型核對實際記憶體transaction/durable狀態，不是PostgreSQL連線、實際RPC或正式權限證據。
+formal live collector、逐案SQL/actor/PK compiler、PG timeout/cancel/rollback及獨立observer、真正網站復原
+仍是明列的工程缺項；沒有宣稱只等operator。coverage/retention提案未接受，正式REMOTE NOT RUN、Epic7 REMOTE CLOSED=NO。
+使用者只需集中回答[五題白話決策單](EPIC7_OWNER_DECISIONS.md)，本輪不要求其代寫工程步驟。
