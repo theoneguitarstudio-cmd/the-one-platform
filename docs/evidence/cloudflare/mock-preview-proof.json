@@ -4,7 +4,7 @@
   "branch": "preview-test",
   "mode": "explicit-preview-mock",
   "localStatus": "PASS",
-  "remoteStatus": "NOT_DEPLOYED_WAITING_OFFICIAL_OAUTH",
+  "remoteStatus": "PASS",
   "unitTestsPassed": 53,
   "http": {
     "time": "2026-09-08T05:31:55.320Z",
@@ -183,8 +183,8 @@
     "realAuthValidated": false,
     "rlsValidated": false,
     "mutations": "denied; no persistence",
-    "freeRuntime": "not yet measured",
-    "cpu": "UNKNOWN",
+    "freeRuntime": "PASS for tested Mock Preview requests; no paid upgrade",
+    "cpu": "510 ms aggregate in initial dashboard snapshot; not per-request percentile",
     "memory": "UNKNOWN"
   },
   "hashes": {
@@ -210,5 +210,192 @@
     "tools/cloudflare/local-proof.mjs": "5b159bd83955b5b25327fc209d2a4bcdb9ff4357d194812ff39da43cb0f1f1c9",
     "worker/index.ts": "822aeb884f5940463344fe555ea0092201f0f201e58697ff3337a5ee4d181fef",
     "wrangler.jsonc": "ec73729e0beda19102ec815bb3e836d915bd5134ee270985d9b85130716f97b1"
+  },
+  "deployment": {
+    "time": "2026-09-08T08:34:39.647Z",
+    "url": "https://the-one-platform-preview.theoneguitarstudio.workers.dev",
+    "sourceCommit": "0475bc2a76ece857fa531797a4ce9a4b6f5e68b9",
+    "versionId": "a5083462-3847-4cf7-a210-e1b6f48aa3a5",
+    "accountId": "611ed099848d669a9f4388998dc20fd0",
+    "wrangler": "4.129.1",
+    "authentication": "official device OAuth; whoami verified",
+    "method": "explicit Preview deployment; Git auto-build not connected",
+    "gzipUploadKiB": 413.29,
+    "startupMs": 46
+  },
+  "remoteHttp": {
+    "time": "2026-09-08T08:30:46.379Z",
+    "status": "PASS",
+    "results": [
+      {
+        "name": "/",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-in",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-up",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/forgot-password",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/verify-email",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/access-denied",
+        "status": "PASS"
+      },
+      {
+        "name": "/teachers",
+        "status": "PASS"
+      },
+      {
+        "name": "/teachers/preview-teacher",
+        "status": "PASS"
+      },
+      {
+        "name": "/products",
+        "status": "PASS"
+      },
+      {
+        "name": "/products/preview-private-lesson",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-in",
+        "status": "PASS"
+      },
+      {
+        "name": "/student",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/orders",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/orders/00000000-0000-4000-8000-000000000201",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/trial",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/packages",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/schedule",
+        "status": "PASS"
+      },
+      {
+        "name": "/teachers/preview-teacher/trial?intent=00000000-0000-4000-8000-000000000401",
+        "status": "PASS"
+      },
+      {
+        "name": "/products/preview-private-lesson",
+        "status": "PASS"
+      },
+      {
+        "name": "checkout refuses mutation",
+        "status": "PASS"
+      },
+      {
+        "name": "cross-origin action refused",
+        "status": "PASS"
+      },
+      {
+        "name": "student role boundary",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-in",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher/profile",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher/trials",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher/packages",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher/schedule",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-in",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/orders",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/orders/00000000-0000-4000-8000-000000000201",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/teachers",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/trials",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/packages",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/schedule",
+        "status": "PASS"
+      },
+      {
+        "name": "404",
+        "status": "PASS"
+      },
+      {
+        "name": "payment stays disabled",
+        "status": "PASS"
+      }
+    ]
+  },
+  "remoteBrowser": {
+    "desktopHome": "PASS",
+    "mobileProducts390px": "PASS",
+    "studentServerActionLogin": "PASS",
+    "errors": 0,
+    "observedRequestOrigins": [
+      "https://the-one-platform-preview.theoneguitarstudio.workers.dev"
+    ],
+    "assets": "JS/CSS/fonts 200"
+  },
+  "usage": {
+    "source": "Cloudflare Workers account UI snapshot after smoke",
+    "requests": 46,
+    "dailyRequestLimit": 100000,
+    "cpuTotalMs": 510,
+    "cloudBuildMinutes": 0
   }
 }

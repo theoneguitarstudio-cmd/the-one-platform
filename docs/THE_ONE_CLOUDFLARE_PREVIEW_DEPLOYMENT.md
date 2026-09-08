@@ -3,8 +3,17 @@
 ## 現行：Free Preview + Mock（2026-09-08）
 
 OWNER 已核准 Preview-only Worker、workers.dev、GitHub preview-test 同步與明確部署。
-目前本機安全與相容性檢查 PASS；遠端部署等待官方 OAuth 授權完成，尚未宣告上線。
-預定 Worker：the-one-platform-preview。帳戶 workers.dev 子網域已由官方 UI 核對為 theoneguitarstudio.workers.dev。
+**已上線：https://the-one-platform-preview.theoneguitarstudio.workers.dev**
+Wrangler 4.129.1 官方 Device OAuth 成功，whoami 核對 The One account。
+部署 source commit 0475bc2a76ece857fa531797a4ce9a4b6f5e68b9；
+Cloudflare version a5083462-3847-4cf7-a210-e1b6f48aa3a5。
+遠端 38 項 HTTP、三種 demo roles/cookies、下單拒絕、跨站 403、404、payment 501 PASS。
+瀏覽器實際導覽與 Student 登入、桌面首頁、390px 手機商品頁 PASS；無捕捉到 browser errors。
+已觀測 browser requests 僅本站；JS/CSS/fonts 200。正式 Supabase connections / SQL / writes = 0。
+Free 目前測試正常，沒有 Paid 升級。初次 UI 用量：46 / 100,000 requests、CPU 合計 510 ms、
+Cloudflare build minutes 0（本機 build）；Worker startup 46 ms、gzip 413.29 KiB；memory UNKNOWN。
+CPU 合計不是每請求上限保證；本輪不是負載測試。
+Worker：the-one-platform-preview。帳戶 workers.dev 子網域已由官方 UI 核對為 theoneguitarstudio.workers.dev。
 不綁正式網域，不買服務，不接任何 Supabase，Epic7 正式 gate 保持獨立。
 
 ### 資料與操作
@@ -34,7 +43,7 @@ pnpm proof:preview-mock 使用清理過的子程序環境，build 同一 applica
 跨站 action 403、404、停用 payment webhook。TypeScript / ESLint / Cloudflare target build PASS。
 390px 商品頁與桌面登入已目視檢查。沒有重跑 Epic7 SQL / Docker / remote cases。
 
-[本輪非秘密證據](evidence/cloudflare/mock-preview-proof.json)：本機 PASS、遠端待授權，禁止把兩者混為一談。
+[本輪非秘密證據](evidence/cloudflare/mock-preview-proof.json)：本機與遠端 Mock Preview PASS；不代表真實 Auth / RLS 或 Epic7 remote closure。
 
 ### Git / 部署方式
 

@@ -7,7 +7,10 @@ OWNER 已授權獨立 workers.dev Preview，明確選擇同一套 application + 
 本輪基線 a3442fd2768e0c7110e8480d5ded71ff50b5b47a，branch preview-test。
 Mock transport、三種示範身份、唯讀假商品/訂單、拒絕所有資料變更已完成。
 本機 build / typecheck / ESLint / 53 項必要單元測試 / 38 項 HTTP 檢查 PASS。
-遠端部署狀態以 [Preview deployment](THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT.md) 為準。
+Cloudflare Free Preview 已上線：https://the-one-platform-preview.theoneguitarstudio.workers.dev 。
+遠端 38 項 HTTP / demo cookies / action 拒絕與 desktop/mobile 瀏覽器檢查 PASS。
+採 explicit Preview deployment，尚無 Git 自動部署；main 不連任何部署。
+[部署與證據](THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT.md)。
 Demo session 不代表真實 Auth / RLS 驗證；Epic7 Backup/Recovery 未過，REMOTE CLOSED = NO。
 正式 DB connections / SQL / writes = 0。沒有 Epic8、main 或正式操作。
 
