@@ -1,0 +1,104 @@
+{
+  "baseline": "8692f969a809899d626d5e3936a583b51a2ad76d",
+  "scope": "Visual Golden Reference v1, local Mock only",
+  "strictNetworkExit": 1,
+  "networkWarning": "Blocked local antivirus injected requests; no protection disabled",
+  "lint": "PASS",
+  "typecheck": "PASS",
+  "build": "PASS",
+  "unitTests": 47,
+  "httpChecks": 38,
+  "productionSupabaseCalls": 0,
+  "base": "http://127.0.0.1:8787",
+  "results": [
+    {
+      "name": "home",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": "想變厲害，卻不知道下一步該練什麼？"
+    },
+    {
+      "name": "course",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": "The OneGuitar Roadmap 2.0"
+    },
+    {
+      "name": "today",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": "早安，今天也讓自己更靠近想成為的吉他手！"
+    },
+    {
+      "name": "map",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": "學習地圖"
+    },
+    {
+      "name": "player",
+      "width": 1440,
+      "scroll": 1440,
+      "h1": "讓你的右手，找到穩定節奏"
+    },
+    {
+      "name": "home",
+      "width": 390,
+      "scroll": 390,
+      "h1": "想變厲害，卻不知道下一步該練什麼？"
+    },
+    {
+      "name": "course",
+      "width": 390,
+      "scroll": 390,
+      "h1": "The OneGuitar Roadmap 2.0"
+    },
+    {
+      "name": "today",
+      "width": 390,
+      "scroll": 390,
+      "h1": "早安，今天也讓自己更靠近想成為的吉他手！"
+    },
+    {
+      "name": "map",
+      "width": 390,
+      "scroll": 390,
+      "h1": "學習地圖"
+    },
+    {
+      "name": "player",
+      "width": 390,
+      "scroll": 390,
+      "h1": "讓你的右手，找到穩定節奏"
+    }
+  ],
+  "interactions": [
+    "stage selection",
+    "return current",
+    "continue lesson",
+    "practice toggle",
+    "reload clears",
+    "next lesson",
+    "locked next",
+    "mobile lesson menu",
+    "locked 404"
+  ],
+  "failures": [],
+  "external": [
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com"
+  ],
+  "errors": []
+}

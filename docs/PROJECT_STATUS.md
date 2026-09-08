@@ -1,6 +1,17 @@
 # Project Status
 
-## White-led Warm Tech Learning UI（本機完成，部署待直接確認）
+## Visual Golden Reference v1（本機視覺驗證完成）
+
+OWNER 提供 2026-09-08 Golden Reference，授權同一 application 五頁 visual fidelity pass、commit/push preview-test 與既有 workers.dev Preview 更新。
+基線 8692f969a809899d626d5e3936a583b51a2ad76d。白底／暖金、45:55 hero、窄學生側欄、垂直六階地圖、20:52:28 player 已對齊。
+[逐頁比較與驗證](THE_ONE_PRODUCT_UX_DIRECTION.md#visual-golden-reference-v1)；品牌照片及正式影片仍缺，使用原創 SVG/CSS 安全佔位，不複製參考圖。
+本機 lint/typecheck/build、47 項 Preview/route/tool tests、38 項 HTTP proof 通過；五頁 1440/390 與 9 項互動通過。
+嚴格 network run 保留 Kaspersky 注入 WARN，所有外站請求被攔；Production Supabase connection/SQL/write=0。
+本次部署結果以操作回報為準；不以本機完成宣告遠端上線。main、Canonical、migrations、backend 未改。
+OWNER 視覺驗收待回饋，不宣告 Epic7/8/9 closure。
+
+
+## White-led Warm Tech Learning UI（歷史；已由 OWNER 直接核准並部署）
 
 基線 preview-test / fd58da172a0650c31bbb38fdb0b61c0abd7d7395；同一application完成首頁、Guitar Roadmap landing、Student Today、Learning Map與Lesson Workspace。
 [UX視覺來源](THE_ONE_PRODUCT_UX_DIRECTION.md)採OWNER最新白色/柔和漸層/少框線方向；無新Demo或backend。
@@ -8,8 +19,8 @@
 build、lint、typecheck、23 Cloudflare +20 Mock +4 route guard測試、38既有HTTP proof通過。
 五頁桌面1440/手機390無overflow，9項互動檢查無失敗；防毒注入外連被阻擋，嚴格network run保留警告，未停用防護。
 [可攜本機證據](evidence/cloudflare/white-learning-ui-local.json)；screenshots在ignored artifacts/white-learning-ui。
-目前未部署這份UI：自動審查兩次拒絕附件中的部署授權，已請OWNER直接確認同一workers.dev Mock目的地；不繞過。
-先前Cloudflare網址仍是舊版，不以本機完成宣告遠端更新。已完成官方OAuth登入不等於部署已執行。
+先前附件授權曾被自動審查拒絕；其後 OWNER 直接核准，8692f96 已成功部署，version 242bc1ed-46c0-49c1-b207-6bf6cd04b914。
+該版遠端五頁 desktop/mobile、38 HTTP proof 與 10 assets 通過；防毒注入請求被攔截並保留警告。
 Production Supabase connection/SQL/write=0；main、migrations、Product Decisions不動；不宣告Epic8/9或Epic7 CLOSED。
 
 

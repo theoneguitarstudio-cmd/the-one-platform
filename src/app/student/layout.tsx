@@ -9,5 +9,5 @@ export default async function StudentLayout({
   children: ReactNode;
 }) {
   await requireAreaAccess("student");
-  return <><StudentNavigation />{children}</>;
+  return <div className="student-shell"><StudentNavigation /><div className="student-content">{children}</div></div>;
 }
