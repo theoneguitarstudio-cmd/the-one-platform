@@ -1,0 +1,54 @@
+{
+  "baseline": "fd58da172a0650c31bbb38fdb0b61c0abd7d7395",
+  "scope": "same application UI / explicit Preview Mock only",
+  "pages": [
+    "/",
+    "/courses/guitar-roadmap",
+    "/student",
+    "/student/map",
+    "/student/learn/pulse"
+  ],
+  "viewports": [
+    {
+      "width": 1440,
+      "height": 1000
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "checks": {
+    "cloudflareBuild": "PASS",
+    "lint": "PASS",
+    "typecheck": "PASS",
+    "cloudflareUnitTests": 23,
+    "mockGuardTests": 20,
+    "newRouteBoundaryTests": 4,
+    "existingMockHttpChecks": 38,
+    "overflowFailures": 0,
+    "browserRuntimeErrors": 0,
+    "interactionFailures": 0
+  },
+  "network": {
+    "applicationProductionSupabaseConnections": 0,
+    "productionSQL": 0,
+    "productionWrites": 0,
+    "blockedExternalOrigins": [
+      "http://gc.kis.v2.scr.kaspersky-labs.com"
+    ],
+    "limitation": "Local antivirus-injected browser requests were blocked; raw strict network run exits nonzero. No protection disabled; source scan contains no such URL. Not a zero-attempt browser environment."
+  },
+  "interactions": [
+    "select stage",
+    "return current",
+    "continue lesson",
+    "practice toggle",
+    "reload clears practice",
+    "next lesson",
+    "locked lesson disabled",
+    "mobile lesson menu",
+    "locked route 404"
+  ],
+  "epicClosure": false
+}

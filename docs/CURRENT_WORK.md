@@ -1,5 +1,18 @@
 # Current Work
 
+## White-led Warm Tech Learning UI（本機完成，部署待直接確認）
+
+基線 preview-test / fd58da172a0650c31bbb38fdb0b61c0abd7d7395；同一application完成首頁、Guitar Roadmap landing、Student Today、Learning Map與Lesson Workspace。
+[UX視覺來源](THE_ONE_PRODUCT_UX_DIRECTION.md)採OWNER最新白色/柔和漸層/少框線方向；無新Demo或backend。
+六個既有Level成果不變；新課節/進度為集中Mock，route非Mock拒絕、student layout權限保留。
+build、lint、typecheck、23 Cloudflare +20 Mock +4 route guard測試、38既有HTTP proof通過。
+五頁桌面1440/手機390無overflow，9項互動檢查無失敗；防毒注入外連被阻擋，嚴格network run保留警告，未停用防護。
+[可攜本機證據](evidence/cloudflare/white-learning-ui-local.json)；screenshots在ignored artifacts/white-learning-ui。
+目前未部署這份UI：自動審查兩次拒絕附件中的部署授權，已請OWNER直接確認同一workers.dev Mock目的地；不繞過。
+先前Cloudflare網址仍是舊版，不以本機完成宣告遠端更新。已完成官方OAuth登入不等於部署已執行。
+Production Supabase connection/SQL/write=0；main、migrations、Product Decisions不動；不宣告Epic8/9或Epic7 CLOSED。
+
+
 ## 2026-09-08 Cloudflare Free Preview + Mock（現行）
 
 OWNER 已授權獨立 workers.dev Preview，明確選擇同一套 application + 集中合成資料。

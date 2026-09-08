@@ -1,17 +1,11 @@
+import { PageShell, PrimaryCTA, SectionHeader } from "@/components/learning/ui";
+import { GuitarArt } from "@/components/learning/guitar-art";
+import { SystemCourseCard } from "@/components/learning/course-card";
 export default function Home() {
-  return (
-    <main className="flex flex-1 items-center justify-center px-6 py-16 sm:px-10">
-      <section className="w-full max-w-2xl rounded-2xl border border-[var(--border)] bg-white p-8 shadow-sm sm:p-12">
-        <p className="mb-5 inline-flex rounded-full bg-[var(--brand-yellow)] px-3 py-1 text-sm font-semibold text-[var(--text-primary)]">
-          Platform Foundation
-        </p>
-        <h1 className="text-4xl font-semibold tracking-tight text-[var(--text-primary)] sm:text-5xl">
-          The One 樂玩吉他 2.0
-        </h1>
-        <p className="mt-6 text-base text-[var(--text-secondary)]">
-          Environment / Build 正常。
-        </p>
-      </section>
-    </main>
-  );
+ return <PageShell><section className="home-hero"><div className="hero-copy"><p className="eyebrow"><span className="tiny-dot"/> 給每一個想繼續進步的你</p><h1>想變厲害，<br/>卻不知道下一步<br/><em>該練什麼？</em></h1><p className="body-copy">把學習路線、日常練習、老師回饋與成果，<br className="desktop-only"/>放進一套有方向的學習系統。<br/>在 The One，找到自己的節奏，一步步彈出可能。</p><div className="cta-row"><PrimaryCTA href="/#courses">開始探索課程</PrimaryCTA><PrimaryCTA secondary href="/#how-it-works">了解學習方式</PrimaryCTA></div><p className="hero-note">不只看懂。更要練會，然後真正做到。</p></div><div className="hero-visual"><GuitarArt/><div className="floating-note"><span>♫</span><div><small>你的下一步，可以很清楚</small><strong>今天，比昨天更靠近音樂。</strong></div></div><div className="floating-label">Learn. Practice. Become.</div></div></section>
+ <section className="section why-section"><SectionHeader eyebrow="A LITTLE DIRECTION. A LOT OF POSSIBILITY." title="不再自己摸索，也不必急著追趕。" text="好的學習，是知道自己為什麼而練，也知道下一步往哪裡走。"/><div className="benefits">{[["⌁","有方向的學習系統","從想學什麼，到真正能做到什麼，每一步都有脈絡。"],["✧","專業老師陪伴","在需要的時候，有人幫你聽見問題，也看見進步。"],["♫","多元學習資源","從示範、圖解到練習，把理解變成手上的能力。"],["◷","屬於你的成長節奏","忙碌、卡關或重新開始，都能找到適合自己的下一步。"]].map(([icon,title,text])=><div key={title}><span className="benefit-icon">{icon}</span><h3>{title}</h3><p>{text}</p></div>)}</div></section>
+ <section className="section" id="courses"><SectionHeader eyebrow="SYSTEM COURSES" title="找到一條，值得走下去的路。" text="以能力為目的的系統課程。從吉他開始，為更多音樂旅程留出空間。"/><SystemCourseCard/></section>
+ <section className="section how-section" id="how-it-works"><SectionHeader eyebrow="YOUR WAY FORWARD" title="把「我想學會」，變成「我做到了」。"/><ol className="how-steps">{["探索方向","加入系統課程","知道今天做什麼","動手練習","得到回饋","真正進步"].map((t,i)=><li key={t}><span>0{i+1}</span><h3>{t}</h3></li>)}</ol><p className="muted">學習體驗方向預覽；看完影片不代表完成，成果仍需要練習與驗證。</p></section>
+ <section className="section teacher-feature"><div className="teacher-abstract" aria-hidden="true"><span>一起練，<br/>走得更遠。</span><i>you + a little guidance</i></div><div><SectionHeader eyebrow="REAL PEOPLE. REAL SUPPORT." title="有些突破，需要有人陪你聽。" text="The One 不只有錄播內容。透過老師的回饋與私人課程，理解卡住的地方，找到更適合你的練習方式。"/><PrimaryCTA secondary href="/teachers">認識陪你成長的老師</PrimaryCTA></div></section>
+ <section className="section" id="membership"><SectionHeader eyebrow="A PLACE FOR EVERY PACE" title="選擇你需要的支持。"/><div className="membership-row">{[["Free","找到方向","先探索，認識自己現在的位置。"],["Plus","建立系統","沿著有脈絡的方法，自主練習。"],["Pro","走向成果","加上老師回饋與人工驗證的支持。"]].map(([tier,title,text])=><div key={tier}><p className="eyebrow">{tier}</p><h3>{title}</h3><p>{text}</p></div>)}</div><p className="muted">會員角色介紹。實際課程權益與服務依核准方案提供；此 Preview 不開通或收款。</p></section></PageShell>;
 }

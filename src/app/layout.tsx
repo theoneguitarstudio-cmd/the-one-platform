@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { PreviewNotice } from "@/components/preview-notice";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -15,10 +16,10 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "The One 樂玩吉他 2.0",
-  description: "Platform Foundation",
+  description: "The One：有方向的系統課程、練習與老師陪伴，讓每一步更靠近音樂。",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html
       lang="zh-Hant"

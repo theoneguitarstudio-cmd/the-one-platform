@@ -67,3 +67,4 @@ supabase/.branches/
 .dev.vars*
 /artifacts/cloudflare-local/
 /artifacts/cloudflare-mock/
+/artifacts/white-learning-ui/
