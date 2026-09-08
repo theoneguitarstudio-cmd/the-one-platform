@@ -1,5 +1,14 @@
 # EPIC7_BACKUP_RECOVERY_EXECUTION_REQUEST
 
+## 2026-09-08 公司場景補充
+
+本申請仍PENDING OWNER APPROVAL，沒有export/restore批准。
+[公司再核對](EPIC7_BACKUP_STORAGE_WRITE_SOURCE_REVIEW.md)未找到可證明The One自控的合格加密位置；
+不請OWNER去修改公司Windows加密/ACL，不把公司repo/TEMP/Docker當正式backup中繼。
+請指定The One自己控制的私人/專用位置後再由工程核對；下方家用UI/容量/路徑不是公司已可用證據。
+寫入入口仍需[最小唯讀活動查證](PRODUCTION_WRITE_ACTIVITY_READONLY_REQUEST.md)，不能靠Preview project尚未建立推論沒有writer。
+Preview準備不授權本申請，也不需要為看網站把正式資料匯出到測試環境。
+
 **PENDING OWNER APPROVAL**
 
 這是待審申請，不是執行授權。對應[工程計畫](EPIC7_BACKUP_RECOVERY_EXECUTION_PLAN.md)。

@@ -1,5 +1,17 @@
 # PRODUCTION_WRITE_ACTIVITY_READONLY_REQUEST
 
+## 2026-09-08 一次最小申請（公司再核對後，仍未執行）
+
+請OWNER只核准本文件既有白名單的正式活動metadata查證，不含備份或停寫。
+來源固定the-one-platform / ygxeihtcolpiulupieeq / ap-southeast-1，身份錯或可見性不足STOP。
+兩次有界聚合相隔約60秒、總執行窗口最多90秒，單一SQL statement_timeout最多5秒；
+只用transaction-local設定與read-only transaction，不改永久參數。逾時不重試，不cancel其他backend。
+不讀原始query、自由文字、使用者資料/帳密或job command；catalog能力未存在就記UNKNOWN/不適用，不擴充scope。
+[本機來源盤點](EPIC7_BACKUP_STORAGE_WRITE_SOURCE_REVIEW.md)與[Preview隔離計畫](THE_ONE_VERCEL_PREVIEW_SETUP.md)已補齊，
+現在不能靠本機程式證明正式活動；先前preflight批准不延伸至本申請。
+90秒短觀測不證明整段backup靜止，仍需實際hosting/操作者控制證據；本輪未連Production。
+此批准也不授權建立Vercel Project或獨立Supabase，兩條工作線分開。
+
 **PENDING OWNER APPROVAL，未連線。** 下一輪最小查證，不含backup/restore。
 依據：[本機盤點](EPIC7_BACKUP_STORAGE_WRITE_SOURCE_REVIEW.md)。
 

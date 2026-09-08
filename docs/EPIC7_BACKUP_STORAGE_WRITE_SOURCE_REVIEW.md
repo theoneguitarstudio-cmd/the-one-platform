@@ -1,5 +1,67 @@
 # Epic7 備份位置與寫入來源 — 2026-09-08 本機唯讀盤點
 
+## 2026-09-08 公司電腦再核對（現行；非家用證據）
+
+起點preview-test / e4a646fb6744945deafa93f4f97388d9dc5592dc，CLEAN。
+本節是公司電腦事實；下方Home 24H2、C/D、C:/TheOneBackups與家用ACL等屬家用歷史，不混用。
+
+### A. 公司位置是否合格
+
+- 本機非秘密登錄：EditionID=Core、DisplayVersion=25H2、Build=26200。
+- 當次可讀且ready的DriveInfo只有C:/，Fixed/NTFS、可用280787275776 bytes；沒有可見ready的獨立外接磁碟。
+  這不是全網路儲存或未接設備的完整發現。
+- manage-bde -status C: 被Windows拒絕讀取；加密狀態UNKNOWN，沒有提升為管理員、索取金鑰或改安全設定。
+- 沒有證據證明公司C:/或目前使用者目錄是The One自己控制、可保管正式資料的獨立空間。
+  公司登入帳號、可寫目錄、容量或磁碟加密，都不能代替The One保管權/ACL/custodian/retention證據。
+- 因此本輪**沒有可採用的公司長期正式backup位置**；也不把公司TEMP、Docker資料層、repo、Downloads或同步資料夾
+  當正式備份的暫存捷徑。沒有掃描/讀取備份內容、改ACL/BitLocker、掛載儲存或啟動Docker。
+- 下一步需要OWNER指定已持有、The One自控的私人/專用加密位置，或授權另輪評估。
+  若位置在家中，回該環境再查加密/ACL/暫存/還原落地；不要求OWNER替公司電腦除錯或改加密。
+  未指定路徑時不能憑程式產生一個合格位置，也不自行購買服務。
+
+### B. 本輪補充寫入來源與Hosting證據
+
+本輪唯讀Vercel connector可見Team只有together-stories Project（Hobby），project只有together-stories，
+repo link也是theoneguitarstudio-cmd/together-stories。沒有The One project；只限這個連線可見範圍，
+不證明其他帳戶/Team/hosting不存在。未讀任何環境變數值、runtime secret或Production log。
+
+實際checkout仍無vercel.json、.vercel/project.json、.github/workflows；package無migration/seed/cron建置腳本。
+30個page與5個handler、src env/client/actions已重讀。未變更application，沿用下方Auth/Teacher/Trial/
+Commerce/Entitlement/Scheduling/RPC/trigger的source inventory；程式存在不等於今天正式使用。
+
+補強兩點，不能靠「Preview」或「GET」推論零寫入：
+
+1. src/proxy.ts在首頁和/api/health也呼叫refreshSupabaseSession；
+   src/lib/supabase/proxy.ts會getClaims與setAll cookie，可能有Auth refresh活動。
+   health handler本身C（無DB），**完整HTTP鏈仍是B，實際運行/target為UNKNOWN**。
+   lesson join亦有Auth前置。阻止業務表单不等於停止所有Auth或直接API入口。
+2. 將來Preview/dev如果誤填正式URL/key，即使不是Production deployment仍可能透過登入、
+   actions或RPC寫正式服務。故Preview必須獨立Supabase、合成帳戶/資料、獨立redirect與測試外部整合。
+   目前未建立The One Preview，不新增已確認正式writer；準備見[Preview設定](THE_ONE_VERCEL_PREVIEW_SETUP.md)。
+
+分類保持：已證明目前正式使用的writer仍無足夠證據；B為source存在，D為部署/執行未知。
+直接Supabase Auth/REST/RPC、Dashboard手動SQL、其他服務、外部排程仍不能由repo或這個Vercel列表排除。
+歷史29 remote / 34 local、無已查範圍意外drift與PITR狀態沿用
+[正式唯讀preflight](EPIC7_PRODUCTION_READONLY_PREFLIGHT.md)，本輪未重新連Production。
+家用ignored detailed artifacts未隨Git同步，不以公司現有舊cache冒充持有最新原始evidence；不為此重做交接。
+
+### C. 剩餘gate與最小授權
+
+Epic7現行阻擋為Backup/Recovery：
+BR-1/BR-3 UNKNOWN、BR-2未通過，最多落後1小時的一致可還原時間點尚未證明。
+即使有可寫資料夾，也不能放行export；DB logical restore不等於網站全服務恢復。
+正式五份migration及smoke仍未授權，四個authority成功分支仍BLOCKED/coverage未accepted；
+不把通過備份一項說成Epic7已REMOTE CLOSED。
+
+可純本機完成的來源/設定/風險與控制條件已補齊。下一個缺的是外部事實：
+The One自控加密儲存位置、實際部署/連線target、是否有在途交易與排程、可靠控制/恢复入口。
+只需一次[最小唯讀活動申請](PRODUCTION_WRITE_ACTIVITY_READONLY_REQUEST.md)，兩次約60秒間隔的聚合與白名單metadata；
+無query text/PII/credential、無cancel/terminate、無DB寫入、無export。
+結果只是活動佐證，不是一小時保障或全時段無writer證明。沒有新scope外擴自動批准。
+
+本輪不執行該申請，不重跑已完成preflight；不export/restore/migration/smoke/cleanup/Epic8。
+公司磁碟加密權限拒絕只是本機狀態UNKNOWN，不需要OWNER授權管理員操作才完成此份準備。
+
 起點 main / bc4f882b036794f038bc3f4e504d2fa119a06b9e，CLEAN。資料時間約00:32 Asia/Taipei。
 本輪 production connections=0；只讀目前家用 checkout、Windows 非秘密 metadata 及既有證據，未讀環境秘密或 dump。
 

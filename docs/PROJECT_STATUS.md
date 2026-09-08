@@ -1,5 +1,29 @@
 # Project Status
 
+## 2026-09-08 公司Epic7 gate與Vercel Preview準備（現行）
+
+起點preview-test / e4a646fb6744945deafa93f4f97388d9dc5592dc，CLEAN；只在preview-test工作。
+本輪允許文件commit/push preview-test，並非main、Vercel deployment或正式資料庫授權。
+
+Epic7本機PG工程與已完成Production Read-Only Preflight保留最新結果：
+remote29/local34、差異為Epic7五份未部署migration，未發現已查範圍意外drift。
+現行阻擋仍Backup/Recovery：BR-1/3 UNKNOWN、BR-2未過，OWNER要求最多1h；正式migration/smoke及coverage結案未批准。
+[公司備份/寫入來源再核對](EPIC7_BACKUP_STORAGE_WRITE_SOURCE_REVIEW.md)：
+公司可見C:/加密狀態讀取受限，未證明The One自控，不能當正式長期或暫存backup位置。
+寫入來源已補Proxy/health/Auth與Preview誤連正式的風險；
+[一次最小正式唯讀活動申請](PRODUCTION_WRITE_ACTIVITY_READONLY_REQUEST.md)仍PENDING，未執行。
+
+[The One Preview設定](THE_ONE_VERCEL_PREVIEW_SETUP.md)已完成：
+Next.js/root/pnpm10.34.5/Node24.x/build/獨立env、main Production/preview-test Preview、首次部署Production陷阱與create-only流程。
+唯讀Vercel連線仍只見together-stories（Hobby）；The One可用Team/商業方案及獨立測試Supabase尚未核定。
+既有30個page/5個handler；首頁是Platform Foundation，不是課程學習工作區；不另造假網站或偷做Epic8/9。
+6組既有env模組的合成檢查PASS、文件來源/連結檢查完成；無server/cloud build/UI E2E，不冒稱已有Preview URL。
+Project建立設定可審閱；真正建立/部署仍等OWNER確認Team、獨立測試後端及具體外部授權。
+
+本輪無正式DB connections/SQL/write、無backup/restore/migration/smoke/cleanup、無Docker啟動。
+application、歷史migration、package/lock/workspace及accepted roadmap不改。
+下方歷史「不push」「Preflight尚未做」「本機PG未完成」依各輪時點解讀，不覆蓋本節現行狀態。
+
 ## 2026-09-08 OWNER 核定 GitHub 開發同步流程
 
 GitHub theoneguitarstudio-cmd/the-one-platform 為程式碼與版本歷史的主要遠端保存位置。

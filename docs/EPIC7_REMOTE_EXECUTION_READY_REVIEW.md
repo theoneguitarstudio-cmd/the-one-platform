@@ -1,5 +1,15 @@
 # EPIC7_REMOTE_EXECUTION_READY_REVIEW
 
+## 2026-09-08 最新正式gate與Preview分線
+
+Production Read-Only Preflight已完成，見[正式唯讀證據](EPIC7_PRODUCTION_READONLY_PREFLIGHT.md)；不依下方舊敘述重做。
+本機PG接線/33可執行計畫分支PASS保留，P04/P05/P06/R04仍BLOCKED；不把37案全部標PASS。
+目前還不能執行正式migration/smoke：Backup/Recovery BR-1/3 UNKNOWN、BR-2未過，1h可恢復點與自控加密位置未證明。
+[公司位置/寫入來源](EPIC7_BACKUP_STORAGE_WRITE_SOURCE_REVIEW.md)已再核對，公司磁碟不作The One正式backup位置。
+[Preview準備](THE_ONE_VERCEL_PREVIEW_SETUP.md)是獨立測試環境，不放Production secrets，也不取代Epic7 closure。
+本輪只本機合成設定檢查及Vercel project metadata唯讀；沒有建立Project或執行正式DB查詢。
+下一個外部需求是具體儲存/入口事實與[最小活動唯讀批准](PRODUCTION_WRITE_ACTIVITY_READONLY_REQUEST.md)，不是重新交接或Epic8。
+
 ## 2026-09-07 家用本機 PostgreSQL 執行更新（現行）
 
 本輪起點 main / 2eac1b9e8d69d0e3628120121f9a4f7058457325，家用新repo起點CLEAN。
