@@ -1,0 +1,281 @@
+{
+  "sourceBaseline": "65e9f78c2b995c7b6f3394aeac7450f02ddf9863",
+  "unitTestsPassed": 51,
+  "httpChecksPassed": 38,
+  "lint": "PASS",
+  "typecheck": "PASS",
+  "build": "PASS",
+  "strictNetworkStatus": "WARN - local antivirus injection blocked",
+  "strictCommandExit": 1,
+  "productionSupabaseConnections": 0,
+  "productionSQL": 0,
+  "productionWrites": 0,
+  "base": "http://127.0.0.1:8787",
+  "meta": {
+    "application": "The One 2.0",
+    "environment": "preview",
+    "dataMode": "mock",
+    "sha": "65e9f78c2b995c7b6f3394aeac7450f02ddf9863-dirty",
+    "shortSha": "65e9f78-dirty"
+  },
+  "pages": [
+    {
+      "name": "home",
+      "width": 1440,
+      "h1": "想變厲害，卻不知道下一步該練什麼？",
+      "scroll": 1440
+    },
+    {
+      "name": "course",
+      "width": 1440,
+      "h1": "The OneGuitar Roadmap 2.0",
+      "scroll": 1440
+    },
+    {
+      "name": "today",
+      "width": 1440,
+      "h1": "早安，今天也讓自己更靠近想成為的吉他手！",
+      "scroll": 1440
+    },
+    {
+      "name": "map",
+      "width": 1440,
+      "h1": "學習地圖",
+      "scroll": 1440
+    },
+    {
+      "name": "video",
+      "width": 1440,
+      "h1": "Lesson 2 · 讓你的右手，找到穩定節奏",
+      "scroll": 1440
+    },
+    {
+      "name": "home",
+      "width": 1024,
+      "h1": "想變厲害，卻不知道下一步該練什麼？",
+      "scroll": 1024
+    },
+    {
+      "name": "course",
+      "width": 1024,
+      "h1": "The OneGuitar Roadmap 2.0",
+      "scroll": 1024
+    },
+    {
+      "name": "today",
+      "width": 1024,
+      "h1": "早安，今天也讓自己更靠近想成為的吉他手！",
+      "scroll": 1024
+    },
+    {
+      "name": "map",
+      "width": 1024,
+      "h1": "學習地圖",
+      "scroll": 1024
+    },
+    {
+      "name": "video",
+      "width": 1024,
+      "h1": "Lesson 2 · 讓你的右手，找到穩定節奏",
+      "scroll": 1024
+    },
+    {
+      "name": "home",
+      "width": 390,
+      "h1": "想變厲害，卻不知道下一步該練什麼？",
+      "scroll": 390
+    },
+    {
+      "name": "course",
+      "width": 390,
+      "h1": "The OneGuitar Roadmap 2.0",
+      "scroll": 390
+    },
+    {
+      "name": "today",
+      "width": 390,
+      "h1": "早安，今天也讓自己更靠近想成為的吉他手！",
+      "scroll": 390
+    },
+    {
+      "name": "map",
+      "width": 390,
+      "h1": "學習地圖",
+      "scroll": 390
+    },
+    {
+      "name": "video",
+      "width": 390,
+      "h1": "Lesson 2 · 讓你的右手，找到穩定節奏",
+      "scroll": 390
+    }
+  ],
+  "checks": [
+    {
+      "name": "home no overflow 1440",
+      "pass": true
+    },
+    {
+      "name": "course no overflow 1440",
+      "pass": true
+    },
+    {
+      "name": "today no overflow 1440",
+      "pass": true
+    },
+    {
+      "name": "map no overflow 1440",
+      "pass": true
+    },
+    {
+      "name": "video no overflow 1440",
+      "pass": true
+    },
+    {
+      "name": "text panel 1440",
+      "pass": true
+    },
+    {
+      "name": "segment resets content scroll",
+      "pass": true
+    },
+    {
+      "name": "keyboard segments",
+      "pass": true
+    },
+    {
+      "name": "independent outline scroll",
+      "pass": true
+    },
+    {
+      "name": "content independent",
+      "pass": true
+    },
+    {
+      "name": "home no overflow 1024",
+      "pass": true
+    },
+    {
+      "name": "course no overflow 1024",
+      "pass": true
+    },
+    {
+      "name": "today no overflow 1024",
+      "pass": true
+    },
+    {
+      "name": "map no overflow 1024",
+      "pass": true
+    },
+    {
+      "name": "video no overflow 1024",
+      "pass": true
+    },
+    {
+      "name": "text panel 1024",
+      "pass": true
+    },
+    {
+      "name": "home no overflow 390",
+      "pass": true
+    },
+    {
+      "name": "course no overflow 390",
+      "pass": true
+    },
+    {
+      "name": "today no overflow 390",
+      "pass": true
+    },
+    {
+      "name": "map no overflow 390",
+      "pass": true
+    },
+    {
+      "name": "video no overflow 390",
+      "pass": true
+    },
+    {
+      "name": "text panel 390",
+      "pass": true
+    },
+    {
+      "name": "exercise 1",
+      "pass": true
+    },
+    {
+      "name": "exercise 2",
+      "pass": true
+    },
+    {
+      "name": "jam",
+      "pass": true
+    },
+    {
+      "name": "previous segment",
+      "pass": true
+    },
+    {
+      "name": "temporary mark",
+      "pass": true
+    },
+    {
+      "name": "reload clears mark",
+      "pass": true
+    },
+    {
+      "name": "lesson switching resets segment",
+      "pass": true
+    },
+    {
+      "name": "locked next",
+      "pass": true
+    },
+    {
+      "name": "mobile outline",
+      "pass": true
+    },
+    {
+      "name": "mobile global nav",
+      "pass": true
+    },
+    {
+      "name": "search empty",
+      "pass": true
+    },
+    {
+      "name": "search navigation",
+      "pass": true
+    },
+    {
+      "name": "locked route 404",
+      "pass": true
+    },
+    {
+      "name": "meta mock only",
+      "pass": true
+    }
+  ],
+  "failures": [],
+  "errors": [],
+  "external": [
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com",
+    "http://gc.kis.v2.scr.kaspersky-labs.com"
+  ]
+}

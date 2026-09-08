@@ -1,3 +1,4 @@
+import { previewBuildMeta } from "../src/lib/preview/build-meta";
 import handler from "vinext/server/fetch-handler";
 import { assertPreviewEnvironment } from "../tools/cloudflare/environment";
 import { bufferFormRequest } from "../tools/cloudflare/form-request";
@@ -14,6 +15,12 @@ const worker = {
         }
         catch {
             return new Response("Preview environment is not configured safely.", { status: 503 });
+        }
+        if (new URL(args[0].url).pathname === "/__preview-meta") {
+            const meta = previewBuildMeta();
+            if (!meta) return new Response("Not found", { status: 404 });
+            if (args[0].method !== "GET") return new Response("Method not allowed", { status: 405 });
+            return Response.json(meta, { headers: { "Cache-Control": "no-store" } });
         }
         const prepared = await bufferFormRequest(args[0]);
         if (prepared instanceof Response)

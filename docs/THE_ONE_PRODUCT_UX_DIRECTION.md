@@ -1,6 +1,8 @@
 # The One Product UX Direction
 
-Status: OWNER APPROVED visual direction — White-led Warm Tech Learning.
+Status: OWNER APPROVED — Light Public / Dark Focused Learning (2026-09-08 recording-based update).
+
+Current specification: [Pickup-style layout / interaction reference](THE_ONE_PICKUP_LAYOUT_REFERENCE.md). Public remains white; core Student Today/Map/Workspace now use dark charcoal. The white-only learning direction below is historical, superseded for these core pages. No Canonical/business decision changed.
 此輪明確授權取代 UI 僅限黃黑白的舊視覺約束；不修改 Canonical curriculum、角色權限或商業決策。
 
 白色主體、淡紫/淡藍/杏色氛圍、深海軍藍文字、少量accent。集中tokens於 src/app/globals.css。

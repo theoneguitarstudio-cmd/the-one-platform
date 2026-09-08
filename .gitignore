@@ -68,3 +68,7 @@ supabase/.branches/
 /artifacts/cloudflare-local/
 /artifacts/cloudflare-mock/
 /artifacts/white-learning-ui/
+
+# Owner reference recordings and local UI proof (never publish source media)
+/artifacts/pickup-reference/
+/artifacts/pickup-ui/

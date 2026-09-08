@@ -264,3 +264,200 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: #2
   .lesson-support .practice-panel { margin-top: 10px; }
   .mobile-lesson-nav { background: #f8faff; }
 }
+
+/* Recording-based learning shell: public stays light; core learning is immersive. */
+.app-menu-toggle { display: none; }
+.nav-primary, .nav-secondary { display: flex; flex-direction: column; gap: 4px; }
+.nav-secondary { margin-top: auto; padding-top: 25px; }
+.nav-brand-name { color: inherit !important; font-size: inherit !important; margin: 0 !important; }
+.student-header nav button, .student-header nav summary { display: flex; align-items: center; gap: 8px; min-height: 42px; padding: 10px; border: 0; background: none; color: inherit; text-align: left; font-size: 12px; border-radius: 6px; }
+.student-header nav a .nav-label { margin: 0; }
+.nav-support p { padding: 10px; font-size: 11px; line-height: 1.8; }
+.lesson-search { position: fixed; z-index: 60; top: 80px; left: 50%; transform: translateX(-50%); width: min(440px,calc(100vw - 32px)); border: 1px solid #758391; padding: 24px; background: #202935; color: #f4f5f8; box-shadow: 0 20px 80px #0008; border-radius: 12px; }
+.lesson-search > div { display: flex; justify-content: space-between; align-items: center; }
+.lesson-search button { border: 0; background: none; color: #fff; font-size: 25px; }
+.lesson-search input { width: 100%; margin: 16px 0; background: #111a24; border: 1px solid #6c7a8d; padding: 10px; border-radius: 6px; color: #fff; }
+.lesson-search ul { list-style: none; padding: 0; }
+.lesson-search li a { display: block; padding: 10px 0; }
+.preview-fingerprint { font-size: 10px; padding: 7px 15px; text-align: center; color: #707b8b; background: #fafbfc; }
+.public-header { position: sticky; top: 0; z-index: 20; background: #fffffff5; height: 76px; }
+.home-hero { display: flex; flex-direction: column; text-align: center; padding: 60px 30px 20px; max-width: 1050px; background: radial-gradient(ellipse at 50% 75%,#f5ecf466,transparent 65%); }
+.hero-copy { max-width: 830px; }
+.hero-copy h1 { font-size: clamp(38px,4.5vw,64px); line-height: 1.3; letter-spacing: -.025em; }
+.hero-copy .body-copy { max-width: 650px; margin: 25px auto 0; }
+.hero-copy .cta-row { justify-content: center; }
+.home-hero .hero-visual { width: min(700px,100%); min-height: 300px; margin-top: 20px; }
+.home-hero .guitar-art { height: 320px; min-height: 320px; border-radius: 22px; background: radial-gradient(ellipse at 45% 50%,#f3e4d3,transparent 65%),linear-gradient(120deg,#fdf8f3,#f5f3fa,#f0f6fc); }
+.home-hero .guitar-art svg { height: 310px; transform: rotate(12deg); }
+.home-hero .guitar-art:after { display: none; }
+.home-hero .floating-label { font-size: 23px; bottom: 60px; right: 20px; }
+.learning-shell { --text-primary:#f0f3f7; --text-secondary:#acb6c5; --accent:#9abbea; --blue:#263951; --lavender:#283241; --peach:#463b2b; --warm-highlight:#343c49; --learning-blue:#8eb6ed; --foreground:#f0f3f7; background:#111720; color:var(--text-primary); grid-template-columns:184px minmax(0,1fr); max-width:none; height:calc(100dvh - 59px); min-height:600px; }
+.learning-shell .student-content { overflow-y:auto; min-height:0; }
+.learning-shell > .student-header { position:relative; top:auto; height:100%; padding:24px 14px; background:#171e28; border-right:1px solid #ffffff0b; gap:28px; color:#b5c0cf; min-height:0; }
+.learning-shell .student-header .wordmark { font-size:20px; color:#f0f3f7; }
+.learning-shell .student-header nav { flex:1; min-height:0; overflow-y:auto; scrollbar-width:thin; }
+.learning-shell .student-header nav a { font-size:12px; border-radius:5px; min-height:43px; display:flex; align-items:center; gap:9px; }
+.learning-shell .student-header nav a[aria-current=page] { background:#2a3443; color:#c7dcff; box-shadow:inset 3px 0 #97b9ee; }
+.learning-shell .student-header nav a:hover, .learning-shell .student-header nav button:hover { background:#252f3d; }
+.learning-shell .brand-symbol { background:#34302c; color:#dfbe84; }
+.learning-shell .student-main { max-width:1200px; padding:35px 42px 60px; min-height:100%; }
+.learning-shell .today-main { background:none; }
+.learning-shell .student-welcome { color:#a8b6c9; }
+.learning-shell .today-greeting { padding-bottom:24px; border-bottom:1px solid #ffffff0c; }
+.learning-shell .today-greeting h1 { font-size:29px; }
+.learning-shell .pace-note { display:none; }
+.learning-shell .continue-panel { padding:28px; background:#1c2531; grid-template-columns:1.5fr 1fr; max-width:950px; }
+.learning-shell .continue-panel h2 { font-size:23px; }
+.learning-shell .lesson-thumbnail .guitar-art { background:linear-gradient(120deg,#393a3d,#554638); }
+.learning-shell .today-overview { margin-top:30px; gap:25px; }
+.learning-shell .overview-icon { background:#28374a; color:#b6d5ff; }
+.learning-shell .today-overview h2 { font-size:17px; }
+.learning-shell .today-overview p, .learning-shell .today-overview small { font-size:12px; }
+.learning-shell .profile-strip { border-top:1px solid #ffffff12; padding-top:28px; }
+.learning-shell .profile-strip button { background:#263344; color:#eee; border-color:#546174; }
+.learning-shell .cta { background:#98bcea; color:#102139; }
+.learning-shell .cta:hover { background:#c3dafa; }
+.learning-shell .cta-secondary { background:#273241; color:#f2f5fa; box-shadow:none; }
+.learning-shell .learning-progress > div[role] { background:#354154; }
+.learning-shell .map-main { background:none; }
+.learning-shell .map-heading .eyebrow { color:#b5c5da; }
+.learning-shell .map-grid { background:radial-gradient(ellipse at 55% 50%,#203c5566,transparent 70%); }
+.learning-shell .mountain { background:linear-gradient(140deg,#38557466,#1a273477); opacity:.6; }
+.learning-shell .mountain-front { background:linear-gradient(140deg,#29405588,#303d3888); }
+.learning-shell .stage-path:before { background:#61768e; }
+.learning-shell .stage-path button { color:#bac5d3; }
+.learning-shell .stage-path button:hover, .learning-shell .stage-path .selected button { background:#263649; }
+.learning-shell .stage-path .current-stage button { background:linear-gradient(90deg,#383b36,#29313b); color:#f0e5cd; }
+.learning-shell .stage-number { border-color:#1b2430; background:#48576b; box-shadow:none; color:#dde6f2; }
+.learning-shell .current-stage .stage-number { background:#bc914f; color:#111720; }
+.learning-shell .stage-detail { background:#1c2633; }
+.learning-shell .node-row.current { background:#2a3b52; }
+.learning-shell .node-row > span { color:#b4c5dc; }
+.learning-shell .node-row.completed > span { color:#8cceaf; }
+.learning-shell .node-row.current > span { color:#a7cbff; }
+.learning-shell .node-row.locked { opacity:.7; }
+.learning-shell .landscape-caption { color:#829db8; }
+.learning-shell.in-lesson { grid-template-columns:68px minmax(0,1fr); }
+.learning-shell.in-lesson > .student-header { padding:22px 10px; }
+.in-lesson .student-header .nav-brand-name, .in-lesson .student-header .nav-label { display:none; }
+.in-lesson .student-header nav a, .in-lesson .student-header nav button, .in-lesson .student-header nav summary { justify-content:center; padding:10px 0; font-size:19px; }
+.in-lesson .student-header nav a > span { margin:0; }
+.in-lesson .nav-support[open] p { position:fixed; z-index:50; left:70px; bottom:70px; width:240px; background:#253243; padding:20px; border-radius:8px; }
+.immersive-workspace { display:grid; grid-template-columns:270px minmax(0,1fr); height:100%; min-height:0; background:#111720; }
+.outline-desktop { overflow-y:auto; scrollbar-width:thin; scrollbar-color:#516074 transparent; background:#19212c; border-right:1px solid #ffffff0c; min-height:0; }
+.course-outline { padding:24px 16px; color:#c2cbd7; }
+.outline-heading h2 { font-size:17px; margin:9px 0 18px; line-height:1.6; color:#f0f3f7; }
+.outline-heading small, .outline-stage small, .outline-future small { display:block; color:#99abc1; font-size:10px; }
+.outline-heading a { display:block; padding:12px 0; font-size:12px; border-top:1px solid #ffffff0b; }
+.outline-stage { margin-top:20px; }
+.outline-stage summary { list-style:none; padding:12px 0; position:relative; }
+.outline-stage summary:after { content:'⌄'; position:absolute; right:4px; top:17px; }
+.outline-stage summary strong { display:block; font-size:15px; margin-top:5px; }
+.outline-stage > p { font-size:11px; color:#a8b6c8; }
+.outline-stage h3 { font-size:12px; padding:14px 0; color:#f1f5fa; }
+.outline-lesson { display:flex; gap:9px; align-items:center; padding:14px 10px; font-size:11px; margin:4px -6px; border-radius:5px; }
+.outline-lesson > span:first-child { color:#9baac0; font-size:10px; }
+.outline-lesson > div { flex:1; }
+.outline-lesson small { font-size:9px; margin-top:4px; }
+.outline-lesson[aria-current=page] { background:#2b3a50; box-shadow:inset 3px 0 #92b8f0; color:#e4efff; }
+.outline-lesson.locked { color:#91a0b3; }
+.outline-future { margin-top:35px; }
+.outline-future a { display:block; padding:18px 0; border-bottom:1px solid #ffffff08; font-size:12px; }
+.outline-future span { display:block; margin-top:6px; }
+.outline-disclaimer { font-size:10px; margin-top:25px; color:#99a8bd; }
+.lesson-center { display:flex; flex-direction:column; min-height:0; min-width:0; }
+.lesson-scroll { padding:28px clamp(20px,3vw,52px); overflow-y:auto; min-height:0; flex:1; scroll-behavior:smooth; }
+.immersive-title, .lesson-segments, #lesson-panel { max-width:1100px; margin-left:auto; margin-right:auto; }
+.immersive-title { font-size:11px; color:#9bb5d8; }
+.immersive-title h1 { font-size:clamp(23px,2.1vw,32px); color:#f1f4f8; margin:10px 0 22px; }
+.lesson-segments { display:flex; border-bottom:1px solid #344155; margin-bottom:22px; }
+.lesson-segments button { flex:1; padding:14px 10px; background:none; color:#aeb9c9; border:0; border-bottom:3px solid transparent; white-space:nowrap; font-size:12px; }
+.lesson-segments button[aria-selected=true] { color:#dceaff; border-bottom-color:#9bbef1; background:#1b2635; }
+.immersive-video { width:100%; aspect-ratio:16/9; background:radial-gradient(ellipse at 65% 40%,#344154,#131c29 70%); color:#eef3fb; position:relative; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center; padding:35px; border-radius:8px; }
+.immersive-video h2 { font-size:clamp(18px,1.8vw,27px); max-width:80%; }
+.immersive-video p { font-size:12px; color:#b4c1d1; margin-top:10px; }
+.lesson-summary, .exercise-material { padding:28px 0; }
+.lesson-summary h2, .exercise-material h2, .immersive-resources h2 { font-size:20px; margin-bottom:12px; }
+.lesson-summary p, .exercise-material p { font-size:15px; color:#c0c9d7; }
+.lesson-summary button { background:none; border:0; color:#aaceff; margin-top:15px; }
+.immersive-resources { padding:28px 0; max-width:720px; }
+.immersive-resources .resource-row { color:#dfe7f1; }
+.immersive-resources .resource-icon { background:#273a54; color:#aacdff; }
+.immersive-resources .muted, .immersive-resources small { color:#abb9cd; }
+.text-material { max-width:740px; padding:18px 0 35px; margin:auto; font-size:16px; line-height:1.95; color:#c1cbd9; }
+.text-material h2 { font-size:30px; color:#f1f4f8; margin-bottom:25px; }
+.text-material h3 { font-size:21px; color:#e9eff8; margin:32px 0 15px; }
+.text-material p { margin-bottom:20px; }
+.text-material ul { list-style:disc; padding-left:24px; }
+.text-material li { padding:5px 0; }
+.text-material blockquote { margin:28px 0; padding:20px 24px; border-left:3px solid #9abce9; background:#202d3e; }
+.material-note { font-size:12px; color:#9fafc5; }
+.rhythm-diagram { display:grid; grid-template-columns:repeat(4,1fr); margin:25px 0; background:#202c3b; padding:24px; border-radius:7px; }
+.rhythm-diagram > div { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.rhythm-diagram span { font-size:26px; color:#d7be8e; }
+.rhythm-diagram strong { font-size:25px; color:#e9f2ff; }
+.rhythm-diagram small { color:#a7b8ce; }
+.lesson-action-bar { display:grid; grid-template-columns:1fr auto 1fr; gap:5px 15px; padding:15px 28px 9px; background:#18212d; border-top:1px solid #ffffff0b; align-items:center; }
+.lesson-action-bar > a, .lesson-action-bar > button { background:none; color:#cad8eb; border:0; font-size:12px; min-height:42px; display:flex; align-items:center; justify-content:center; border-radius:6px; padding:10px; }
+.lesson-action-bar > :first-child { justify-self:start; }
+.lesson-action-bar > :nth-child(3) { justify-self:end; }
+.lesson-action-bar > .practice-mark { background:#89acdc; color:#14243b; font-weight:650; }
+.lesson-action-bar > .practice-mark[aria-pressed=true] { background:#9acdb8; color:#132c22; }
+.lesson-action-bar [role=status] { grid-column:1/-1; font-size:10px; text-align:center; color:#a3b0c1; }
+.locked-next { font-size:11px; color:#92a1b6; }
+.outline-mobile { display:none; }
+@media(max-width:1100px) and (min-width:761px) {
+ .learning-shell { grid-template-columns:160px minmax(0,1fr); }
+ .immersive-workspace { grid-template-columns:235px minmax(0,1fr); }
+ .lesson-scroll { padding:25px 20px; }
+ .lesson-segments button { font-size:11px; padding:12px 6px; }
+}
+@media(max-width:760px) {
+ .home-hero { padding:35px 22px 20px; }
+ .hero-copy h1 { font-size:36px; }
+ .home-hero .hero-visual { width:100%; margin:20px 0 0; min-height:250px; }
+ .home-hero .guitar-art { min-height:250px; height:250px; }
+ .home-hero .guitar-art svg { height:245px; }
+ .home-hero .floating-label { font-size:15px; bottom:40px; right:12px; }
+ .learning-shell, .learning-shell.in-lesson { display:block; height:auto; min-height:calc(100dvh - 59px); padding-bottom:0; }
+ .learning-shell > .student-header { display:flex; flex-direction:row; position:sticky; top:0; z-index:40; height:62px; padding:12px 20px; align-items:center; }
+ .learning-shell .student-content { overflow:visible; }
+ .learning-shell .student-header .nav-brand-name { display:inline; }
+ .app-menu-toggle { display:flex; align-items:center; gap:8px; margin-left:auto; padding:8px; background:none; border:0; color:inherit; font-size:15px; }
+ .learning-shell .student-header nav { display:none; position:absolute; top:62px; bottom:auto; left:0; right:0; width:100%; max-height:calc(100dvh - 110px); padding:18px 22px; background:#1a2431; overflow-y:auto; border:0; }
+ .learning-shell .student-header.nav-open nav { display:flex; flex-direction:column; }
+ .learning-shell .student-header nav a, .learning-shell .student-header nav button, .learning-shell .student-header nav summary { display:flex; justify-content:flex-start; text-align:left; font-size:13px; gap:12px; padding:10px; }
+ .learning-shell .student-header nav a span { display:inline; font-size:inherit; }
+ .learning-shell .student-header .nav-label { display:inline; }
+ .in-lesson .nav-support[open] p { position:static; width:auto; }
+ .learning-shell .student-main { padding:24px 20px 40px; }
+ .learning-shell .today-greeting h1 { font-size:22px; }
+ .learning-shell .continue-panel { padding:22px; }
+ .learning-shell .today-overview { gap:20px; }
+ .learning-shell .today-overview h2 { font-size:15px; }
+ .immersive-workspace { display:block; height:auto; }
+ .outline-desktop { display:none; }
+ .outline-mobile { display:block; background:#1c2837; border-radius:7px; margin-bottom:23px; }
+ .outline-mobile > summary { padding:14px; font-size:13px; }
+ .outline-mobile .course-outline { max-height:55dvh; overflow-y:auto; }
+ .lesson-center { display:block; }
+ .lesson-scroll { overflow:visible; padding:20px 16px; }
+ .immersive-title h1 { font-size:24px; }
+ .lesson-segments { overflow-x:auto; scrollbar-width:thin; }
+ .lesson-segments button { flex:0 0 auto; min-width:78px; font-size:11px; padding:12px 10px; }
+ .immersive-video { min-height:205px; padding:25px 15px; }
+ .immersive-video h2 { font-size:17px; }
+ .immersive-video .video-label { font-size:8px; }
+ .immersive-video .play-symbol { width:40px; height:40px; font-size:30px; }
+ .immersive-video p { font-size:10px; }
+ .lesson-action-bar { position:sticky; bottom:0; z-index:10; padding:10px 10px max(8px,env(safe-area-inset-bottom)); gap:5px; }
+ .lesson-action-bar > a, .lesson-action-bar > button { font-size:11px; padding:9px; }
+ .lesson-action-bar [role=status] { font-size:9px; }
+ .text-material { font-size:15px; }
+ .text-material h2 { font-size:25px; }
+}
+/* Final focus and alignment adjustments after viewport review. */
+.home-hero .hero-visual { align-self:center; }
+body:has(.learning-shell) .preview-notice,
+body:has(.learning-shell) .preview-fingerprint { background:#171e28; color:#a5b3c6; }
+.lesson-scroll { scroll-margin-top:75px; }

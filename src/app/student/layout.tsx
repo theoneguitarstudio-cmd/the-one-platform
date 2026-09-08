@@ -1,4 +1,4 @@
-import { StudentNavigation } from "@/components/learning/student-navigation";
+import { StudentShell } from "@/components/learning/student-shell";
 import type { ReactNode } from "react";
 
 import { requireAreaAccess } from "@/modules/auth/server-authorization";
@@ -9,5 +9,5 @@ export default async function StudentLayout({
   children: ReactNode;
 }) {
   await requireAreaAccess("student");
-  return <div className="student-shell"><StudentNavigation /><div className="student-content">{children}</div></div>;
+  return <StudentShell>{children}</StudentShell>;
 }

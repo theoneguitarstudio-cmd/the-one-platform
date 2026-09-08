@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { PreviewFingerprint } from "@/components/preview-fingerprint";
 import { PreviewNotice } from "@/components/preview-notice";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -25,7 +26,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       lang="zh-Hant"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col"><PreviewNotice />{children}</body>
+      <body className="min-h-full flex flex-col"><PreviewNotice />{children}<PreviewFingerprint /></body>
     </html>
   );
 }

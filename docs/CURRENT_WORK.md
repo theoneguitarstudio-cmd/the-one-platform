@@ -1,13 +1,26 @@
 # Current Work
 
-## Visual Golden Reference v1（本機視覺驗證完成）
+## Pickup-style Learning Experience（本機驗證完成）
+
+OWNER 的兩段操作錄影已逐段檢視並整理為 [layout / interaction specification](THE_ONE_PICKUP_LAYOUT_REFERENCE.md)。
+Public 保持白色；Today、Map、Lesson 採深色集中學習區。Desktop 全局導覽／獨立課程目錄／中央內容；手機雙收合導覽。
+同一課節支援影片 placeholder、原創文字教材、兩個練習與合奏 Mock；底部操作固定，鍵盤分頁與切換回頂部通過。
+51 項 Mock/route/build identity tests、lint/typecheck/build、38 HTTP proof、36 項瀏覽器檢查通過；1440/1024/390 無 overflow。
+[本機非秘密證據](evidence/cloudflare/pickup-layout-local.json)。嚴格 network run 因已攔截防毒注入保留 WARN；不冒稱零外連嘗試。
+新增 /__preview-meta 與頁底 Preview SHA；本機 dirty build 明示 dirty，正式 Preview 必須重新建置 clean commit。
+課節狀態是本頁暫記，沒有正式完成、能力驗證或權益授予。Production Supabase connections/SQL/writes=0。
+本輪基線 preview-test / 65e9f78c2b995c7b6f3394aeac7450f02ddf9863；main/Canonical/Product Decisions/migrations 不動。
+部署與 exact source identity 以 /__preview-meta 及操作回報為準；OWNER 看畫面後再驗收，不宣告任何 Epic remote closure。
+
+
+## Visual Golden Reference v1（歷史；已部署）
 
 OWNER 提供 2026-09-08 Golden Reference，授權同一 application 五頁 visual fidelity pass、commit/push preview-test 與既有 workers.dev Preview 更新。
 基線 8692f969a809899d626d5e3936a583b51a2ad76d。白底／暖金、45:55 hero、窄學生側欄、垂直六階地圖、20:52:28 player 已對齊。
 [逐頁比較與驗證](THE_ONE_PRODUCT_UX_DIRECTION.md#visual-golden-reference-v1)；品牌照片及正式影片仍缺，使用原創 SVG/CSS 安全佔位，不複製參考圖。
 本機 lint/typecheck/build、47 項 Preview/route/tool tests、38 項 HTTP proof 通過；五頁 1440/390 與 9 項互動通過。
 嚴格 network run 保留 Kaspersky 注入 WARN，所有外站請求被攔；Production Supabase connection/SQL/write=0。
-本次部署結果以操作回報為準；不以本機完成宣告遠端上線。main、Canonical、migrations、backend 未改。
+65e9f78 已部署至既有 Preview，Cloudflare version 343af52d-c897-46fd-9420-9455a2362a48；五頁線上檢查通過。main、Canonical、migrations、backend 未改。
 OWNER 視覺驗收待回饋，不宣告 Epic7/8/9 closure。
 
 
