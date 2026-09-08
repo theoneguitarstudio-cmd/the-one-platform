@@ -1,5 +1,20 @@
 # SYSTEM ARCHITECTURE
 
+## Accepted hosting decision — 2026-09-08
+
+OWNER accepted Cloudflare Workers + vinext as the target hosting/runtime path.
+Supabase PostgreSQL, Auth, Storage and RPC/API remain the backend; the modular
+monolith and server/database authorization boundaries remain unchanged.
+Preview uses an isolated Cloudflare Worker from preview-test. Future Production
+uses a separate Worker from main; Production deployment is NOT AUTHORIZED.
+Vercel is no longer the primary hosting target. The earlier Vercel recommendation
+in THE_ONE_CLOUDFLARE_HOSTING_EVALUATION is a superseded proposal, retained as audit history.
+No D1, KV, Durable Objects or R2 product is introduced. R2 stays future/optional.
+Canonical Epic7–Epic13 and accepted Product Decisions are unchanged.
+See [local compatibility proof and Preview plan](THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT.md).
+Epic7 Backup/Recovery gates still block Production migration/smoke/launch.
+
+
 ## Epic 6 — Scheduling & Booking Core (REMOTE CLOSED)
 
 P2 remote closure is complete; see [Project Status](PROJECT_STATUS.md) for

@@ -1,6 +1,19 @@
 # Current Work
 
-## 2026-09-08 公司Epic7 gate與Vercel Preview準備（現行）
+## 2026-09-08 Cloudflare Workers + vinext 本機相容性已驗證（現行）
+
+OWNER 已接受 Cloudflare Workers + vinext；Supabase 保留，Vercel 不再是主要方案。
+本輪從 preview-test / 4efe04b2fd82ce654dcfe397f17edc6ea45ba899 開始。
+本機 Cloudflare target build、workerd runtime、23 項新增安全測試、21 項 HTTP proof 通過；
+瀏覽器確認首頁、手機登入、登入/登出、學生頁、Admin 拒絕與師資圖片。
+未修改 src application、歷史 migration、Canonical 或 Product Decisions；main 不動。
+[Preview 下一步與證據](THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT.md)。
+下一步需要 OWNER 控制的 Cloudflare account 與獨立 Preview Supabase；不能以正式後端代替。
+本機 proof 不等於遠端登入/資料庫政策/完整產品驗證，Free CPU 是否足夠仍待隔離 Preview 實測。
+Epic7 Backup/Recovery 仍未過，REMOTE CLOSED = NO；未授權正式操作或 Epic8 implementation。
+
+
+## 2026-09-08 公司Epic7 gate與Vercel Preview準備（歷史；hosting 已更新）
 
 起點preview-test / e4a646fb6744945deafa93f4f97388d9dc5592dc，CLEAN；只在preview-test工作。
 本輪允許文件commit/push preview-test，並非main、Vercel deployment或正式資料庫授權。

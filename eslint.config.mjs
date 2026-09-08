@@ -11,6 +11,10 @@ const eslintConfig = defineConfig([
     ".next/**",
     "out/**",
     "build/**",
+    "dist/**",
+    ".wrangler/**",
+    ".vinext/**",
+    "artifacts/cloudflare-local/**",
     "next-env.d.ts",
   ]),
 ]);

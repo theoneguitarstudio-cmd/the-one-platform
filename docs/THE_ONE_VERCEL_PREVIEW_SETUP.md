@@ -1,5 +1,9 @@
 # THE_ONE_VERCEL_PREVIEW_SETUP
 
+> 此 Vercel 方案已由 OWNER 接受的 Cloudflare Workers + vinext 決策取代。
+> 現行入口為 [Cloudflare Preview plan](THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT.md)；本文僅留作歷史準備紀錄。
+
+
 2026-09-08；起點 preview-test / e4a646fb6744945deafa93f4f97388d9dc5592dc，CLEAN。
 **設定與建立程序已可審閱；Project未建立、Preview未部署、尚無可開啟URL。**
 本輪是readiness，不是部署批准；main、正式Supabase、theoneguitar.com皆不動。

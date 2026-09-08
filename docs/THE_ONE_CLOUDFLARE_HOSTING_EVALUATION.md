@@ -1,5 +1,9 @@
 # THE_ONE_CLOUDFLARE_HOSTING_EVALUATION
 
+> 後續決策：OWNER 已接受 Workers + vinext，取代本文當時的 Vercel 建議。
+> 本文保留為歷史 audit；目前實作與本機證據請見 [Preview deployment plan](THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT.md)。
+
+
 2026-09-08 / **ARCHITECTURE & HOSTING AUDIT ONLY** / recommendation PROPOSAL。
 Source baseline：`preview-test` / `d3821e3a6fec98c0fe72ba280e705e7bf6f3bc79`，CLEAN。
 實際 repo：`C:/Projects/the-one-platform-handoff-0af0680`。

@@ -1,0 +1,175 @@
+{
+  "time": "2026-09-08T02:53:01.761Z",
+  "synthetic": true,
+  "status": "PASS",
+  "results": [
+    {
+      "name": "homepage SSR",
+      "status": "PASS"
+    },
+    {
+      "name": "health route",
+      "status": "PASS"
+    },
+    {
+      "name": "unauthenticated protected route",
+      "status": "PASS"
+    },
+    {
+      "name": "login HTML and Server Action reference",
+      "status": "PASS"
+    },
+    {
+      "name": "cross-origin Server Action rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "login POST + session Cookie",
+      "status": "PASS"
+    },
+    {
+      "name": "authenticated SSR and Supabase identity",
+      "status": "PASS"
+    },
+    {
+      "name": "Student cannot enter Admin",
+      "status": "PASS"
+    },
+    {
+      "name": "proxy refreshes expired session Cookie",
+      "status": "PASS"
+    },
+    {
+      "name": "public teachers + image",
+      "status": "PASS"
+    },
+    {
+      "name": "public page /teachers/synthetic-teacher",
+      "status": "PASS"
+    },
+    {
+      "name": "public page /products",
+      "status": "PASS"
+    },
+    {
+      "name": "public page /auth/sign-up",
+      "status": "PASS"
+    },
+    {
+      "name": "public page /auth/forgot-password",
+      "status": "PASS"
+    },
+    {
+      "name": "public page /auth/access-denied",
+      "status": "PASS"
+    },
+    {
+      "name": "unsupported payment POST stays disabled",
+      "status": "PASS"
+    },
+    {
+      "name": "404",
+      "status": "PASS"
+    },
+    {
+      "name": "invalid callback redirects safely",
+      "status": "PASS"
+    },
+    {
+      "name": "static SVG",
+      "status": "PASS"
+    },
+    {
+      "name": "client bundle has no privileged secret or production ref",
+      "status": "PASS"
+    },
+    {
+      "name": "compiled JS and CSS served",
+      "status": "PASS"
+    }
+  ],
+  "productionConnections": 0,
+  "productionWrites": 0,
+  "sourceHead": "4efe04b2fd82ce654dcfe397f17edc6ea45ba899",
+  "branch": "preview-test",
+  "scope": "Local synthetic compatibility only; no Supabase database/RLS proof",
+  "compatibilityCheck": {
+    "issues": 0,
+    "partial": [
+      "next/font/google CDN delivery"
+    ],
+    "percentage": 96
+  },
+  "unitTests": {
+    "passed": 23
+  },
+  "typecheck": "PASS",
+  "eslint": "PASS",
+  "browser": {
+    "tool": "agent-browser 0.37.0",
+    "routes": [
+      "/",
+      "/auth/sign-in",
+      "/student",
+      "/admin -> /auth/access-denied",
+      "/teachers"
+    ],
+    "login": "PASS",
+    "logout": "PASS",
+    "teacherImageLoaded": true,
+    "mobileWidth": 390,
+    "capturedErrors": [],
+    "allowedDomains": [
+      "127.0.0.1",
+      "fonts.googleapis.com",
+      "fonts.gstatic.com"
+    ]
+  },
+  "versions": {
+    "node": "24.19.0",
+    "pnpm": "10.34.5",
+    "vinext": "1.0.0-beta.9",
+    "vite": "8.2.2",
+    "wrangler": "4.129.1"
+  },
+  "hashes": {
+    "package.json": "3e1589ac176a83642ee7f66099c2e00aaa098e68055bf4178a28f30994b6b3e4",
+    "pnpm-lock.yaml": "8261570f1c862ef933671e20e0090639a6589b3926c7c123a2194ad46df50e4b",
+    "vite.config.ts": "488e61fc125e6683333aa33d2e600a83514b2df58674b1c619de2d0214df57b2",
+    "wrangler.jsonc": "fd27d76aee799734aa95727fffa023ab34a388570eaf73287c27ddc6a66203e5",
+    "worker/index.ts": "f10d1520e99a7820b00d7cf6acff13acf88f81fb6afba53b877a5c8ea9dcff02",
+    "next-env.d.ts": "217ce9348b523c3e6954fb50bb93364b58781d86742c995f3a5b03ba88b9ba72",
+    "tools/cloudflare/environment.test.ts": "531157493b7488dbe63dc362027507b6465b260cba65440401c0d71e1ab7dfce",
+    "tools/cloudflare/environment.ts": "88065e569add80fcd7ad0d94db29bd7c5569c00726d4e7ea598fa7485d84f04d",
+    "tools/cloudflare/form-request.test.ts": "6aa7384586d332f31bbd5d8797f64bcc8b6a9d1061e687234818ccefadd639de",
+    "tools/cloudflare/form-request.ts": "8517125c474d62848154e73497794e7e7e650d855144ee7c8b3ea59ca6293ebc",
+    "tools/cloudflare/http-proof.mjs": "f15d73c41fe7d9404d318fd4d61066cc13cf4c1cecc3a054c05147139c0e6d80",
+    "tools/cloudflare/local-proof.mjs": "68741f28e4979dfd28ce5d341068d500124b74a81189ffd2f04b8d19db80ced5",
+    "tools/cloudflare/mock-supabase.mjs": "d7c0a896e4e0596459ed3d142c3abd1e0999b159701c2aa967ddb14223848086",
+    "tools/cloudflare/worker.test.ts": "dc1ca284f7ea9be875fe804281b1b1d4b5effcdbf53416db2de8ed4fb4bc18f9"
+  },
+  "notVerified": [
+    "Cloudflare remote runtime/Free CPU",
+    "Real isolated Preview Supabase Auth/RLS/RPC/Storage",
+    "Full Next build",
+    "Production",
+    "Epic7 remote closure"
+  ],
+  "stopReason": "Expected values to be strictly equal:\n\n500 !== 303\n",
+  "repetitions": 20,
+  "resolvedIssue": {
+    "failure": "Local ProxyWorker Network connection lost on POST after early rejection",
+    "fix": "Bounded form buffering before one handler delegation; 1 MiB, 10 seconds; no retry; CSRF retained",
+    "regression": "20 consecutive groups of 21 HTTP checks passed"
+  },
+  "mockRequestCounts": {
+    "POST /auth/v1/token": 40,
+    "GET /auth/v1/user": 40,
+    "GET /rest/v1/user_roles": 40,
+    "GET /rest/v1/profiles": 40,
+    "GET /rest/v1/teacher_public_profiles": 40,
+    "GET /rest/v1/teacher_specialties": 40,
+    "GET /rest/v1/teacher_stage_capabilities": 40,
+    "GET /rest/v1/product_public_catalog": 20
+  }
+}
