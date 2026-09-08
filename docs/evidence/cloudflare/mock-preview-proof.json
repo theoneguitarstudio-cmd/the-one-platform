@@ -1,0 +1,214 @@
+{
+  "time": "2026-09-08T05:38:03.322Z",
+  "baseline": "a3442fd2768e0c7110e8480d5ded71ff50b5b47a",
+  "branch": "preview-test",
+  "mode": "explicit-preview-mock",
+  "localStatus": "PASS",
+  "remoteStatus": "NOT_DEPLOYED_WAITING_OFFICIAL_OAUTH",
+  "unitTestsPassed": 53,
+  "http": {
+    "time": "2026-09-08T05:31:55.320Z",
+    "status": "PASS",
+    "results": [
+      {
+        "name": "/",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-in",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-up",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/forgot-password",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/verify-email",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/access-denied",
+        "status": "PASS"
+      },
+      {
+        "name": "/teachers",
+        "status": "PASS"
+      },
+      {
+        "name": "/teachers/preview-teacher",
+        "status": "PASS"
+      },
+      {
+        "name": "/products",
+        "status": "PASS"
+      },
+      {
+        "name": "/products/preview-private-lesson",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-in",
+        "status": "PASS"
+      },
+      {
+        "name": "/student",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/orders",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/orders/00000000-0000-4000-8000-000000000201",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/trial",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/packages",
+        "status": "PASS"
+      },
+      {
+        "name": "/student/schedule",
+        "status": "PASS"
+      },
+      {
+        "name": "/teachers/preview-teacher/trial?intent=00000000-0000-4000-8000-000000000401",
+        "status": "PASS"
+      },
+      {
+        "name": "/products/preview-private-lesson",
+        "status": "PASS"
+      },
+      {
+        "name": "checkout refuses mutation",
+        "status": "PASS"
+      },
+      {
+        "name": "cross-origin action refused",
+        "status": "PASS"
+      },
+      {
+        "name": "student role boundary",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-in",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher/profile",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher/trials",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher/packages",
+        "status": "PASS"
+      },
+      {
+        "name": "/teacher/schedule",
+        "status": "PASS"
+      },
+      {
+        "name": "/auth/sign-in",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/orders",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/orders/00000000-0000-4000-8000-000000000201",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/teachers",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/trials",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/packages",
+        "status": "PASS"
+      },
+      {
+        "name": "/admin/schedule",
+        "status": "PASS"
+      },
+      {
+        "name": "404",
+        "status": "PASS"
+      },
+      {
+        "name": "payment stays disabled",
+        "status": "PASS"
+      }
+    ]
+  },
+  "checks": {
+    "typescript": "PASS",
+    "eslint": "PASS",
+    "cloudflareBuild": "PASS",
+    "desktopLogin": "PASS",
+    "mobileProducts390px": "PASS",
+    "wranglerDryRun": "PASS",
+    "gzipUploadKiB": 413.25
+  },
+  "production": {
+    "connections": 0,
+    "sql": 0,
+    "writes": 0,
+    "dataCopied": false
+  },
+  "limits": {
+    "realAuthValidated": false,
+    "rlsValidated": false,
+    "mutations": "denied; no persistence",
+    "freeRuntime": "not yet measured",
+    "cpu": "UNKNOWN",
+    "memory": "UNKNOWN"
+  },
+  "hashes": {
+    "src/components/preview-notice.tsx": "b7b1e086af6e316765ef01b1302b6d7745b8040e4a61f2c8356f5840572e6551",
+    "src/lib/preview/fixtures.ts": "22759eaf6d96a63012063c8237421b2f73f8b5ec963c738017ea38e8b02f8d44",
+    "src/lib/preview/mode.ts": "e78ad9a3c403c008cfa6960a9275c341bd1e651d2e36bde7201ac2766663c186",
+    "src/lib/preview/preview.test.ts": "05391d0b09ee4b1ffeb810e4b8ff26ac78cadd9e2fbfbf22e2de27cd08cda093",
+    "src/lib/preview/transport.ts": "64a2ace610c514a83644fd30b8faf70aa13df2219d8b5de8c1c8b82cf308229f",
+    "tools/cloudflare/mock-http-proof.mjs": "da57ebb98dd6cf69db201e242d2cb9f12feb30ebb6c2efd9136f7c161cc60a93",
+    "tools/cloudflare/prepare-mock-deployment.mjs": "34e7670df4654164389fab6bde8d6ee89ea10975fb8dfda3e0c8cf5169ca614f",
+    ".env.example": "f19f0031dc3670675c03f19b5da64fa42446d618dc43900f2561ef83f99c6511",
+    ".gitignore": "a5a3638dc4c2df0dedfa5e7274a391280d4013983640d1b1811f6373add3d636",
+    "package.json": "c408587bb201b66edd979b15d741ab799604a6f5c19349fd5ac164a61ec5b719",
+    "src/app/auth/sign-in/page.tsx": "91a2f7aa1cc355f556dc57104b9f4f0643b5a456e5c54d82547d292d8b67306e",
+    "src/app/layout.tsx": "1a32824b0b79bb36d63fa693736aba4dba8e18dbb89a7eeb259b467a50503a0f",
+    "src/lib/env/public.ts": "868a47836869fe9e1fcc8d8ce3fb2aab64931e5a3f9cf8add7648fa07cef9478",
+    "src/lib/env/server.ts": "c785adb371dd636ac73f0451f78b4bf5462ba11573c0ac1b51429f776c0320a5",
+    "src/lib/supabase/admin.ts": "f6e844bc43805aee12e0ac4f52c2ea200c438462dcf06687449b1fe1e172d610",
+    "src/lib/supabase/browser.ts": "7e787e8aed8537d510a92d6fe940074395b663163e4d4515c453a94f1ee6ea96",
+    "src/lib/supabase/proxy.ts": "19b92c49b2ed5ada4bb7f390f2d66fe4a6c682fc4f70abe7cc18d742e1537f52",
+    "src/lib/supabase/server.ts": "406273d6546d7c22e94eb9c4156adb3f79a4abe8d5ba1a8c3a4d51a44b5a6ccf",
+    "tools/cloudflare/environment.ts": "4bee4f5c77d556b0aa81d0ffe1a1f4eef04944f78bcb26148f4987b69538b871",
+    "tools/cloudflare/local-proof.mjs": "5b159bd83955b5b25327fc209d2a4bcdb9ff4357d194812ff39da43cb0f1f1c9",
+    "worker/index.ts": "822aeb884f5940463344fe555ea0092201f0f201e58697ff3337a5ee4d181fef",
+    "wrangler.jsonc": "ec73729e0beda19102ec815bb3e836d915bd5134ee270985d9b85130716f97b1"
+  }
+}

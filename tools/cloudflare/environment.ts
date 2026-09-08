@@ -1,6 +1,13 @@
+import { isMockDataMode } from "../../src/lib/preview/mode";
 type Environment = Record<string, string | undefined>;
 const productionRef = "ygxeihtcolpiulupieeq";
 export function assertPreviewEnvironment(env: Environment): void {
+    if (isMockDataMode(env)) {
+        if (env.THE_ONE_ENV !== "preview" || env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("Unsafe Mock environment");
+        const site = new URL(env.NEXT_PUBLIC_SITE_URL ?? "");
+        if (site.username || site.password || !(site.origin === "http://127.0.0.1:8787" || (site.protocol === "https:" && site.hostname.endsWith(".workers.dev")))) throw new Error("Wrong Mock Preview site");
+        return;
+    }
     const url = new URL(env.NEXT_PUBLIC_SUPABASE_URL ?? "");
     const site = new URL(env.NEXT_PUBLIC_SITE_URL ?? "");
     if (url.username || url.password || url.pathname !== "/" || url.search || url.hash || site.username || site.password)

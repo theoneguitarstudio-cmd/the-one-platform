@@ -1,5 +1,56 @@
 # THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT
 
+## 現行：Free Preview + Mock（2026-09-08）
+
+OWNER 已核准 Preview-only Worker、workers.dev、GitHub preview-test 同步與明確部署。
+目前本機安全與相容性檢查 PASS；遠端部署等待官方 OAuth 授權完成，尚未宣告上線。
+預定 Worker：the-one-platform-preview。帳戶 workers.dev 子網域已由官方 UI 核對為 theoneguitarstudio.workers.dev。
+不綁正式網域，不買服務，不接任何 Supabase，Epic7 正式 gate 保持獨立。
+
+### 資料與操作
+
+沿用全部既有 routes/components/layout/domain UI。唯一資料差異在 Supabase client 的 Mock transport，
+集中假資料位於 src/lib/preview/fixtures.ts。三個公開示範身份 Student / Teacher / Admin，
+假商品、老師、訂單可以看，尚無合成內容的頁面維持 empty state。
+建立/修改/刪除、付款、預約、寄信皆拒絕，不保存變更；不是完整可販售產品。
+Demo session 是展示工具，不是 Supabase Auth、RLS 或 Epic7 remote evidence。
+
+### 四個非秘密 build/runtime 設定
+
+- THE_ONE_ENV=preview
+- NEXT_PUBLIC_APP_ENV=preview
+- NEXT_PUBLIC_DATA_MODE=mock
+- NEXT_PUBLIC_SITE_URL=https://the-one-platform-preview.theoneguitarstudio.workers.dev
+
+不得提供任何 Supabase URL/key/service role 或 payment/LINE/email credentials。
+Mock 不會呼叫外部 fetch；production+mock、未知模式、混入 Supabase env、build/runtime 不同皆拒絕。
+本機 proof 自行以 loopback SITE_URL 覆寫；不用 .env secrets。
+
+### 本機驗證
+
+pnpm proof:preview-mock 使用清理過的子程序環境，build 同一 application，啟動本機 workerd，
+再執行 Mock HTTP proof；產物與截圖在 gitignored artifacts/cloudflare-mock。
+本輪 53 個必要單元測試與 38 項 HTTP 檢查通過，包含三角色 cookies/頁面、下單拒絕、
+跨站 action 403、404、停用 payment webhook。TypeScript / ESLint / Cloudflare target build PASS。
+390px 商品頁與桌面登入已目視檢查。沒有重跑 Epic7 SQL / Docker / remote cases。
+
+[本輪非秘密證據](evidence/cloudflare/mock-preview-proof.json)：本機 PASS、遠端待授權，禁止把兩者混為一談。
+
+### Git / 部署方式
+
+目前採明確 Preview 部署；GitHub UI 連接尚未完成，不假稱已設自動更新。
+preview-test 只同步程式；main 不連部署。每次先執行 node tools/cloudflare/prepare-mock-deployment.mjs（只 build，不部署）；它拒絕 main、.env 檔、非預期 bindings，並注入上述四個非秘密設定。再
+用產出的 dist/server/wrangler.json，僅提供同值 runtime vars，使用 Wrangler 官方 OAuth。
+不允許在此 Worker 加入正式來源；未來 production workflow 必須另行審查。
+
+---
+
+## 歷史：先前隔離 Supabase 相容性 proof（不是本輪需求）
+
+以下保留先前本機 proof 細節；其中「須先建立 Preview Supabase」已被 OWNER 本輪 Mock 決策取代。
+
+# THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT
+
 2026-09-08｜**Cloudflare Compatibility Proof PASS，可以進入 Preview Deployment。**
 這是「本機合成環境相容性通過」，不是已部署，也不是正式網站上線許可。
 接受的 hosting 決策在 [SYSTEM_ARCHITECTURE](SYSTEM_ARCHITECTURE.md)。

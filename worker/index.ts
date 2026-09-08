@@ -7,7 +7,7 @@ const worker = {
         try {
             assertPreviewEnvironment(env as Record<string, string | undefined>);
             // Public values are baked into the client/server build. Reject mixed artifacts.
-            if (env.NEXT_PUBLIC_SUPABASE_URL !== process.env.NEXT_PUBLIC_SUPABASE_URL ||
+            if (env.NEXT_PUBLIC_DATA_MODE !== process.env.NEXT_PUBLIC_DATA_MODE || env.NEXT_PUBLIC_APP_ENV !== process.env.NEXT_PUBLIC_APP_ENV || env.NEXT_PUBLIC_SUPABASE_URL !== process.env.NEXT_PUBLIC_SUPABASE_URL ||
                 env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY !== process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
                 env.NEXT_PUBLIC_SITE_URL !== process.env.NEXT_PUBLIC_SITE_URL)
                 throw new Error("Build/runtime mismatch");

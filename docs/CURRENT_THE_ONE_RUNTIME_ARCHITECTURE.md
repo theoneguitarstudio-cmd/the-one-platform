@@ -1,5 +1,17 @@
 # CURRENT_THE_ONE_RUNTIME_ARCHITECTURE
 
+## 現行增補：Preview Mock data boundary（2026-09-08）
+
+Cloudflare Worker / vinext 使用原本 30 個 page files、Server Actions 與角色路由。
+只在 Supabase client factory 注入 in-process fetch adapter；domain service 留在 src/modules。
+資料集中 src/lib/preview/fixtures.ts；HTTPS preview.invalid 是 SDK 內部保留假地址，adapter 不呼叫網路 fetch。
+三個公開 demo 身份只用來顯示既有 UI，不是真 Auth security implementation。
+任何資料修改與未知 RPC 都拒絕；既有正式資料來源仍需原本 env，不會自動 fallback mock。
+明確旗標 NEXT_PUBLIC_DATA_MODE=mock、NEXT_PUBLIC_APP_ENV=preview、THE_ONE_ENV=preview；
+Worker 比對 build/runtime，production+mock、未知 mode 或混入 Supabase 設定 fail closed。
+[現行部署與限制](THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT.md)。下列是保留的 hosting audit 基線。
+
+
 2026-09-08，AUDIT ONLY。檢查基線：`preview-test` / `d3821e3a6fec98c0fe72ba280e705e7bf6f3bc79`，起點 CLEAN。
 實際目錄：`C:/Projects/the-one-platform-handoff-0af0680`。不是桌面預設的舊 `C:/Projects/the-one-platform`。
 本文件是 hosting 評估的程式證據，不取代 Canonical 文件，不宣告部署或功能通過。

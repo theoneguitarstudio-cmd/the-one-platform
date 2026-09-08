@@ -1,3 +1,4 @@
+import { isMockDataMode, mockSupabaseEnvironment } from "@/lib/preview/mode";
 import "server-only";
 
 import { z } from "zod";
@@ -13,6 +14,10 @@ export function getServerSupabaseEnv() {
 }
 
 export function getServiceRoleEnv() {
+  if (isMockDataMode()) {
+    if (process.env.SUPABASE_SERVICE_ROLE_KEY) throw new Error("Mock forbids privileged credentials");
+    return { ...mockSupabaseEnvironment, SUPABASE_SERVICE_ROLE_KEY: "synthetic-preview-privileged-key-only" };
+  }
   const result = serviceRoleEnvSchema.safeParse({
     SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY,
   });

@@ -1,3 +1,5 @@
+import { isMockDataMode } from "@/lib/preview/mode";
+import { previewUsers, previewPassword } from "@/lib/preview/fixtures";
 import Link from "next/link";
 
 import { AuthMessage } from "@/components/auth/auth-message";
@@ -24,6 +26,15 @@ export default async function SignInPage({ searchParams }: SignInPageProps) {
           使用你的 The One 帳號繼續。
         </p>
       </div>
+      {isMockDataMode() && <section className="space-y-3" aria-label="Preview 示範登入">
+        <p className="text-sm">不用輸入真實帳號或密碼，選一個示範身分。這不是真正的登入驗證。</p>
+        {previewUsers.map(user => <form key={user.id} action={signIn}>
+          <input type="hidden" name="email" value={user.email} />
+          <input type="hidden" name="password" value={previewPassword} />
+          <input type="hidden" name="next" value={user.path} />
+          <button className="w-full rounded-xl bg-[var(--surface)] px-4 py-3 text-left font-medium" type="submit">{user.name}</button>
+        </form>)}
+      </section>}
       <AuthMessage code={params.error ?? params.status} />
       <form action={signIn} className="space-y-4">
         <input name="next" type="hidden" value={next} />

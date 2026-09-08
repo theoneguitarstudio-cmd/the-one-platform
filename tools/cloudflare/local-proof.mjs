@@ -3,10 +3,16 @@ import { mkdirSync, writeFileSync, createWriteStream } from "node:fs";
 import { createServer } from "node:net";
 import { startMock } from "./mock-supabase.mjs";
 import { runHttpProof } from "./http-proof.mjs";
-const output = "artifacts/cloudflare-local";
+import { runMockHttpProof } from "./mock-http-proof.mjs";
+const mockMode = process.argv.includes("--mock");
+const output = mockMode ? "artifacts/cloudflare-mock" : "artifacts/cloudflare-local";
 mkdirSync(output, { recursive: true });
 const env = Object.fromEntries(Object.entries(process.env).filter(([key]) => /^(PATH|PATHEXT|SystemRoot|WINDIR|COMSPEC|TEMP|TMP|USERPROFILE|LOCALAPPDATA|APPDATA|SYSTEMDRIVE|NUMBER_OF_PROCESSORS)$/i.test(key)));
 Object.assign(env, { THE_ONE_ENV: "local-proof", NEXT_PUBLIC_SUPABASE_URL: "http://127.0.0.1:54329", NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: "synthetic-local-public-key-only", NEXT_PUBLIC_SITE_URL: "http://127.0.0.1:8787", WRANGLER_SEND_METRICS: "false", CLOUDFLARE_VITE_ENABLE_REMOTE_BINDINGS: "false", CI: "true" });
+if (mockMode) {
+ delete env.NEXT_PUBLIC_SUPABASE_URL; delete env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY;
+ Object.assign(env,{ THE_ONE_ENV:"preview",NEXT_PUBLIC_APP_ENV:"preview",NEXT_PUBLIC_DATA_MODE:"mock" });
+}
 function stop(child) {
     if (!child || child.exitCode !== null)
         return;
@@ -35,7 +41,7 @@ async function run(file, args, log) {
 // Refuse to test an unrelated service already listening on the proof port.
 const probe = createServer();
 await new Promise((resolve, reject) => { probe.once("error", reject); probe.listen(8787, "127.0.0.1", () => probe.close(resolve)); });
-const mock = await startMock();
+const mock = mockMode ? null : await startMock();
 let worker;
 const evidence = { time: new Date().toISOString(), synthetic: true, status: "FAIL", results: [], productionConnections: 0, productionWrites: 0 };
 try {
@@ -59,7 +65,7 @@ try {
     console.log("LOCAL_WORKER_READY http://127.0.0.1:8787 — synthetic backend only");
     const repeats = process.argv.includes("--repeat-20") ? 20 : 1;
     for (let i = 0; i < repeats; i++)
-        evidence.results = await runHttpProof();
+        evidence.results = mockMode ? await runMockHttpProof() : await runHttpProof();
     evidence.repetitions = repeats;
     evidence.status = "PASS";
     console.log("HTTP_PROOF_PASS " + evidence.results.length);
@@ -72,9 +78,9 @@ catch (error) {
 }
 finally {
     writeFileSync(output + "/proof.json", JSON.stringify(evidence, null, 2));
-    writeFileSync(output + "/mock-requests.json", JSON.stringify({ synthetic: true, productionConnections: 0, requests: mock.requests }, null, 2));
+    writeFileSync(output + "/mock-requests.json", JSON.stringify({ synthetic: true, productionConnections: 0, requests: mock?.requests ?? [] }, null, 2));
     await new Promise(resolve => setTimeout(resolve, 200));
     stop(worker);
-    mock.server.closeAllConnections();
-    mock.server.close();
+    mock?.server.closeAllConnections();
+    mock?.server.close();
 }

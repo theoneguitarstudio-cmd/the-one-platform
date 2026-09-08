@@ -1,3 +1,4 @@
+import { supabaseTransportOptions } from "@/lib/preview/transport";
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 
@@ -11,6 +12,7 @@ export async function refreshSupabaseSession(request: NextRequest) {
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     {
+      ...supabaseTransportOptions(),
       cookies: {
         getAll() {
           return request.cookies.getAll();

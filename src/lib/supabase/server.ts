@@ -1,3 +1,4 @@
+import { supabaseTransportOptions } from "@/lib/preview/transport";
 import "server-only";
 
 import { createServerClient } from "@supabase/ssr";
@@ -13,6 +14,7 @@ export async function createServerSupabaseClient() {
     env.NEXT_PUBLIC_SUPABASE_URL,
     env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     {
+      ...supabaseTransportOptions(),
       cookies: {
         getAll() {
           return cookieStore.getAll();

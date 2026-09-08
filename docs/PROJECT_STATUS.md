@@ -1,6 +1,18 @@
 # Project Status
 
-## 2026-09-08 Cloudflare Workers + vinext 本機相容性已驗證（現行）
+## 2026-09-08 Cloudflare Free Preview + Mock（現行）
+
+OWNER 已授權獨立 workers.dev Preview，明確選擇同一套 application + 集中合成資料。
+不再要求先建立 Preview Supabase；正式 Supabase 完全不接入。
+本輪基線 a3442fd2768e0c7110e8480d5ded71ff50b5b47a，branch preview-test。
+Mock transport、三種示範身份、唯讀假商品/訂單、拒絕所有資料變更已完成。
+本機 build / typecheck / ESLint / 53 項必要單元測試 / 38 項 HTTP 檢查 PASS。
+遠端部署狀態以 [Preview deployment](THE_ONE_CLOUDFLARE_PREVIEW_DEPLOYMENT.md) 為準。
+Demo session 不代表真實 Auth / RLS 驗證；Epic7 Backup/Recovery 未過，REMOTE CLOSED = NO。
+正式 DB connections / SQL / writes = 0。沒有 Epic8、main 或正式操作。
+
+
+## 2026-09-08 Cloudflare Workers + vinext 本機相容性已驗證（歷史）
 
 OWNER 已接受 Cloudflare Workers + vinext；Supabase 保留，Vercel 不再是主要方案。
 本輪從 preview-test / 4efe04b2fd82ce654dcfe397f17edc6ea45ba899 開始。

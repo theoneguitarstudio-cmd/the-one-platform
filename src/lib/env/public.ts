@@ -1,3 +1,4 @@
+import { isMockDataMode, mockSupabaseEnvironment } from "@/lib/preview/mode";
 import { z } from "zod";
 
 const publicSupabaseEnvSchema = z.object({
@@ -8,6 +9,7 @@ const publicSupabaseEnvSchema = z.object({
 export type PublicSupabaseEnv = z.infer<typeof publicSupabaseEnvSchema>;
 
 export function getPublicSupabaseEnv(): PublicSupabaseEnv {
+  if (isMockDataMode()) return mockSupabaseEnvironment;
   const result = publicSupabaseEnvSchema.safeParse({
     NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY:
