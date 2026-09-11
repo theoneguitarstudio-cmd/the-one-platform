@@ -22,9 +22,13 @@ const worker = {
             if (args[0].method !== "GET") return new Response("Method not allowed", { status: 405 });
             return Response.json(meta, { headers: { "Cache-Control": "no-store" } });
         }
-        const prepared = await bufferFormRequest(args[0]);
-        if (prepared instanceof Response)
-            return prepared;
+        // Drain bounded request bodies before rejection to avoid the local proxy stream race.
+        const prepared = await bufferFormRequest(args[0], env.NEXT_PUBLIC_DATA_MODE === "mock");
+        if (prepared instanceof Response) return prepared;
+        // Mock UX never submits a server action, even before vinext parses it.
+        if (env.NEXT_PUBLIC_DATA_MODE === "mock" && !["GET", "HEAD"].includes(args[0].method)) {
+            return new Response("UX Preview does not accept writes.", { status: 503, headers: { "Cache-Control": "no-store" } });
+        }
         args[0] = prepared;
         return handler.fetch(...args);
     },

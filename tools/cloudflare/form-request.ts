@@ -1,7 +1,7 @@
 /** Keep the existing Next Server Action 1 MiB form limit at the Worker boundary. */
-export async function bufferFormRequest(request: Request): Promise<Request | Response> {
+export async function bufferFormRequest(request: Request, allBodies = false): Promise<Request | Response> {
     const type = request.headers.get("content-type") ?? "";
-    if (request.method !== "POST" || !/^(multipart\/form-data|application\/x-www-form-urlencoded)(;|$)/i.test(type) || !request.body)
+    if (!request.body || (!allBodies && (request.method !== "POST" || !/^(multipart\/form-data|application\/x-www-form-urlencoded)(;|$)/i.test(type))))
         return request;
     const reader = request.body.getReader();
     const chunks: Uint8Array[] = [];

@@ -10,6 +10,16 @@ beforeEach(() => {
 });
 afterEach(() => vi.unstubAllEnvs());
 describe("Worker entry fail closed", () => {
+    it("rejects Mock writes before vinext and form parsing", async () => {
+        const mock = { THE_ONE_ENV: "preview", NEXT_PUBLIC_APP_ENV: "preview", NEXT_PUBLIC_DATA_MODE: "mock", NEXT_PUBLIC_SITE_URL: "http://127.0.0.1:8787" };
+        vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", undefined); vi.stubEnv("NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY", undefined);
+        for (const [key, value] of Object.entries(mock)) vi.stubEnv(key, value);
+        for (const method of ["POST", "PUT", "PATCH", "DELETE"]) {
+            const response = await worker.fetch(new Request("http://127.0.0.1:8787/admin", { method, body: "synthetic" }), mock, {});
+            expect(response.status).toBe(503);
+        }
+        expect(delegate).not.toHaveBeenCalled();
+    });
     it("delegates only a verified environment", async () => { expect((await worker.fetch(new Request("http://127.0.0.1:8787"), safe, {})).status).toBe(200); expect(delegate).toHaveBeenCalledOnce(); });
     it("rejects unsafe runtime before application", async () => { expect((await worker.fetch(new Request("http://127.0.0.1:8787"), { ...safe, THE_ONE_ENV: "production" }, {})).status).toBe(503); expect(delegate).not.toHaveBeenCalled(); });
     it("rejects a build/runtime mismatch before application", async () => { vi.stubEnv("NEXT_PUBLIC_SITE_URL", "http://127.0.0.1:3000"); expect((await worker.fetch(new Request("http://127.0.0.1:8787"), safe, {})).status).toBe(503); expect(delegate).not.toHaveBeenCalled(); });
