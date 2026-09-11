@@ -1,0 +1,1097 @@
+{
+  "createdAt": "2026-09-11T10:40:38.785Z",
+  "renderer": "sharp 0.35.4",
+  "alignment": "Only source #app.y reviewbar offset from immutable SCENE_MANIFEST; common upper-left overlap; no resize, mask, tolerance or PASS threshold",
+  "results": [
+    {
+      "name": "home-desktop",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\homepage-desktop.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\public-home-desktop.png",
+      "sourceHash": "c626d43080cd1d9e02b33f00a81303f9f58cd9c9bef406b583a35cd521f42f73",
+      "nativeHash": "3c20e199cbc2e44b1f31ebce9e97361623a68438ce1c6597afdf2061d2601a33",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "nativeViewport": {
+        "width": 1425,
+        "height": 1000
+      },
+      "manifestAppY": 0,
+      "sourceRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1425,
+        "height": 1000
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1425,
+        "height": 1000
+      },
+      "changedPixels": 388054,
+      "totalPixels": 1425000,
+      "changedPixelPercent": 27.231859649122807,
+      "meanAbsoluteRGB": 4.07039134502924,
+      "rootMeanSquareRGB": 24.042011285802747,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 1000
+        },
+        "#page": {
+          "x": 0,
+          "y": 18,
+          "width": 1440,
+          "height": 7244.34375
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 1000
+        },
+        ".p5-nav": {
+          "x": 130,
+          "y": 18,
+          "width": 1180,
+          "height": 74
+        },
+        ".p6-teacher-card": {
+          "x": 246,
+          "y": 4514.25,
+          "width": 356,
+          "height": 474.65625
+        },
+        ".t-review-grid": null,
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "home-mobile",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\homepage-mobile.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\public-home-mobile.png",
+      "sourceHash": "2eb08558698e6d18fa825d36b11780c8c02791fb883a41c7ff140103a53aba6d",
+      "nativeHash": "d5708dd990036b5e6a6a86bde1121b3843b854331afd67bac6573c5fc6658474",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeViewport": {
+        "width": 375,
+        "height": 844
+      },
+      "manifestAppY": 0,
+      "sourceRect": {
+        "left": 0,
+        "top": 0,
+        "width": 375,
+        "height": 844
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 375,
+        "height": 844
+      },
+      "changedPixels": 194184,
+      "totalPixels": 316500,
+      "changedPixelPercent": 61.35355450236967,
+      "meanAbsoluteRGB": 8.471580832016851,
+      "rootMeanSquareRGB": 32.68939271381305,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "#page": {
+          "x": 0,
+          "y": 10,
+          "width": 390,
+          "height": 6825.296875
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        ".p5-nav": {
+          "x": 14,
+          "y": 10,
+          "width": 362,
+          "height": 62
+        },
+        ".p6-teacher-card": {
+          "x": 20,
+          "y": 3814.203125,
+          "width": 350,
+          "height": 466.65625
+        },
+        ".t-review-grid": null,
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "teacher-cards-desktop",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\homepage-teachers-desktop.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\public-teachers-desktop.png",
+      "sourceHash": "ddfeea0afd39a6397e377e9beb3c335f1778f009a85892d7f2bf8738b64bbec0",
+      "nativeHash": "dfe85eb557d17d6f0d67fa1d3b0e885cfca853fb9a1d051b7f9dbb7dc0852185",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "nativeViewport": {
+        "width": 1425,
+        "height": 1000
+      },
+      "manifestAppY": 0,
+      "sourceRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1425,
+        "height": 1000
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1425,
+        "height": 1000
+      },
+      "changedPixels": 373161,
+      "totalPixels": 1425000,
+      "changedPixelPercent": 26.18673684210526,
+      "meanAbsoluteRGB": 5.2201740350877195,
+      "rootMeanSquareRGB": 27.716133777620346,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 1000
+        },
+        "#page": {
+          "x": 0,
+          "y": -4064,
+          "width": 1440,
+          "height": 7244.34375
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 0,
+          "y": 0,
+          "width": 1440,
+          "height": 1000
+        },
+        ".p5-nav": {
+          "x": 130,
+          "y": 18,
+          "width": 1180,
+          "height": 74
+        },
+        ".p6-teacher-card": {
+          "x": 246,
+          "y": 432.25,
+          "width": 356,
+          "height": 474.65625
+        },
+        ".t-review-grid": null,
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "teacher-cards-mobile",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\homepage-teachers-mobile.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\public-teachers-mobile.png",
+      "sourceHash": "d050b68a3a3df86adca1f84853e95d965a6ef9e0ed9225b2dcc4cb2635e5d3ff",
+      "nativeHash": "f420ebc41c52a9a2dce5a177db43b32b5029e7aa8492dfd37449db4299ce6f64",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeViewport": {
+        "width": 375,
+        "height": 844
+      },
+      "manifestAppY": 0,
+      "sourceRect": {
+        "left": 0,
+        "top": 0,
+        "width": 375,
+        "height": 844
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 375,
+        "height": 844
+      },
+      "changedPixels": 250872,
+      "totalPixels": 316500,
+      "changedPixelPercent": 79.26445497630333,
+      "meanAbsoluteRGB": 35.079389152185364,
+      "rootMeanSquareRGB": 77.80417529620699,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        "#page": {
+          "x": 0,
+          "y": -3700,
+          "width": 390,
+          "height": 6825.296875
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 0,
+          "y": 0,
+          "width": 390,
+          "height": 844
+        },
+        ".p5-nav": {
+          "x": 14,
+          "y": 10,
+          "width": 362,
+          "height": 62
+        },
+        ".p6-teacher-card": {
+          "x": 20,
+          "y": 104.203125,
+          "width": 350,
+          "height": 466.65625
+        },
+        ".t-review-grid": null,
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "student-today-desktop",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\student-today-dark.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\student-today-desktop.png",
+      "sourceHash": "9aa9f79c8f378d439d36be374ffa77411ae637cdab8b933ce21ff3d72a2704d8",
+      "nativeHash": "6eb2ecd5e8efb39de2ba69ce1e71b53c2d1422983e3e5cfa9922973d8bf8fa54",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "nativeViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "manifestAppY": 36,
+      "sourceRect": {
+        "left": 0,
+        "top": 36,
+        "width": 1440,
+        "height": 964
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1440,
+        "height": 964
+      },
+      "changedPixels": 598940,
+      "totalPixels": 1388160,
+      "changedPixelPercent": 43.14632319041033,
+      "meanAbsoluteRGB": 6.105092352466574,
+      "rootMeanSquareRGB": 26.23037910528832,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 36,
+          "width": 1440,
+          "height": 964
+        },
+        "#page": {
+          "x": 220,
+          "y": 36,
+          "width": 1220,
+          "height": 1280.515625
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 220,
+          "y": 36,
+          "width": 1220,
+          "height": 964
+        },
+        ".p5-nav": null,
+        ".p6-teacher-card": null,
+        ".t-review-grid": null,
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "student-today-mobile",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\student-today-mobile.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\student-today-mobile.png",
+      "sourceHash": "d24ea7fb2f6f8c8706f8d111917c1c49a6eac44b8198138b9f254e5bfc6f8554",
+      "nativeHash": "2d733eb37b3ac9072d266998501dedc3e23aeb7d50f5c353cc7d1ff310464dc7",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "manifestAppY": 34,
+      "sourceRect": {
+        "left": 0,
+        "top": 34,
+        "width": 390,
+        "height": 810
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 390,
+        "height": 810
+      },
+      "changedPixels": 146299,
+      "totalPixels": 315900,
+      "changedPixelPercent": 46.31180753402976,
+      "meanAbsoluteRGB": 8.952260208926875,
+      "rootMeanSquareRGB": 32.57401851928098,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 34,
+          "width": 390,
+          "height": 810
+        },
+        "#page": {
+          "x": 0,
+          "y": 88,
+          "width": 390,
+          "height": 1733.8125
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 0,
+          "y": 88,
+          "width": 390,
+          "height": 756
+        },
+        ".p5-nav": null,
+        ".p6-teacher-card": null,
+        ".t-review-grid": null,
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "player-desktop",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\lesson-locked-desktop.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\lesson-desktop.png",
+      "sourceHash": "6b3ca174be19e8abb06b97c49529e3f7c895fec449bf0d3df59e5e18151c743c",
+      "nativeHash": "b443ad0ea4794bdfccbbb413263d77dc2de74f3c1c308651b216ab62f383d419",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "nativeViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "manifestAppY": 38,
+      "sourceRect": {
+        "left": 0,
+        "top": 38,
+        "width": 1440,
+        "height": 962
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1440,
+        "height": 962
+      },
+      "changedPixels": 681147,
+      "totalPixels": 1385280,
+      "changedPixelPercent": 49.170348232848234,
+      "meanAbsoluteRGB": 6.468627281127281,
+      "rootMeanSquareRGB": 28.398834051880993,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 38,
+          "width": 1440,
+          "height": 962
+        },
+        "#page": null,
+        ".rail": {
+          "x": 0,
+          "y": 38,
+          "width": 64,
+          "height": 962
+        },
+        "#outline": {
+          "x": 64,
+          "y": 38,
+          "width": 360,
+          "height": 962
+        },
+        "#main": {
+          "x": 424,
+          "y": 38,
+          "width": 1016,
+          "height": 962
+        },
+        ".p5-nav": null,
+        ".p6-teacher-card": null,
+        ".t-review-grid": null,
+        "#activity-nav": {
+          "x": 464,
+          "y": 164.5,
+          "width": 936,
+          "height": 74
+        },
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "player-desktop-free",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\lesson-locked-desktop.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\lesson-free-desktop.png",
+      "sourceHash": "6b3ca174be19e8abb06b97c49529e3f7c895fec449bf0d3df59e5e18151c743c",
+      "nativeHash": "a9e0035967650d438e8cee397bbe87d76906eed66e66a8d30abcc4387f800548",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "nativeViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "manifestAppY": 38,
+      "sourceRect": {
+        "left": 0,
+        "top": 38,
+        "width": 1440,
+        "height": 962
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1440,
+        "height": 962
+      },
+      "changedPixels": 694834,
+      "totalPixels": 1385280,
+      "changedPixelPercent": 50.15837953337954,
+      "meanAbsoluteRGB": 6.571419255794256,
+      "rootMeanSquareRGB": 28.406301210775812,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 38,
+          "width": 1440,
+          "height": 962
+        },
+        "#page": null,
+        ".rail": {
+          "x": 0,
+          "y": 38,
+          "width": 64,
+          "height": 962
+        },
+        "#outline": {
+          "x": 64,
+          "y": 38,
+          "width": 360,
+          "height": 962
+        },
+        "#main": {
+          "x": 424,
+          "y": 38,
+          "width": 1016,
+          "height": 962
+        },
+        ".p5-nav": null,
+        ".p6-teacher-card": null,
+        ".t-review-grid": null,
+        "#activity-nav": {
+          "x": 464,
+          "y": 164.5,
+          "width": 936,
+          "height": 74
+        },
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "player-mobile",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\lesson-locked-mobile.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\lesson-mobile.png",
+      "sourceHash": "338cfa2b4589d9c0d5a0ad45d48707532df2aff7a8665c041a7f727efa1bf6c7",
+      "nativeHash": "34a8c38f00e5158c035f6500308ca3c3737486ef6e998663de5e4cafac9e2483",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "manifestAppY": 38,
+      "sourceRect": {
+        "left": 0,
+        "top": 38,
+        "width": 390,
+        "height": 806
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 390,
+        "height": 806
+      },
+      "changedPixels": 211548,
+      "totalPixels": 314340,
+      "changedPixelPercent": 67.29910288222943,
+      "meanAbsoluteRGB": 14.69685902738012,
+      "rootMeanSquareRGB": 44.667126642513686,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 38,
+          "width": 390,
+          "height": 806
+        },
+        "#page": null,
+        ".rail": {
+          "x": 0,
+          "y": 0,
+          "width": 0,
+          "height": 0
+        },
+        "#outline": {
+          "x": -386.1000061035156,
+          "y": 38,
+          "width": 351,
+          "height": 806
+        },
+        "#main": {
+          "x": 0,
+          "y": 90,
+          "width": 390,
+          "height": 754
+        },
+        ".p5-nav": null,
+        ".p6-teacher-card": null,
+        ".t-review-grid": null,
+        "#activity-nav": {
+          "x": 18,
+          "y": 370.96875,
+          "width": 354,
+          "height": 72
+        },
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "teacher-reviews-desktop",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\teacher-reviews-dark.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\teacher-reviews-desktop.png",
+      "sourceHash": "fd3ba163643ccbff48119d8347d415c001143dfecee62953ea4b390e39dfc10e",
+      "nativeHash": "1e84b330b9f436cbe59d921183054498be7a79a2db870a7c9856a504ccee6d5e",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "nativeViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "manifestAppY": 38,
+      "sourceRect": {
+        "left": 0,
+        "top": 38,
+        "width": 1440,
+        "height": 962
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1440,
+        "height": 962
+      },
+      "changedPixels": 300065,
+      "totalPixels": 1385280,
+      "changedPixelPercent": 21.660963848463847,
+      "meanAbsoluteRGB": 3.014579242704243,
+      "rootMeanSquareRGB": 16.494842135549284,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 38,
+          "width": 1440,
+          "height": 962
+        },
+        "#page": {
+          "x": 220,
+          "y": 38,
+          "width": 1220,
+          "height": 580.265625
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 220,
+          "y": 38,
+          "width": 1220,
+          "height": 962
+        },
+        ".p5-nav": null,
+        ".p6-teacher-card": null,
+        ".t-review-grid": {
+          "x": 258,
+          "y": 270.984375,
+          "width": 1144,
+          "height": 171.390625
+        },
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "teacher-reviews-mobile",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\teacher-reviews-mobile.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\teacher-reviews-mobile.png",
+      "sourceHash": "d508e3bbc35570cb282885acc2d5dea3ffcf837319f37e65e0a12e3cae3bc93a",
+      "nativeHash": "6910f1dcbe6df3620952bf32d289d9ad92a1959ed780030cc150b61c101a91e5",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "manifestAppY": 38,
+      "sourceRect": {
+        "left": 0,
+        "top": 38,
+        "width": 390,
+        "height": 806
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 390,
+        "height": 806
+      },
+      "changedPixels": 171389,
+      "totalPixels": 314340,
+      "changedPixelPercent": 54.523445950244955,
+      "meanAbsoluteRGB": 6.396653305338169,
+      "rootMeanSquareRGB": 22.607648080545474,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 38,
+          "width": 390,
+          "height": 806
+        },
+        "#page": {
+          "x": 0,
+          "y": 92,
+          "width": 390,
+          "height": 780.984375
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 0,
+          "y": 92,
+          "width": 390,
+          "height": 752
+        },
+        ".p5-nav": null,
+        ".p6-teacher-card": null,
+        ".t-review-grid": {
+          "x": 19,
+          "y": 301.140625,
+          "width": 352,
+          "height": 362.78125
+        },
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "finance-desktop",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\admin-finance-dark.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\admin-finance-desktop-native.png",
+      "sourceHash": "cf15981a2fe38521d40ca6644fa324b03214f4aef741031c4cd9c43c52b6b997",
+      "nativeHash": "0e7ae3a98ba058bf80df351c459e099eb51925f49718d010a342fa034f3ed749",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "nativeViewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "manifestAppY": 38,
+      "sourceRect": {
+        "left": 0,
+        "top": 38,
+        "width": 1440,
+        "height": 962
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1440,
+        "height": 962
+      },
+      "changedPixels": 619795,
+      "totalPixels": 1385280,
+      "changedPixelPercent": 44.7414963039963,
+      "meanAbsoluteRGB": 6.163739941864942,
+      "rootMeanSquareRGB": 27.665608067851945,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 38,
+          "width": 1440,
+          "height": 962
+        },
+        "#page": {
+          "x": 220,
+          "y": 38,
+          "width": 1220,
+          "height": 2059.875
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 220,
+          "y": 38,
+          "width": 1220,
+          "height": 962
+        },
+        ".p5-nav": null,
+        ".p6-teacher-card": null,
+        ".t-review-grid": null,
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    },
+    {
+      "name": "finance-mobile",
+      "sourcePath": "C:\\Users\\win\\Downloads\\the-one-complete-frontend-v1-6\\the-one-codex-handoff-v1-6\\screenshots\\admin-finance-mobile.png",
+      "nativePath": "C:\\Projects\\the-one-platform\\artifacts\\ux-prototype\\admin-finance-mobile-native.png",
+      "sourceHash": "209a9a7bf9791d08edf07f6ee2b0bb03210ff48f6565405554fe03d42bcde8e5",
+      "nativeHash": "64bd1146f3a3e6db7f69a32227e918e7170f7a2c854d3cae321519dc04767d71",
+      "sourceFormat": "png",
+      "nativeFormat": "jpeg",
+      "sourceViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "nativeViewport": {
+        "width": 390,
+        "height": 844
+      },
+      "manifestAppY": 38,
+      "sourceRect": {
+        "left": 0,
+        "top": 38,
+        "width": 390,
+        "height": 806
+      },
+      "nativeRect": {
+        "left": 0,
+        "top": 0,
+        "width": 390,
+        "height": 806
+      },
+      "changedPixels": 117296,
+      "totalPixels": 314340,
+      "changedPixelPercent": 37.315009225679205,
+      "meanAbsoluteRGB": 14.764903183389535,
+      "rootMeanSquareRGB": 45.329101592327255,
+      "manifestGeometry": {
+        "#app": {
+          "x": 0,
+          "y": 38,
+          "width": 390,
+          "height": 806
+        },
+        "#page": {
+          "x": 0,
+          "y": 92,
+          "width": 390,
+          "height": 2715.84375
+        },
+        ".rail": null,
+        "#outline": null,
+        "#main": {
+          "x": 0,
+          "y": 92,
+          "width": 390,
+          "height": 752
+        },
+        ".p5-nav": null,
+        ".p6-teacher-card": null,
+        ".t-review-grid": null,
+        "#activity-nav": null,
+        ".video-wrap": null
+      }
+    }
+  ],
+  "pending": [],
+  "nativePublicGeometry": [
+    {
+      "file": "public-published-linkage-desktop.png",
+      "png": {
+        "format": "JPEG",
+        "width": 1440,
+        "height": 1000
+      },
+      "dom": {
+        "clientHeight": 1000,
+        "clientWidth": 1440,
+        "innerHeight": 1000,
+        "innerWidth": 1440,
+        "scrollY": 0,
+        "url": "http://127.0.0.1:3100/ux-prototype/teachers/t1?tab=private"
+      }
+    },
+    {
+      "file": "public-teachers-many-desktop.png",
+      "image": {
+        "format": "JPEG",
+        "width": 1425,
+        "height": 990
+      },
+      "dom": {
+        "cards": [
+          {
+            "href": "/ux-prototype/teachers/t1?tab=private",
+            "rect": {
+              "bottom": 742.671875,
+              "height": 485.328125,
+              "left": 142.5,
+              "right": 506.5,
+              "top": 257.34375,
+              "width": 364,
+              "x": 142.5,
+              "y": 257.34375
+            }
+          },
+          {
+            "href": "/ux-prototype/teachers/qa-teacher-2?tab=private",
+            "rect": {
+              "bottom": 742.671875,
+              "height": 485.328125,
+              "left": 530.5,
+              "right": 894.5,
+              "top": 257.34375,
+              "width": 364,
+              "x": 530.5,
+              "y": 257.34375
+            }
+          },
+          {
+            "href": "/ux-prototype/teachers/qa-teacher-3?tab=private",
+            "rect": {
+              "bottom": 742.671875,
+              "height": 485.328125,
+              "left": 918.5,
+              "right": 1282.5,
+              "top": 257.34375,
+              "width": 364,
+              "x": 918.5,
+              "y": 257.34375
+            }
+          }
+        ],
+        "clientWidth": 1425,
+        "innerHeight": 1000,
+        "innerWidth": 1440,
+        "scrollY": 4256
+      }
+    },
+    {
+      "file": "public-teachers-many-mobile.png",
+      "image": {
+        "format": "JPEG",
+        "width": 375,
+        "height": 812
+      },
+      "dom": {
+        "cards": [
+          {
+            "href": "/ux-prototype/teachers/t1?tab=private",
+            "rect": {
+              "bottom": 582.0625,
+              "height": 379.65625,
+              "left": 20,
+              "right": 304.75,
+              "top": 202.40625,
+              "width": 284.75,
+              "x": 20,
+              "y": 202.40625
+            }
+          },
+          {
+            "href": "/ux-prototype/teachers/qa-teacher-2?tab=private",
+            "rect": {
+              "bottom": 582.0625,
+              "height": 379.65625,
+              "left": 320.75,
+              "right": 605.5,
+              "top": 202.40625,
+              "width": 284.75,
+              "x": 320.75,
+              "y": 202.40625
+            }
+          },
+          {
+            "href": "/ux-prototype/teachers/qa-teacher-3?tab=private",
+            "rect": {
+              "bottom": 582.0625,
+              "height": 379.65625,
+              "left": 621.5,
+              "right": 906.25,
+              "top": 202.40625,
+              "width": 284.75,
+              "x": 621.5,
+              "y": 202.40625
+            }
+          }
+        ],
+        "clientWidth": 375,
+        "innerHeight": 844,
+        "innerWidth": 390,
+        "scrollY": 3631
+      }
+    }
+  ],
+  "rootPublicGeometry": [
+    {
+      "card": {
+        "x": 20,
+        "y": 89.40625,
+        "width": 335,
+        "height": 446.65625,
+        "top": 89.40625,
+        "right": 355,
+        "bottom": 536.0625,
+        "left": 20
+      },
+      "client": 375,
+      "height": 844,
+      "scene": "teachers-mobile",
+      "width": 390,
+      "y": 3736,
+      "capture": {
+        "x": 0,
+        "y": 3736,
+        "width": 375,
+        "height": 844
+      },
+      "note": "Read DOM immediately before final capture. Browser clip uses document coordinates. Pixel comparison retains the actual framing difference."
+    },
+    {
+      "client": 375,
+      "height": 844,
+      "scene": "home-mobile",
+      "width": 390,
+      "y": 0,
+      "capture": {
+        "x": 0,
+        "y": 0,
+        "width": 375,
+        "height": 844
+      }
+    },
+    {
+      "client": 1425,
+      "height": 1000,
+      "scene": "home-desktop",
+      "width": 1440,
+      "y": 0,
+      "capture": {
+        "x": 0,
+        "y": 0,
+        "width": 1425,
+        "height": 1000
+      }
+    },
+    {
+      "card": {
+        "bottom": 907,
+        "height": 474.65625,
+        "left": 238.5,
+        "right": 594.5,
+        "top": 432.34375,
+        "width": 356,
+        "x": 238.5,
+        "y": 432.34375
+      },
+      "client": 1425,
+      "height": 1000,
+      "scene": "teachers-desktop",
+      "width": 1440,
+      "y": 4081,
+      "capture": {
+        "x": 0,
+        "y": 4081,
+        "width": 1425,
+        "height": 1000
+      }
+    }
+  ]
+}

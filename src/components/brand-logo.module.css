@@ -1,0 +1,7 @@
+.logo { display:inline-flex; flex:none; vertical-align:middle; align-items:center; width:168px; max-width:100%; aspect-ratio:2667 / 765; overflow:hidden; border-radius:4px; background:#fff; line-height:0; }
+.logo .image { display:block; width:100%; height:auto; max-width:none; flex:none; margin:0; object-fit:contain; }
+.small { width:126px; }
+.large { width:252px; }
+.logo.compact { width:38px; height:38px; aspect-ratio:1; border-radius:50%; }
+.logo.compact .image { width:auto; height:100%; }
+@media(max-width:600px) { .normal { width:144px; } }

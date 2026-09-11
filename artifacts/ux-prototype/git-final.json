@@ -1,0 +1,8 @@
+{
+  "branch": "preview-test",
+  "head": "0af06802dbeb2fcd614d33db3e64c441fe711be4",
+  "main": "0af06802dbeb2fcd614d33db3e64c441fe711be4",
+  "trackedDiff": "next-env.d.ts  |  4 ++--\n next.config.ts |  3 ++-\n src/proxy.ts   | 13 ++++++++++++-\n 3 files changed, 16 insertions(+), 4 deletions(-)",
+  "status": "M next-env.d.ts\n M next.config.ts\n M src/proxy.ts\n?? artifacts/\n?? docs/UX_PROTOTYPE_ACCEPTANCE.md\n?? docs/UX_PROTOTYPE_PROGRESS.md\n?? public/ux-prototype/\n?? scripts/ux-prototype-baseline.mjs\n?? scripts/ux-prototype-check.mjs\n?? scripts/ux-prototype-compare.mjs\n?? scripts/ux-prototype-dev.mjs\n?? scripts/ux-prototype-production-check.mjs\n?? scripts/ux-prototype-workspace-css.mjs\n?? src/app/ux-prototype/\n?? src/components/ux-prototype/\n?? src/modules/ux-prototype/\n?? tests/ux-prototype-isolation.test.ts",
+  "scope": "Local preview-test only. No commit, push, fetch, deployment, SQL, migration, or formal services performed."
+}

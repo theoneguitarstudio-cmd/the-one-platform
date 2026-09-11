@@ -1,0 +1,15 @@
+/* Native v1.4 finance/policy details; the original v4 layout lives in workspace.css. */
+.ux-workspace .ux-finance .v4-toolbar .tabs { width: auto; max-width: 100%; margin: 0; }
+.ux-workspace .ux-finance .v4-fact > span { min-width: 0; }
+.ux-workspace .ux-finance .v4-grid > *, .ux-workspace .ux-policies { min-width: 0; }
+.ux-workspace .ux-finance .v4-stats + .v4-grid { margin-top: 0; }
+.ux-workspace .ux-policy-editor textarea { min-height: 150px; }
+.ux-workspace .ux-policy-editor .x-field:nth-child(3) textarea { min-height: 260px; }
+.ux-workspace .ux-finance dialog .v4-inline-actions, .ux-workspace .ux-policy-editor .v4-inline-actions { margin-bottom: 10px; }
+.ux-workspace .ux-policies .v4-policy-head h2 { min-width: 0; }
+@media (max-width: 700px) {
+  .ux-workspace .ux-finance .v4-toolbar { align-items: flex-start; }
+  .ux-workspace .ux-finance .v4-fact { gap: 10px; }
+  .ux-workspace .ux-policies .v4-policy-head { gap: 10px; }
+  .ux-workspace .ux-policy-editor .x-field:nth-child(3) textarea { min-height: 220px; }
+}

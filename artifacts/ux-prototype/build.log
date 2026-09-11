@@ -1,0 +1,71 @@
+▲ Next.js 16.3.3 (webpack)
+- Environments: .env.local
+✓ Running next.config.ts took 41ms
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 10.3s
+  Running TypeScript ...
+
+  We detected TypeScript in your project and reconfigured your tsconfig.json file for you.
+  The following suggested values were added to your tsconfig.json. These values can be changed to fit your project's needs:
+
+  	- include was updated to add '.next/ux-prototype-build/types/**/*.ts'
+  	- include was updated to add '.next/ux-prototype-build/dev/types/**/*.ts'
+
+  Finished TypeScript in 8.1s ...
+  Collecting page data using 11 workers ...
+  Generating static pages using 11 workers (0/31) ...
+  Generating static pages using 11 workers (7/31) 
+  Generating static pages using 11 workers (15/31) 
+  Generating static pages using 11 workers (23/31) 
+✓ Generating static pages using 11 workers (31/31) in 1025ms
+  Finalizing page optimization ...
+  Collecting build traces ...
+
+Route (app)
+┌ ○ /
+├ ○ /_not-found
+├ ƒ /admin
+├ ƒ /admin/orders
+├ ƒ /admin/orders/[id]
+├ ƒ /admin/packages
+├ ƒ /admin/schedule
+├ ƒ /admin/teachers
+├ ƒ /admin/trials
+├ ƒ /api/health
+├ ƒ /api/payments/[provider]/webhook
+├ ○ /auth/access-denied
+├ ƒ /auth/callback
+├ ƒ /auth/confirm
+├ ƒ /auth/forgot-password
+├ ƒ /auth/reset-password
+├ ƒ /auth/sign-in
+├ ƒ /auth/sign-up
+├ ƒ /auth/verify-email
+├ ƒ /lesson/[id]/join
+├ ƒ /products
+├ ƒ /products/[slug]
+├ ƒ /student
+├ ƒ /student/orders
+├ ƒ /student/orders/[id]
+├ ƒ /student/packages
+├ ƒ /student/schedule
+├ ƒ /student/trial
+├ ƒ /teacher
+├ ƒ /teacher/packages
+├ ƒ /teacher/profile
+├ ƒ /teacher/schedule
+├ ƒ /teacher/trials
+├ ƒ /teachers
+├ ƒ /teachers/[slug]
+├ ƒ /teachers/[slug]/trial
+└ ƒ /ux-prototype/[[...segments]]
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand
+
+
+EXIT_CODE=0

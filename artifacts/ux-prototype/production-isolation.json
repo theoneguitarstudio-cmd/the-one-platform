@@ -1,0 +1,31 @@
+{
+  "production": [
+    {
+      "path": "/ux-prototype",
+      "status": 404,
+      "body": "Not found"
+    },
+    {
+      "path": "/ux-prototype/teacher",
+      "status": 404,
+      "body": "Not found"
+    },
+    {
+      "path": "/ux-prototype/admin",
+      "status": 404,
+      "body": "Not found"
+    },
+    {
+      "path": "/ux-prototype/student",
+      "status": 404,
+      "body": "Not found"
+    }
+  ],
+  "development": {
+    "status": 200,
+    "csp": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; font-src 'self'; connect-src 'self' ws://localhost:* ws://127.0.0.1:*; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'",
+    "robots": "noindex, nofollow",
+    "cache": "no-cache, must-revalidate"
+  },
+  "networkScope": "Only 127.0.0.1:3100 and 127.0.0.1:4101 were requested by this check."
+}

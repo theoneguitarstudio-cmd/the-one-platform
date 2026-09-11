@@ -1,0 +1,128 @@
+[
+  {
+    "file": "public-published-linkage-desktop.png",
+    "png": {
+      "format": "JPEG",
+      "width": 1440,
+      "height": 1000
+    },
+    "dom": {
+      "clientHeight": 1000,
+      "clientWidth": 1440,
+      "innerHeight": 1000,
+      "innerWidth": 1440,
+      "scrollY": 0,
+      "url": "http://127.0.0.1:3100/ux-prototype/teachers/t1?tab=private"
+    }
+  },
+  {
+    "file": "public-teachers-many-desktop.png",
+    "image": {
+      "format": "JPEG",
+      "width": 1425,
+      "height": 990
+    },
+    "dom": {
+      "cards": [
+        {
+          "href": "/ux-prototype/teachers/t1?tab=private",
+          "rect": {
+            "bottom": 742.671875,
+            "height": 485.328125,
+            "left": 142.5,
+            "right": 506.5,
+            "top": 257.34375,
+            "width": 364,
+            "x": 142.5,
+            "y": 257.34375
+          }
+        },
+        {
+          "href": "/ux-prototype/teachers/qa-teacher-2?tab=private",
+          "rect": {
+            "bottom": 742.671875,
+            "height": 485.328125,
+            "left": 530.5,
+            "right": 894.5,
+            "top": 257.34375,
+            "width": 364,
+            "x": 530.5,
+            "y": 257.34375
+          }
+        },
+        {
+          "href": "/ux-prototype/teachers/qa-teacher-3?tab=private",
+          "rect": {
+            "bottom": 742.671875,
+            "height": 485.328125,
+            "left": 918.5,
+            "right": 1282.5,
+            "top": 257.34375,
+            "width": 364,
+            "x": 918.5,
+            "y": 257.34375
+          }
+        }
+      ],
+      "clientWidth": 1425,
+      "innerHeight": 1000,
+      "innerWidth": 1440,
+      "scrollY": 4256
+    }
+  },
+  {
+    "file": "public-teachers-many-mobile.png",
+    "image": {
+      "format": "JPEG",
+      "width": 375,
+      "height": 812
+    },
+    "dom": {
+      "cards": [
+        {
+          "href": "/ux-prototype/teachers/t1?tab=private",
+          "rect": {
+            "bottom": 582.0625,
+            "height": 379.65625,
+            "left": 20,
+            "right": 304.75,
+            "top": 202.40625,
+            "width": 284.75,
+            "x": 20,
+            "y": 202.40625
+          }
+        },
+        {
+          "href": "/ux-prototype/teachers/qa-teacher-2?tab=private",
+          "rect": {
+            "bottom": 582.0625,
+            "height": 379.65625,
+            "left": 320.75,
+            "right": 605.5,
+            "top": 202.40625,
+            "width": 284.75,
+            "x": 320.75,
+            "y": 202.40625
+          }
+        },
+        {
+          "href": "/ux-prototype/teachers/qa-teacher-3?tab=private",
+          "rect": {
+            "bottom": 582.0625,
+            "height": 379.65625,
+            "left": 621.5,
+            "right": 906.25,
+            "top": 202.40625,
+            "width": 284.75,
+            "x": 621.5,
+            "y": 202.40625
+          }
+        }
+      ],
+      "clientWidth": 375,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "scrollY": 3631
+    }
+  }
+]

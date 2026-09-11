@@ -1,0 +1,25 @@
+{
+  "unchanged": true,
+  "branch": "preview-test",
+  "head": "0af06802dbeb2fcd614d33db3e64c441fe711be4",
+  "main": "0af06802dbeb2fcd614d33db3e64c441fe711be4",
+  "canonical": [
+    {
+      "file": "docs/CURRENT_WORK.md",
+      "sha256": "8d1058ab353984bd9b2fef051ce33b45bbae53e05319eaecd4135e6f0c877be6"
+    },
+    {
+      "file": "docs/PROJECT_STATUS.md",
+      "sha256": "8fd547e86ed9fcba4acf6576e04835d4374e0fe5b8671c8776375ddd6c880818"
+    },
+    {
+      "file": "docs/CANONICAL_ROADMAP.md",
+      "sha256": "a16e45e45f95c2d6fd1b4beba6d8c36a0ff853455cf77e290cfe7b8e4189879a"
+    },
+    {
+      "file": "docs/PRODUCT_DECISIONS.md",
+      "sha256": "2efeefd683c11124aaa4f695a1b046eb3fe6f9bf749dfd1cdc492f1847b5cda8"
+    }
+  ],
+  "referenceFiles": 5
+}

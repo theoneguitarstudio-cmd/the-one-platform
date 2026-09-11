@@ -1,0 +1,75 @@
+[
+  {
+    "card": {
+      "x": 20,
+      "y": 89.40625,
+      "width": 335,
+      "height": 446.65625,
+      "top": 89.40625,
+      "right": 355,
+      "bottom": 536.0625,
+      "left": 20
+    },
+    "client": 375,
+    "height": 844,
+    "scene": "teachers-mobile",
+    "width": 390,
+    "y": 3736,
+    "capture": {
+      "x": 0,
+      "y": 3736,
+      "width": 375,
+      "height": 844
+    },
+    "note": "Read DOM immediately before final capture. Browser clip uses document coordinates. Pixel comparison retains the actual framing difference."
+  },
+  {
+    "client": 375,
+    "height": 844,
+    "scene": "home-mobile",
+    "width": 390,
+    "y": 0,
+    "capture": {
+      "x": 0,
+      "y": 0,
+      "width": 375,
+      "height": 844
+    }
+  },
+  {
+    "client": 1425,
+    "height": 1000,
+    "scene": "home-desktop",
+    "width": 1440,
+    "y": 0,
+    "capture": {
+      "x": 0,
+      "y": 0,
+      "width": 1425,
+      "height": 1000
+    }
+  },
+  {
+    "card": {
+      "bottom": 907,
+      "height": 474.65625,
+      "left": 238.5,
+      "right": 594.5,
+      "top": 432.34375,
+      "width": 356,
+      "x": 238.5,
+      "y": 432.34375
+    },
+    "client": 1425,
+    "height": 1000,
+    "scene": "teachers-desktop",
+    "width": 1440,
+    "y": 4081,
+    "capture": {
+      "x": 0,
+      "y": 4081,
+      "width": 1425,
+      "height": 1000
+    }
+  }
+]

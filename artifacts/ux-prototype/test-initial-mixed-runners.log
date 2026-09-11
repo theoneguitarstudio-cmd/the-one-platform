@@ -1,0 +1,33 @@
+
+ RUN  v4.1.11 C:/Projects/the-one-platform
+
+Protected content mismatch: next-env.d.ts
+✖ fixed preserved set passes real CLI with network/process/env tripwires (1716.8137ms)
+✔ reject caller override/mode --candidate d5f98434106797afc65c59953aa3bc61ba26ecb4 (4.6724ms)
+✔ reject caller override/mode --candidate 0000000000000000000000000000000000000000 (0.2421ms)
+✔ reject caller override/mode --production (0.205ms)
+✔ reject caller override/mode --production --yes (0.1099ms)
+✔ reject caller override/mode --yes (0.1027ms)
+✔ reject modified protected content src/app/layout.tsx (1092.843ms)
+✔ reject modified protected content supabase/migrations/20260906000500_learning_freeze_graph_validation.sql (1027.994ms)
+✔ reject modified protected content scripts/epic7-readiness.mjs (576.5233ms)
+✔ reject modified protected content scripts/epic7-readiness-cases.json (464.8269ms)
+✔ reject modified protected content docs/EPIC7_F_TOOLING_MANIFEST.json (450.189ms)
+✔ candidate object bytes cannot be replaced even with correct claimed SHA (0.5872ms)
+✔ missing object never falls back to network or current HEAD (0.2387ms)
+ ❯ scripts/epic7-preserved-validation.test.mjs (0 test)
+
+⎯⎯⎯⎯⎯⎯ Failed Suites 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  scripts/epic7-preserved-validation.test.mjs [ scripts/epic7-preserved-validation.test.mjs ]
+Error: No test suite found in file C:/Projects/the-one-platform/scripts/epic7-preserved-validation.test.mjs
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 74 passed (75)
+      Tests  696 passed (696)
+   Start at  18:07:19
+   Duration  5.97s (transform 2.94s, setup 0ms, import 12.60s, tests 1.33s, environment 11ms)
+
+
+EXIT_CODE=1

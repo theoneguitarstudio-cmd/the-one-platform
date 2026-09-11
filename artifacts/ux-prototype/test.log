@@ -1,0 +1,11 @@
+
+ RUN  v4.1.11 C:/Projects/the-one-platform
+
+
+ Test Files  79 passed (79)
+      Tests  763 passed (763)
+   Start at  21:25:37
+   Duration  6.16s (transform 3.63s, setup 0ms, import 14.86s, tests 2.40s, environment 12ms)
+
+
+EXIT_CODE=0

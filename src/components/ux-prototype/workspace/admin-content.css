@@ -1,0 +1,14 @@
+.ux-workspace .ux-content-long textarea{min-height:230px;white-space:pre-wrap}
+.ux-workspace .ux-content-preview p{margin:14px 0;line-height:1.9;overflow-wrap:anywhere}
+.ux-workspace .ux-content-preview h2{overflow-wrap:anywhere}
+.ux-workspace .x-approval-snapshot{overflow-wrap:anywhere}
+.ux-workspace .x-approval-snapshot p{margin:12px 0;line-height:1.8}
+.ux-workspace .x-article-body{white-space:pre-wrap;overflow-wrap:anywhere}
+.ux-workspace .x-article-preview h1{overflow-wrap:anywhere}
+.ux-workspace .v4-editor .v4-guide>.btn{margin-top:22px}
+.ux-workspace .v4-guide .x-field{margin-top:20px}
+.ux-workspace .x-summary .x-course-meta{margin:20px 0}
+.ux-workspace .v4-list .btn{flex-shrink:0}
+.ux-workspace .v4-list .grow{min-width:0}
+.ux-workspace .v4-list h3,.ux-workspace .v4-list p{overflow-wrap:anywhere}
+@media(max-width:700px){.ux-workspace .x-bottom-actions>.btn{flex:1 1 auto}.ux-workspace .x-article-preview{padding:8px 0}.ux-workspace .x-article-preview h1{font-size:26px}.ux-workspace .v4-editor{gap:28px}}

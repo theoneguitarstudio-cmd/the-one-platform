@@ -1,0 +1,386 @@
+[
+  {
+    "route": "/",
+    "width": 320,
+    "brokenImages": 0,
+    "client": 305,
+    "h1": "把喜歡的音樂，彈成自己的。",
+    "scroll": 308
+  },
+  {
+    "route": "/",
+    "width": 360,
+    "brokenImages": 0,
+    "client": 345,
+    "h1": "把喜歡的音樂，彈成自己的。",
+    "scroll": 345
+  },
+  {
+    "route": "/",
+    "width": 390,
+    "brokenImages": 0,
+    "client": 375,
+    "h1": "把喜歡的音樂，彈成自己的。",
+    "scroll": 375
+  },
+  {
+    "route": "/",
+    "width": 768,
+    "brokenImages": 0,
+    "client": 753,
+    "h1": "把喜歡的音樂，彈成自己的。",
+    "scroll": 753
+  },
+  {
+    "route": "/",
+    "width": 1024,
+    "brokenImages": 0,
+    "client": 1009,
+    "h1": "把喜歡的音樂，彈成自己的。",
+    "scroll": 1009
+  },
+  {
+    "route": "/",
+    "width": 1440,
+    "brokenImages": 0,
+    "client": 1425,
+    "h1": "把喜歡的音樂，彈成自己的。",
+    "scroll": 1425
+  },
+  {
+    "route": "/student",
+    "width": 320,
+    "brokenImages": 0,
+    "client": 320,
+    "h1": "今日學習",
+    "scroll": 320
+  },
+  {
+    "route": "/student",
+    "width": 360,
+    "brokenImages": 0,
+    "client": 360,
+    "h1": "今日學習",
+    "scroll": 360
+  },
+  {
+    "route": "/student",
+    "width": 390,
+    "brokenImages": 0,
+    "client": 390,
+    "h1": "今日學習",
+    "scroll": 390
+  },
+  {
+    "route": "/student",
+    "width": 768,
+    "brokenImages": 0,
+    "client": 768,
+    "h1": "今日學習",
+    "scroll": 768
+  },
+  {
+    "route": "/student",
+    "width": 1024,
+    "brokenImages": 0,
+    "client": 1024,
+    "h1": "今日學習",
+    "scroll": 1024
+  },
+  {
+    "route": "/student",
+    "width": 1440,
+    "brokenImages": 0,
+    "client": 1440,
+    "h1": "今日學習",
+    "scroll": 1440
+  },
+  {
+    "route": "/account",
+    "width": 320,
+    "brokenImages": 0,
+    "client": 305,
+    "h1": "你的帳號，一目了然。",
+    "scroll": 305
+  },
+  {
+    "route": "/account",
+    "width": 360,
+    "brokenImages": 0,
+    "client": 345,
+    "h1": "你的帳號，一目了然。",
+    "scroll": 345
+  },
+  {
+    "route": "/account",
+    "width": 390,
+    "brokenImages": 0,
+    "client": 375,
+    "h1": "你的帳號，一目了然。",
+    "scroll": 375
+  },
+  {
+    "route": "/account",
+    "width": 768,
+    "brokenImages": 0,
+    "client": 753,
+    "h1": "你的帳號，一目了然。",
+    "scroll": 753
+  },
+  {
+    "route": "/account",
+    "width": 1024,
+    "brokenImages": 0,
+    "client": 1009,
+    "h1": "你的帳號，一目了然。",
+    "scroll": 1009
+  },
+  {
+    "route": "/account",
+    "width": 1440,
+    "brokenImages": 0,
+    "client": 1425,
+    "h1": "你的帳號，一目了然。",
+    "scroll": 1425
+  },
+  {
+    "route": "/membership",
+    "width": 320,
+    "brokenImages": 0,
+    "client": 305,
+    "h1": "照自己的步伐，選擇需要的支持。",
+    "scroll": 305
+  },
+  {
+    "route": "/membership",
+    "width": 360,
+    "brokenImages": 0,
+    "client": 345,
+    "h1": "照自己的步伐，選擇需要的支持。",
+    "scroll": 345
+  },
+  {
+    "route": "/membership",
+    "width": 390,
+    "brokenImages": 0,
+    "client": 375,
+    "h1": "照自己的步伐，選擇需要的支持。",
+    "scroll": 375
+  },
+  {
+    "route": "/membership",
+    "width": 768,
+    "brokenImages": 0,
+    "client": 753,
+    "h1": "照自己的步伐，選擇需要的支持。",
+    "scroll": 753
+  },
+  {
+    "route": "/membership",
+    "width": 1024,
+    "brokenImages": 0,
+    "client": 1009,
+    "h1": "照自己的步伐，選擇需要的支持。",
+    "scroll": 1009
+  },
+  {
+    "route": "/membership",
+    "width": 1440,
+    "brokenImages": 0,
+    "client": 1425,
+    "h1": "照自己的步伐，選擇需要的支持。",
+    "scroll": 1425
+  },
+  {
+    "route": "/checkout/subscription",
+    "width": 320,
+    "brokenImages": 0,
+    "client": 305,
+    "h1": "平台會員方案",
+    "scroll": 305
+  },
+  {
+    "route": "/checkout/subscription",
+    "width": 360,
+    "brokenImages": 0,
+    "client": 345,
+    "h1": "平台會員方案",
+    "scroll": 345
+  },
+  {
+    "route": "/checkout/subscription",
+    "width": 390,
+    "brokenImages": 0,
+    "client": 375,
+    "h1": "平台會員方案",
+    "scroll": 375
+  },
+  {
+    "route": "/checkout/subscription",
+    "width": 768,
+    "brokenImages": 0,
+    "client": 753,
+    "h1": "平台會員方案",
+    "scroll": 753
+  },
+  {
+    "route": "/checkout/subscription",
+    "width": 1024,
+    "brokenImages": 0,
+    "client": 1009,
+    "h1": "平台會員方案",
+    "scroll": 1009
+  },
+  {
+    "route": "/checkout/subscription",
+    "width": 1440,
+    "brokenImages": 0,
+    "client": 1425,
+    "h1": "平台會員方案",
+    "scroll": 1425
+  },
+  {
+    "route": "/onboarding",
+    "width": 320,
+    "brokenImages": 0,
+    "client": 305,
+    "h1": "先認識你，再一起找方向。",
+    "scroll": 305
+  },
+  {
+    "route": "/onboarding",
+    "width": 360,
+    "brokenImages": 0,
+    "client": 345,
+    "h1": "先認識你，再一起找方向。",
+    "scroll": 345
+  },
+  {
+    "route": "/onboarding",
+    "width": 390,
+    "brokenImages": 0,
+    "client": 375,
+    "h1": "先認識你，再一起找方向。",
+    "scroll": 375
+  },
+  {
+    "route": "/onboarding",
+    "width": 768,
+    "brokenImages": 0,
+    "client": 753,
+    "h1": "先認識你，再一起找方向。",
+    "scroll": 753
+  },
+  {
+    "route": "/onboarding",
+    "width": 1024,
+    "brokenImages": 0,
+    "client": 1009,
+    "h1": "先認識你，再一起找方向。",
+    "scroll": 1009
+  },
+  {
+    "route": "/onboarding",
+    "width": 1440,
+    "brokenImages": 0,
+    "client": 1425,
+    "h1": "先認識你，再一起找方向。",
+    "scroll": 1425
+  },
+  {
+    "route": "/auth/sign-in",
+    "width": 320,
+    "brokenImages": 0,
+    "client": 320,
+    "h1": "歡迎回來",
+    "scroll": 320
+  },
+  {
+    "route": "/auth/sign-in",
+    "width": 360,
+    "brokenImages": 0,
+    "client": 360,
+    "h1": "歡迎回來",
+    "scroll": 360
+  },
+  {
+    "route": "/auth/sign-in",
+    "width": 390,
+    "brokenImages": 0,
+    "client": 390,
+    "h1": "歡迎回來",
+    "scroll": 390
+  },
+  {
+    "route": "/auth/sign-in",
+    "width": 768,
+    "brokenImages": 0,
+    "client": 768,
+    "h1": "歡迎回來",
+    "scroll": 768
+  },
+  {
+    "route": "/auth/sign-in",
+    "width": 1024,
+    "brokenImages": 0,
+    "client": 1024,
+    "h1": "歡迎回來",
+    "scroll": 1024
+  },
+  {
+    "route": "/auth/sign-in",
+    "width": 1440,
+    "brokenImages": 0,
+    "client": 1440,
+    "h1": "歡迎回來",
+    "scroll": 1440
+  },
+  {
+    "route": "/account/help",
+    "width": 320,
+    "brokenImages": 0,
+    "client": 305,
+    "h1": "有問題，我們一起找答案。",
+    "scroll": 305
+  },
+  {
+    "route": "/account/help",
+    "width": 360,
+    "brokenImages": 0,
+    "client": 345,
+    "h1": "有問題，我們一起找答案。",
+    "scroll": 345
+  },
+  {
+    "route": "/account/help",
+    "width": 390,
+    "brokenImages": 0,
+    "client": 375,
+    "h1": "有問題，我們一起找答案。",
+    "scroll": 375
+  },
+  {
+    "route": "/account/help",
+    "width": 768,
+    "brokenImages": 0,
+    "client": 753,
+    "h1": "有問題，我們一起找答案。",
+    "scroll": 753
+  },
+  {
+    "route": "/account/help",
+    "width": 1024,
+    "brokenImages": 0,
+    "client": 1009,
+    "h1": "有問題，我們一起找答案。",
+    "scroll": 1009
+  },
+  {
+    "route": "/account/help",
+    "width": 1440,
+    "brokenImages": 0,
+    "client": 1425,
+    "h1": "有問題，我們一起找答案。",
+    "scroll": 1425
+  }
+]

@@ -1,0 +1,771 @@
+{
+  "console": [],
+  "dom": {
+    "frames": 0,
+    "resources": [
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123239166"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123239166"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123259986"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/chunks/webpack.js?v=1789121729873"
+      },
+      {
+        "tag": "SCRIPT",
+        "url": "/_next/static/chunks/main-app.js?v=1789121729873"
+      },
+      {
+        "tag": "SCRIPT",
+        "url": "/_next/static/chunks/app-pages-internals.js"
+      },
+      {
+        "tag": "SCRIPT",
+        "url": "/_next/static/chunks/app/ux-prototype/layout.js"
+      },
+      {
+        "tag": "SCRIPT",
+        "url": "/_next/static/chunks/app/ux-prototype/%5B%5B...segments%5D%5D/page.js"
+      },
+      {
+        "tag": "SCRIPT",
+        "url": "/_next/static/chunks/polyfills.js"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121750679"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121772016"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121772016"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121772016"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121772060"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121772060"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121772060"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121772128"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121772128"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121772128"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121772184"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121772184"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121772184"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121798344"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121798344"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121798344"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121799183"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121799183"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121799183"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121799911"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121799911"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121799911"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121800196"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121800196"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121800196"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121800495"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121800495"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121800495"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121837508"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121837508"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121837508"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121885119"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121885119"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121885119"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121885255"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121969508"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121969508"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121969508"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121974968"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121974968"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121974968"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789121993590"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789121993590"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789121993590"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122022923"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122022923"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122022923"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122039708"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122039708"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122039708"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122065868"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122065868"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122065868"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122066023"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122104066"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122104066"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122104066"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122123226"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122123226"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122123226"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122201672"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122201672"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122201672"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122218282"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122230491"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122230491"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122230491"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122230529"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122230529"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122230529"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122234452"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122234452"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122234452"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122245309"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122250740"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122250740"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122250740"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122280897"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122280897"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122280897"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122294867"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122294867"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122294867"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122295861"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122311131"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122311131"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122311131"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122339841"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122339841"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122339841"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122449278"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122449373"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122449373"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122449373"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122473824"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122527735"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122527735"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122527735"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122533524"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122541954"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122541954"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122541954"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122589606"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122589606"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122589606"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122602442"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122602442"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122602442"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122627126"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122627126"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122627126"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122714114"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122714114"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122714114"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122739612"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122739612"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122739612"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122761868"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122764411"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122764411"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122764411"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122836496"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122836496"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122836496"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122843367"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122843367"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122843367"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122935864"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122935864"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122935864"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122961178"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122961178"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122961178"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122962541"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122962541"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122962541"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789122963195"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789122963195"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789122963195"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123004826"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123004826"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123004826"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123031250"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123031250"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123031250"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123066595"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123066595"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123066595"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123070370"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123070370"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123070370"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123140720"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123140720"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123140720"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123140935"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123140935"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123140935"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123141206"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123141206"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123141206"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123170782"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123170782"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123170782"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123171607"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123171607"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123171607"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/layout.css?v=1789123239166"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/layout.css?v=1789123239166"
+      },
+      {
+        "tag": "LINK",
+        "url": "/_next/static/css/app/ux-prototype/%5B%5B...segments%5D%5D/page.css?v=1789123259986"
+      },
+      {
+        "tag": "LINK",
+        "url": "/favicon.ico?603d046c9a6fdfbb"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/guitar.jpg"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/wide.jpg"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/guitar.jpg"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/lesson.jpg"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/guitar.jpg"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/wide.jpg"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/guitar.jpg"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/guitar.jpg"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/student.jpg"
+      },
+      {
+        "tag": "IMG",
+        "url": "http://127.0.0.1:3100/ux-prototype/mobile.png"
+      },
+      {
+        "tag": "SCRIPT",
+        "url": "/_next/static/chunks/webpack.js?v=1789121729873"
+      }
+    ],
+    "title": "The One 2.0｜本機 UX 雛形",
+    "url": "http://127.0.0.1:3100/ux-prototype"
+  },
+  "scope": "DOM-visible resources and captured warning/error console only; not a complete network trace."
+}

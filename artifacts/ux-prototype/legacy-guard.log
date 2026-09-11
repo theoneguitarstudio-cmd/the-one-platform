@@ -1,0 +1,48 @@
+Protected content mismatch: next-env.d.ts
+✖ fixed preserved set passes real CLI with network/process/env tripwires (1833.1537ms)
+✔ reject caller override/mode --candidate d5f98434106797afc65c59953aa3bc61ba26ecb4 (2.4673ms)
+✔ reject caller override/mode --candidate 0000000000000000000000000000000000000000 (0.3868ms)
+✔ reject caller override/mode --production (0.1894ms)
+✔ reject caller override/mode --production --yes (0.1809ms)
+✔ reject caller override/mode --yes (0.1591ms)
+✔ reject modified protected content src/app/layout.tsx (1291.2918ms)
+✔ reject modified protected content supabase/migrations/20260906000500_learning_freeze_graph_validation.sql (1361.2118ms)
+✔ reject modified protected content scripts/epic7-readiness.mjs (1268.7476ms)
+✔ reject modified protected content scripts/epic7-readiness-cases.json (833.989ms)
+✔ reject modified protected content docs/EPIC7_F_TOOLING_MANIFEST.json (720.1588ms)
+✔ candidate object bytes cannot be replaced even with correct claimed SHA (0.549ms)
+✔ missing object never falls back to network or current HEAD (0.1586ms)
+ℹ tests 13
+ℹ suites 0
+ℹ pass 12
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 7624.0181
+
+✖ failing tests:
+
+test at scripts\epic7-preserved-validation.test.mjs:7:1
+✖ fixed preserved set passes real CLI with network/process/env tripwires (1833.1537ms)
+  Error: Command failed: C:\Users\win\.cache\codex-runtimes\codex-primary-runtime\dependencies\node\bin\node.exe --import ./scripts/epic7-readiness-offline-tripwire.mjs scripts/epic7-preserved-validation.mjs --validate-only
+  Protected content mismatch: next-env.d.ts
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:942:11)
+      at execFileSync (node:child_process:978:15)
+      at TestContext.<anonymous> (file:///C:/Projects/the-one-platform/scripts/epic7-preserved-validation.test.mjs:8:24)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1382:25)
+      at Test.start (node:internal/test_runner/test:1242:17)
+      at startSubtestAfterBootstrap (node:internal/test_runner/harness:387:17) {
+    status: 1,
+    signal: null,
+    output: [ null, '', 'Protected content mismatch: next-env.d.ts\n' ],
+    pid: 22484,
+    stdout: '',
+    stderr: 'Protected content mismatch: next-env.d.ts\n'
+  }
+
+EXIT_CODE=1

@@ -1,0 +1,821 @@
+{
+  "note": "DOM measurements after viewport.set and 350ms for approved sidebar transitions to settle. Narrow table wrappers scroll horizontally; document/main do not overflow.",
+  "rows": [
+    {
+      "scene": "admin-finance",
+      "requestedWidth": 320,
+      "settledAfterMs": 350,
+      "documentClientWidth": 320,
+      "documentScrollWidth": 320,
+      "innerHeight": 844,
+      "innerWidth": 320,
+      "main": [
+        {
+          "clientWidth": 310,
+          "scrollWidth": 310
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 280,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        },
+        {
+          "className": "v4-scroll",
+          "clientWidth": 280,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/finance"
+    },
+    {
+      "scene": "admin-finance",
+      "requestedWidth": 360,
+      "settledAfterMs": 350,
+      "documentClientWidth": 360,
+      "documentScrollWidth": 360,
+      "innerHeight": 844,
+      "innerWidth": 360,
+      "main": [
+        {
+          "clientWidth": 350,
+          "scrollWidth": 350
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 320,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        },
+        {
+          "className": "v4-scroll",
+          "clientWidth": 320,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/finance"
+    },
+    {
+      "scene": "admin-finance",
+      "requestedWidth": 390,
+      "settledAfterMs": 350,
+      "documentClientWidth": 390,
+      "documentScrollWidth": 390,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "main": [
+        {
+          "clientWidth": 380,
+          "scrollWidth": 380
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 342,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        },
+        {
+          "className": "v4-scroll",
+          "clientWidth": 342,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/finance"
+    },
+    {
+      "scene": "admin-finance",
+      "requestedWidth": 768,
+      "settledAfterMs": 350,
+      "documentClientWidth": 768,
+      "documentScrollWidth": 768,
+      "innerHeight": 1000,
+      "innerWidth": 768,
+      "main": [
+        {
+          "clientWidth": 694,
+          "scrollWidth": 694
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 638,
+          "overflowX": "auto",
+          "scrollWidth": 680
+        },
+        {
+          "className": "v4-scroll",
+          "clientWidth": 638,
+          "overflowX": "auto",
+          "scrollWidth": 680
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/finance"
+    },
+    {
+      "scene": "admin-finance",
+      "requestedWidth": 1024,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1024,
+      "documentScrollWidth": 1024,
+      "innerHeight": 1000,
+      "innerWidth": 1024,
+      "main": [
+        {
+          "clientWidth": 818,
+          "scrollWidth": 818
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 762,
+          "overflowX": "auto",
+          "scrollWidth": 762
+        },
+        {
+          "className": "v4-scroll",
+          "clientWidth": 762,
+          "overflowX": "auto",
+          "scrollWidth": 762
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/finance"
+    },
+    {
+      "scene": "admin-finance",
+      "requestedWidth": 1280,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1280,
+      "documentScrollWidth": 1280,
+      "innerHeight": 1000,
+      "innerWidth": 1280,
+      "main": [
+        {
+          "clientWidth": 1050,
+          "scrollWidth": 1050
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 974,
+          "overflowX": "auto",
+          "scrollWidth": 974
+        },
+        {
+          "className": "v4-scroll",
+          "clientWidth": 974,
+          "overflowX": "auto",
+          "scrollWidth": 974
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/finance"
+    },
+    {
+      "scene": "admin-finance",
+      "requestedWidth": 1440,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1440,
+      "documentScrollWidth": 1440,
+      "innerHeight": 1000,
+      "innerWidth": 1440,
+      "main": [
+        {
+          "clientWidth": 1210,
+          "scrollWidth": 1210
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1134,
+          "overflowX": "auto",
+          "scrollWidth": 1134
+        },
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1134,
+          "overflowX": "auto",
+          "scrollWidth": 1134
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/finance"
+    },
+    {
+      "scene": "admin-finance",
+      "requestedWidth": 1920,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1920,
+      "documentScrollWidth": 1920,
+      "innerHeight": 1000,
+      "innerWidth": 1920,
+      "main": [
+        {
+          "clientWidth": 1690,
+          "scrollWidth": 1690
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1512,
+          "overflowX": "auto",
+          "scrollWidth": 1512
+        },
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1512,
+          "overflowX": "auto",
+          "scrollWidth": 1512
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/finance"
+    },
+    {
+      "scene": "admin-courses",
+      "requestedWidth": 320,
+      "settledAfterMs": 350,
+      "documentClientWidth": 320,
+      "documentScrollWidth": 320,
+      "innerHeight": 844,
+      "innerWidth": 320,
+      "main": [
+        {
+          "clientWidth": 310,
+          "scrollWidth": 310
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 280,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/courses"
+    },
+    {
+      "scene": "admin-courses",
+      "requestedWidth": 360,
+      "settledAfterMs": 350,
+      "documentClientWidth": 360,
+      "documentScrollWidth": 360,
+      "innerHeight": 844,
+      "innerWidth": 360,
+      "main": [
+        {
+          "clientWidth": 350,
+          "scrollWidth": 350
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 320,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/courses"
+    },
+    {
+      "scene": "admin-courses",
+      "requestedWidth": 390,
+      "settledAfterMs": 350,
+      "documentClientWidth": 390,
+      "documentScrollWidth": 390,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "main": [
+        {
+          "clientWidth": 380,
+          "scrollWidth": 380
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 342,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/courses"
+    },
+    {
+      "scene": "admin-courses",
+      "requestedWidth": 768,
+      "settledAfterMs": 350,
+      "documentClientWidth": 768,
+      "documentScrollWidth": 768,
+      "innerHeight": 1000,
+      "innerWidth": 768,
+      "main": [
+        {
+          "clientWidth": 704,
+          "scrollWidth": 704
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 648,
+          "overflowX": "auto",
+          "scrollWidth": 680
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/courses"
+    },
+    {
+      "scene": "admin-courses",
+      "requestedWidth": 1024,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1024,
+      "documentScrollWidth": 1024,
+      "innerHeight": 1000,
+      "innerWidth": 1024,
+      "main": [
+        {
+          "clientWidth": 828,
+          "scrollWidth": 828
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 772,
+          "overflowX": "auto",
+          "scrollWidth": 772
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/courses"
+    },
+    {
+      "scene": "admin-courses",
+      "requestedWidth": 1280,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1280,
+      "documentScrollWidth": 1280,
+      "innerHeight": 1000,
+      "innerWidth": 1280,
+      "main": [
+        {
+          "clientWidth": 1060,
+          "scrollWidth": 1060
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 984,
+          "overflowX": "auto",
+          "scrollWidth": 984
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/courses"
+    },
+    {
+      "scene": "admin-courses",
+      "requestedWidth": 1440,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1440,
+      "documentScrollWidth": 1440,
+      "innerHeight": 1000,
+      "innerWidth": 1440,
+      "main": [
+        {
+          "clientWidth": 1220,
+          "scrollWidth": 1220
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1144,
+          "overflowX": "auto",
+          "scrollWidth": 1144
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/courses"
+    },
+    {
+      "scene": "admin-courses",
+      "requestedWidth": 1920,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1920,
+      "documentScrollWidth": 1920,
+      "innerHeight": 1000,
+      "innerWidth": 1920,
+      "main": [
+        {
+          "clientWidth": 1700,
+          "scrollWidth": 1700
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1512,
+          "overflowX": "auto",
+          "scrollWidth": 1512
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/courses"
+    },
+    {
+      "scene": "admin-articles",
+      "requestedWidth": 320,
+      "settledAfterMs": 350,
+      "documentClientWidth": 320,
+      "documentScrollWidth": 320,
+      "innerHeight": 844,
+      "innerWidth": 320,
+      "main": [
+        {
+          "clientWidth": 320,
+          "scrollWidth": 320
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 290,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/articles"
+    },
+    {
+      "scene": "admin-articles",
+      "requestedWidth": 360,
+      "settledAfterMs": 350,
+      "documentClientWidth": 360,
+      "documentScrollWidth": 360,
+      "innerHeight": 844,
+      "innerWidth": 360,
+      "main": [
+        {
+          "clientWidth": 360,
+          "scrollWidth": 360
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 330,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/articles"
+    },
+    {
+      "scene": "admin-articles",
+      "requestedWidth": 390,
+      "settledAfterMs": 350,
+      "documentClientWidth": 390,
+      "documentScrollWidth": 390,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "main": [
+        {
+          "clientWidth": 390,
+          "scrollWidth": 390
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 352,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/articles"
+    },
+    {
+      "scene": "admin-articles",
+      "requestedWidth": 768,
+      "settledAfterMs": 350,
+      "documentClientWidth": 768,
+      "documentScrollWidth": 768,
+      "innerHeight": 1000,
+      "innerWidth": 768,
+      "main": [
+        {
+          "clientWidth": 704,
+          "scrollWidth": 704
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 648,
+          "overflowX": "auto",
+          "scrollWidth": 680
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/articles"
+    },
+    {
+      "scene": "admin-articles",
+      "requestedWidth": 1024,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1024,
+      "documentScrollWidth": 1024,
+      "innerHeight": 1000,
+      "innerWidth": 1024,
+      "main": [
+        {
+          "clientWidth": 828,
+          "scrollWidth": 828
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 772,
+          "overflowX": "auto",
+          "scrollWidth": 772
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/articles"
+    },
+    {
+      "scene": "admin-articles",
+      "requestedWidth": 1280,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1280,
+      "documentScrollWidth": 1280,
+      "innerHeight": 1000,
+      "innerWidth": 1280,
+      "main": [
+        {
+          "clientWidth": 1060,
+          "scrollWidth": 1060
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 984,
+          "overflowX": "auto",
+          "scrollWidth": 984
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/articles"
+    },
+    {
+      "scene": "admin-articles",
+      "requestedWidth": 1440,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1440,
+      "documentScrollWidth": 1440,
+      "innerHeight": 1000,
+      "innerWidth": 1440,
+      "main": [
+        {
+          "clientWidth": 1220,
+          "scrollWidth": 1220
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1144,
+          "overflowX": "auto",
+          "scrollWidth": 1144
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/articles"
+    },
+    {
+      "scene": "admin-articles",
+      "requestedWidth": 1920,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1920,
+      "documentScrollWidth": 1920,
+      "innerHeight": 1000,
+      "innerWidth": 1920,
+      "main": [
+        {
+          "clientWidth": 1700,
+          "scrollWidth": 1700
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1512,
+          "overflowX": "auto",
+          "scrollWidth": 1512
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/articles"
+    },
+    {
+      "scene": "admin-bookings",
+      "requestedWidth": 320,
+      "settledAfterMs": 350,
+      "documentClientWidth": 320,
+      "documentScrollWidth": 320,
+      "innerHeight": 844,
+      "innerWidth": 320,
+      "main": [
+        {
+          "clientWidth": 320,
+          "scrollWidth": 320
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 290,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/bookings"
+    },
+    {
+      "scene": "admin-bookings",
+      "requestedWidth": 360,
+      "settledAfterMs": 350,
+      "documentClientWidth": 360,
+      "documentScrollWidth": 360,
+      "innerHeight": 844,
+      "innerWidth": 360,
+      "main": [
+        {
+          "clientWidth": 360,
+          "scrollWidth": 360
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 330,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/bookings"
+    },
+    {
+      "scene": "admin-bookings",
+      "requestedWidth": 390,
+      "settledAfterMs": 350,
+      "documentClientWidth": 390,
+      "documentScrollWidth": 390,
+      "innerHeight": 844,
+      "innerWidth": 390,
+      "main": [
+        {
+          "clientWidth": 390,
+          "scrollWidth": 390
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 352,
+          "overflowX": "auto",
+          "scrollWidth": 620
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/bookings"
+    },
+    {
+      "scene": "admin-bookings",
+      "requestedWidth": 768,
+      "settledAfterMs": 350,
+      "documentClientWidth": 768,
+      "documentScrollWidth": 768,
+      "innerHeight": 1000,
+      "innerWidth": 768,
+      "main": [
+        {
+          "clientWidth": 704,
+          "scrollWidth": 704
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 648,
+          "overflowX": "auto",
+          "scrollWidth": 680
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/bookings"
+    },
+    {
+      "scene": "admin-bookings",
+      "requestedWidth": 1024,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1024,
+      "documentScrollWidth": 1024,
+      "innerHeight": 1000,
+      "innerWidth": 1024,
+      "main": [
+        {
+          "clientWidth": 828,
+          "scrollWidth": 828
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 772,
+          "overflowX": "auto",
+          "scrollWidth": 772
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/bookings"
+    },
+    {
+      "scene": "admin-bookings",
+      "requestedWidth": 1280,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1280,
+      "documentScrollWidth": 1280,
+      "innerHeight": 1000,
+      "innerWidth": 1280,
+      "main": [
+        {
+          "clientWidth": 1060,
+          "scrollWidth": 1060
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 984,
+          "overflowX": "auto",
+          "scrollWidth": 984
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/bookings"
+    },
+    {
+      "scene": "admin-bookings",
+      "requestedWidth": 1440,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1440,
+      "documentScrollWidth": 1440,
+      "innerHeight": 1000,
+      "innerWidth": 1440,
+      "main": [
+        {
+          "clientWidth": 1220,
+          "scrollWidth": 1220
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1144,
+          "overflowX": "auto",
+          "scrollWidth": 1144
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/bookings"
+    },
+    {
+      "scene": "admin-bookings",
+      "requestedWidth": 1920,
+      "settledAfterMs": 350,
+      "documentClientWidth": 1920,
+      "documentScrollWidth": 1920,
+      "innerHeight": 1000,
+      "innerWidth": 1920,
+      "main": [
+        {
+          "clientWidth": 1700,
+          "scrollWidth": 1700
+        }
+      ],
+      "tables": [
+        {
+          "className": "v4-scroll",
+          "clientWidth": 1512,
+          "overflowX": "auto",
+          "scrollWidth": 1512
+        }
+      ],
+      "url": "http://127.0.0.1:3100/ux-prototype/admin/bookings"
+    }
+  ]
+}

@@ -1,0 +1,56 @@
+{
+  "desktop": {
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "image": {
+      "format": "JPEG",
+      "width": 1440,
+      "height": 1000
+    },
+    "dialog": {
+      "width": 780,
+      "clientWidth": 763,
+      "scrollWidth": 763,
+      "height": 880
+    },
+    "editorColumns": [
+      371,
+      300
+    ],
+    "slotWidth": 181
+  },
+  "mobile": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "image": {
+      "format": "JPEG",
+      "width": 390,
+      "height": 844
+    },
+    "dialog": {
+      "width": 366.59375,
+      "clientWidth": 350,
+      "scrollWidth": 350,
+      "height": 742.71875,
+      "overflowY": "auto"
+    },
+    "editorColumns": [
+      305.59375
+    ],
+    "slotWidth": 305.59375
+  },
+  "beforeFix": {
+    "image": "admin-booking-dialog-before-fix-desktop.png",
+    "finding": "560px dialog gave about150px main column and about70px slot cards, forcing dates into single-character vertical wrapping"
+  },
+  "afterFix": {
+    "scope": "Native wide dialog only for admin booking and rescheduling; source reference unchanged",
+    "escapeRestoresFocus": "＋ 代學生預約",
+    "bookingCountAfterOpenClose": 2,
+    "submitted": false
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "reference": "C:/Users/win/Downloads/the-one-complete-frontend-v1-6/the-one-codex-handoff-v1-6",
+  "branch": "preview-test",
+  "head": "0af06802dbeb2fcd614d33db3e64c441fe711be4",
+  "main": "0af06802dbeb2fcd614d33db3e64c441fe711be4",
+  "files": [
+    {
+      "file": "references/lesson-locked-v1.1.html",
+      "bytes": 49058,
+      "sha256": "c8c9c6c7eb4f4b67d0d0fef3fa91b99b5617880f99faefeccd3666d3a06573d9",
+      "matches": true
+    },
+    {
+      "file": "references/student-approved-v1.2.html",
+      "bytes": 155952,
+      "sha256": "0612723069b3cc59e107df6f680de39c0dd6fbe2443251e687e75055707b8bbf",
+      "matches": true
+    },
+    {
+      "file": "references/homepage-source-v1.5.html",
+      "bytes": 1080555,
+      "sha256": "7b6f9f540413dce45404334499ed9f913963b902c7556e4fd27620249dae3b02",
+      "matches": true
+    },
+    {
+      "file": "references/workspaces-source-v1.4.html",
+      "bytes": 518219,
+      "sha256": "86b38d01b4aabd568fb30e3609029e1a246de73aba35570b2c69b7c17629c082",
+      "matches": true
+    },
+    {
+      "file": "demo.html",
+      "bytes": 1090541,
+      "sha256": "08d33a0cfd6a3768c906066bf84024ad479548398997e3be70808563f69d0379",
+      "matches": true
+    }
+  ],
+  "canonical": [
+    {
+      "file": "docs/CURRENT_WORK.md",
+      "sha256": "8d1058ab353984bd9b2fef051ce33b45bbae53e05319eaecd4135e6f0c877be6"
+    },
+    {
+      "file": "docs/PROJECT_STATUS.md",
+      "sha256": "8fd547e86ed9fcba4acf6576e04835d4374e0fe5b8671c8776375ddd6c880818"
+    },
+    {
+      "file": "docs/CANONICAL_ROADMAP.md",
+      "sha256": "a16e45e45f95c2d6fd1b4beba6d8c36a0ff853455cf77e290cfe7b8e4189879a"
+    },
+    {
+      "file": "docs/PRODUCT_DECISIONS.md",
+      "sha256": "2efeefd683c11124aaa4f695a1b046eb3fe6f9bf749dfd1cdc492f1847b5cda8"
+    }
+  ]
+}
