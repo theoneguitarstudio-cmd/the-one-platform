@@ -280,6 +280,9 @@ button:focus-visible, a:focus-visible, summary:focus-visible { outline-color: #2
 .lesson-search ul { list-style: none; padding: 0; }
 .lesson-search li a { display: block; padding: 10px 0; }
 .preview-fingerprint { font-size: 10px; padding: 7px 15px; text-align: center; color: #707b8b; background: #fafbfc; }
+/* Preserve the approved classroom's viewport height and independent columns. */
+body:has(.ux-lesson) .preview-notice { display: none; }
+body:has(.ux-lesson) .preview-fingerprint { position: fixed; bottom: 0; right: 0; z-index: 80; padding: 2px 8px; background: #171717; color: #aaa; }
 .public-header { position: sticky; top: 0; z-index: 20; background: #fffffff5; height: 76px; }
 .home-hero { display: flex; flex-direction: column; text-align: center; padding: 60px 30px 20px; max-width: 1050px; background: radial-gradient(ellipse at 50% 75%,#f5ecf466,transparent 65%); }
 .hero-copy { max-width: 830px; }

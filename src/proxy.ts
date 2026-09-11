@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 
 import { refreshSupabaseSession } from "@/lib/supabase/proxy";
 import { isLocalExperience } from "@/modules/platform-experience/local-mode";
+import { isMockDataMode } from "@/lib/preview/mode";
 
 function localHeaders(response: NextResponse) {
   response.headers.set("Cache-Control", "no-store");
@@ -11,14 +12,17 @@ function localHeaders(response: NextResponse) {
 }
 
 export async function proxy(request: NextRequest) {
+  const preview = isMockDataMode();
+  // Health remains the existing read-only route; all business writes stay blocked.
+  if (preview && request.nextUrl.pathname === "/api/health" && ["GET", "HEAD"].includes(request.method)) return localHeaders(NextResponse.next());
   if (process.env.NODE_ENV === "development" && process.env.THE_ONE_LOCAL_EXPERIENCE === "1" && !isLocalExperience(process.env.NODE_ENV, process.env.THE_ONE_LOCAL_EXPERIENCE, request.nextUrl.hostname)) {
     return localHeaders(new NextResponse("本機體驗只接受 localhost。", { status: 503 }));
   }
-  if (isLocalExperience(process.env.NODE_ENV, process.env.THE_ONE_LOCAL_EXPERIENCE, request.nextUrl.hostname)) {
+  if (preview || isLocalExperience(process.env.NODE_ENV, process.env.THE_ONE_LOCAL_EXPERIENCE, request.nextUrl.hostname)) {
     const path = request.nextUrl.pathname;
     if (path.startsWith("/_next/")) return NextResponse.next();
     if (!["GET", "HEAD"].includes(request.method) || path.startsWith("/api/") || /^\/lesson\/[^/]+\/join$/.test(path) || ["/auth/callback", "/auth/confirm"].includes(path)) {
-      return localHeaders(new NextResponse("此本機體驗未連接正式服務。", { status: 503 }));
+      return localHeaders(new NextResponse("此 UX Preview 未連接正式服務。", { status: 503 }));
     }
     if (path === "/ux-prototype" || path.startsWith("/ux-prototype/")) return localHeaders(NextResponse.next());
     const destination = request.nextUrl.clone();
